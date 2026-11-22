@@ -60,7 +60,7 @@
         <div class="modes" id="grpMode">
           <button class="opt sel" data-val="solo" style="--c:#12A3B8"><span class="dot"></span><span><b>Solo practice</b><small>Your own pace, with hints, worked answers and a coaching report.</small></span></button>
           <button class="opt" data-val="class" style="--c:#FF6B3D"><span class="dot"></span><span><b>Class battle</b><small>Teams on the projector, with power-ups, steals and a live scoreboard.</small></span></button>
-          <button class="opt" data-val="sprint" style="--c:#7B4FE0"><span class="dot"></span><span><b>Exam sprint</b><small>10 questions in 15 minutes, marked at the end. Hints are off.</small></span></button>
+          <button class="opt" data-val="sprint" style="--c:#7B4FE0"><span class="dot"></span><span><b>Exam sprint</b><small>10 questions in 1 hour, marked at the end. Hand in early whenever you are ready. Hints are off.</small></span></button>
           <button class="opt" data-val="sheet" style="--c:#F2A516"><span class="dot"></span><span><b>Printable worksheet</b><small>Questions on paper, with a full answer key on a separate page.</small></span></button>
           <button class="opt" data-val="live" style="--c:#2D5BE3"><span class="dot"></span><span><b>Live class game</b><small>Every student answers on their own phone. Up to 150 players, with a live leaderboard.</small></span></button>
         </div>
@@ -1234,9 +1234,10 @@ function start(){
   G={mode:S.mode,calm:S.mode==='solo'&&S.calm==='calm',all:cls&&S.classStyle==='all',climb,level:climb?1:+S.level,score:0,streak:0,best:0,lives:3,run:0,n:0,wrongRun:0,unitsRight:0,
      total:S.mode==='sprint'?10:cls?(S.classStyle==='turns'?S.rounds*S.teams:S.rounds):Infinity,hist:[],cnt:{},q:null,done:false,tier:0,newBadges:[],paused:false,double:false,lifeline:false,
      teams:cls?teamNames().map((n,i)=>({name:n,emo:EMO[teamEmo[i]],score:0,right:0,color:TEAMC[i],pw:{double:1,life:1,time:1}})):null,
-     deadline:S.mode==='sprint'?Date.now()+15*60*1000:null};
+     deadline:S.mode==='sprint'?Date.now()+60*60*1000:null,startedAt:Date.now()};
   document.body.classList.toggle('proj',cls);
   show('game');
+  $('#btnQuit').textContent=S.mode==='sprint'?'Hand in my answers':'Finish';
   const solo=G.mode==='solo';
   $('#hudLives').style.display=solo&&!G.calm?'':'none';
   $('#hudStreak').style.display=solo?'':'none';
@@ -1596,7 +1597,7 @@ function finish(){
     const unitSlips=H.filter(h=>(h.kinds||[]).some(k=>k.startsWith('unit')||k==='mcg'||k==='cc')).length;
     body=`<h2 class="sheet-title">Exam sprint result</h2><p class="bignum">${right}/10</p><p class="endlede">${msg}</p>
       <p class="sub" style="margin-top:8px;max-width:46em">Many nursing programmes set the pass mark for drug calculation assessments at 100%, so aim for 10 out of 10. You can practise as many times as you like.</p>
-      <div class="stats"><div class="stat"><b>${pct}%</b><small>score</small></div><div class="stat"><b>${10-H.length}</b><small>not reached</small></div><div class="stat"><b>${unitSlips}</b><small>unit slips</small></div></div>`;
+      <div class="stats"><div class="stat"><b>${pct}%</b><small>score</small></div><div class="stat"><b>${Math.max(1,Math.round((Date.now()-G.startedAt)/60000))} min</b><small>time taken (of 60)</small></div><div class="stat"><b>${10-H.length}</b><small>not answered</small></div><div class="stat"><b>${unitSlips}</b><small>unit slips</small></div></div>`;
   }else{
     const t=[...G.teams].sort((a,b)=>b.score-a.score),tie=t.length>1&&t[0].score===t[1].score;
     const order=t.length>=3?[t[1],t[0],t[2]]:t,hts=[190,150,118],place=['1st','2nd','3rd'];
@@ -1681,7 +1682,9 @@ $('#btnTSkip').onclick=()=>{if(G&&G.all&&!G.done){G.done=true;clearInterval(turn
 $('#btnPause').onclick=togglePause;
 $('#btnEdit').onclick=()=>{$('#teamBar').classList.toggle('editing');$('#btnEdit').textContent=$('#teamBar').classList.contains('editing')?'Done adjusting':'Adjust scores';};
 $('#hbTiers').querySelectorAll('button').forEach(b=>b.onclick=()=>showHint(+b.dataset.t));
-$('#btnQuit').onclick=()=>{if(G&&G.hist.length===0){goHome();return;}finish();};
+$('#btnQuit').onclick=()=>{
+  if(G&&G.mode==='sprint'){const done=G.hist.length,left=10-done;if(!confirm(left>0?`Hand in now? You have answered ${done} of 10. The ${left} you have not answered will be marked as wrong.`:'Hand in your answers now?'))return;finish();return;}
+  if(G&&G.hist.length===0){goHome();return;}finish();};
 $('#brand').onclick=e=>{e.preventDefault();goHome();};
 $('#btnPrint').onclick=()=>window.print();
 $('#btnNewSheet').onclick=buildSheet;
