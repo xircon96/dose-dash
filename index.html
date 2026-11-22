@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dose Dash: drug calculation practice for nursing students</title>
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+
+<header class="top"><div class="topin">
+  <a class="brand" id="brand" href="#" aria-label="Dose Dash home">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#1B2A72" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M33 4l11 11"/><path d="M38.5 9.5l-5.5 5.5"/><path d="M14 23l11 11"/><rect x="11" y="15" width="30" height="13" rx="2" transform="rotate(-45 26 21.5)" fill="#fff"/><path d="M18.5 27.5l-6 6"/><path d="M10 31l7 7"/><path d="M8 40l-4 4"/></g><path d="M22 27.5l9.5-9.5 3.6 3.6-9.5 9.5z" fill="#FFE45C"/></svg>
+    <span>Dose Dash</span>
+  </a>
+  <nav class="tools" aria-label="Tools">
+    <button class="tool" id="btnFormula"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg><span>Formulas</span></button>
+    <button class="tool" id="btnCalc"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg><span>Calculator</span></button>
+    <button class="tool" id="btnBreath"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/></svg><span>Breathe</span></button>
+    <button class="tool" id="btnSound" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10z"/><path id="sndWave" d="M16.5 8.5a5 5 0 0 1 0 7"/></svg><span id="sndTxt">Sound on</span></button>
+    <button class="tool" id="btnFull"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Full screen</span></button>
+  </nav>
+</div></header>
+
+<main>
+<!-- ============ HOME ============ -->
+<section id="scr-home" class="screen active">
+  <div class="hero">
+    <div>
+      <h1>Dose Dash</h1>
+      <p class="lede">Drug calculation practice for nursing students. Work through questions at your own pace, sit a timed mock exam, or play as teams in class. Every answer needs its unit, just like on the ward.</p>
+      <div class="hero-btns">
+        <button class="btn primary" id="btnQuick">Start calm practice</button>
+        <a class="btn" href="#setup">Set up a session</a>
+        <a class="btn" href="/play">Join a live game</a>
+      </div>
+      <p class="tip" id="tipText"></p>
+    </div>
+    <div class="chart" aria-hidden="true">
+      <div class="chart-head"><span>Medicines chart</span><span>Regular medicines</span></div>
+      <dl>
+        <div><dt>Patient</dt><dd>Mrs Jones, surgical ward</dd></div>
+        <div><dt>Prescribed</dt><dd>Paracetamol 1 g orally</dd></div>
+        <div><dt>Stock</dt><dd>Paracetamol 500 mg tablets</dd></div>
+        <div class="give"><dt>Give</dt><dd><span class="write">2 tablets</span><svg class="tk" viewBox="0 0 36 32"><path d="M3 17 L12 27 L33 4"/></svg></dd></div>
+      </dl>
+      <p class="note">Unit written. Good habit.</p>
+    </div>
+  </div>
+
+  <div class="sheet setup" id="setup">
+    <h2 class="sheet-title">Set up a session</h2>
+    <p class="sheet-sub">Choose how you want to practise. You can change everything next time.</p>
+
+    <div class="frow">
+      <div class="fl"><b>Mode</b><small>Solo for revision, class for groups, sprint for exam practice.</small></div>
+      <div>
+        <div class="modes" id="grpMode">
+          <button class="opt sel" data-val="solo"><span class="dot"></span><span><b>Solo practice</b><small>Your own pace, with hints, worked answers and a coaching report.</small></span></button>
+          <button class="opt" data-val="class"><span class="dot"></span><span><b>Class battle</b><small>Teams on the projector, with power-ups, steals and a live scoreboard.</small></span></button>
+          <button class="opt" data-val="sprint"><span class="dot"></span><span><b>Exam sprint</b><small>10 questions in 15 minutes, marked at the end. Hints are off.</small></span></button>
+          <button class="opt" data-val="sheet"><span class="dot"></span><span><b>Printable worksheet</b><small>Questions on paper, with a full answer key on a separate page.</small></span></button>
+          <button class="opt" data-val="live"><span class="dot"></span><span><b>Live class game</b><small>Every student answers on their own phone. Up to 150 players, with a live leaderboard.</small></span></button>
+        </div>
+        <div class="opts" id="soloOpts">
+          <div class="lbl">How do you want to play?</div>
+          <div class="chips" id="grpCalm">
+            <button class="chip sel" data-val="calm">Calm: no lives, hints are free</button>
+            <button class="chip" data-val="challenge">Challenge: 3 lives and streak bonuses</button>
+          </div>
+        </div>
+        <div class="opts" id="classOpts">
+          <div class="lbl">Game style</div>
+          <div class="chips" id="grpCStyle">
+            <button class="chip sel" data-val="turns">Take turns: one team answers, others can steal</button>
+            <button class="chip" data-val="all">Everyone answers on mini whiteboards</button>
+          </div>
+          <div class="lbl">Teams (tap the animal to change it)</div>
+          <div class="chips" id="grpTeams">
+            <button class="chip sel" data-val="2">2</button><button class="chip" data-val="3">3</button><button class="chip" data-val="4">4</button><button class="chip" data-val="5">5</button><button class="chip" data-val="6">6</button>
+          </div>
+          <div class="teamnames" id="teamNames"></div>
+          <div class="lbl">Rounds <span id="roundsHelp" style="font-weight:500"></span></div>
+          <div class="chips" id="grpRounds">
+            <button class="chip" data-val="3">3</button><button class="chip sel" data-val="5">5</button><button class="chip" data-val="8">8</button><button class="chip" data-val="10">10</button><button class="chip" data-val="15">15</button>
+          </div>
+          <div class="lbl">Time per question</div>
+          <div class="chips" id="grpTimer">
+            <button class="chip" data-val="0">No timer</button><button class="chip" data-val="30">30 seconds</button><button class="chip sel" data-val="60">60 seconds</button><button class="chip" data-val="90">90 seconds</button><button class="chip" data-val="120">2 minutes</button>
+          </div>
+          <p class="optnote">Each team gets one double points, one lifeline and one extra 30 seconds to use when they like. Some questions are golden and worth double, and so is the final round.</p>
+        </div>
+        <div class="opts" id="liveOpts">
+          <div class="lbl">How the live game works</div>
+          <p class="optnote" style="margin-top:0">You open the host screen on the projector and students join on their phones at <b id="liveUrl">this site/play</b> with a 6-digit code. Your choices below are carried over, and you can change them on the host screen. Each answer is worth up to 1000 points, more for answering quickly, with a bonus for a streak of correct answers.</p>
+        </div>
+        <div class="opts" id="sheetOpts">
+          <div class="lbl">Number of questions</div>
+          <div class="chips" id="grpSheetN">
+            <button class="chip sel" data-val="10">10</button><button class="chip" data-val="15">15</button><button class="chip" data-val="20">20</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frow">
+      <div class="fl"><b>Field</b><small>Patients and medicines change to suit the field.</small></div>
+      <div class="chips" id="grpField">
+        <button class="chip sel" data-val="mixed">Mixed</button>
+        <button class="chip" data-val="adult"><i class="sw" style="--c:#2F5DA8"></i>Adult</button>
+        <button class="chip" data-val="child"><i class="sw" style="--c:#B86E00"></i>Child</button>
+        <button class="chip" data-val="mh"><i class="sw" style="--c:#6B3FA0"></i>Mental health</button>
+        <button class="chip" data-val="ld"><i class="sw" style="--c:#1F7A5C"></i>Learning disability</button>
+      </div>
+    </div>
+
+    <div class="frow">
+      <div class="fl"><b>Topics</b><small>Tick the ones you want. At least one stays on.</small></div>
+      <div class="chips ticks" id="grpTopics"></div>
+    </div>
+
+    <div class="frow">
+      <div class="fl"><b>Level</b><small>Climb starts simple and gets harder as you go.</small></div>
+      <div class="chips" id="grpLevel">
+        <button class="chip sel" data-val="1"><i class="lv" style="--c:#2E8B57"></i>Simple</button>
+        <button class="chip" data-val="2"><i class="lv" style="--c:#D4A017"></i>Moderate</button>
+        <button class="chip" data-val="3"><i class="lv" style="--c:#D9661F"></i>Difficult</button>
+        <button class="chip" data-val="4"><i class="lv" style="--c:#C21F32"></i>Hard</button>
+        <button class="chip" data-val="climb">Climb</button>
+      </div>
+    </div>
+
+    <div class="frow" id="styleWrap">
+      <div class="fl"><b>Answers</b><small>Typing is closest to the real exam.</small></div>
+      <div class="chips" id="grpStyle">
+        <button class="chip sel" data-val="type">Type the answer</button>
+        <button class="chip" data-val="mc">Multiple choice</button>
+      </div>
+    </div>
+
+    <div class="frow">
+      <div class="fl"><b>Helpers</b><small>Switch support on or off.</small></div>
+      <div class="helpers">
+        <div class="helper"><span>Help panel<small>Formula, first step and walk-through</small></span><div class="chips" id="grpHints"><button class="chip sel" data-val="on">On</button><button class="chip" data-val="off">Off</button></div></div>
+        <div class="helper"><span>BNF look-up buttons<small>Opens a search on the BNF or BNFC website</small></span><div class="chips" id="grpBnf"><button class="chip sel" data-val="on">On</button><button class="chip" data-val="off">Off</button></div></div>
+        <div class="helper"><span>Units must be written<small>An answer without its unit is marked wrong</small></span><div class="chips" id="grpUnits"><button class="chip sel" data-val="on">On</button><button class="chip" data-val="off">Off</button></div></div>
+      </div>
+    </div>
+
+    <div class="frow startrow" style="border-top:1px solid var(--rule)">
+      <div></div>
+      <div><button class="btn primary big" id="btnStart">Start practising</button></div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="sheet prog" id="progCard"></div>
+    <aside class="sheet calm">
+      <h3>If maths makes you anxious</h3>
+      <p>Lots of nursing students feel this way, and practice is the safest place to make mistakes. Use the same four steps every time:</p>
+      <ol>
+        <li>Read the question twice and highlight the numbers.</li>
+        <li>Write the formula before any numbers.</li>
+        <li>Work it out one step at a time.</li>
+        <li>Check it makes sense, then add the unit.</li>
+      </ol>
+      <button class="btn" id="btnBreathHome">Try a 1 minute breathing exercise</button>
+    </aside>
+  </div>
+  <p class="disclaimer">For learning and practice only. In practice, always follow the prescription, local policy and the current BNF or BNFC, and get a second check where required.</p>
+</section>
+
+<!-- ============ GAME ============ -->
+<section id="scr-game" class="screen">
+  <div class="hud">
+    <div><span class="hm" id="hudMode"></span><span class="hl" id="hudLevel"></span></div>
+    <div class="hud-r">
+      <span class="hs" id="hudScore"></span>
+      <span class="hs" id="hudStreak"></span>
+      <span class="hs" id="hudLives"></span>
+      <span class="hs" id="hudProg"></span>
+      <button class="btn small" id="btnQuit">Finish</button>
+    </div>
+  </div>
+  <div id="syrWrap"></div>
+  <div class="tctrl" id="tctrl">
+    <span class="lab">Teacher controls</span>
+    <button class="btn small ghost" id="btnPause">Pause timer</button>
+    <button class="btn small ghost" id="btnTSkip">Skip question</button>
+    <button class="btn small ghost" id="btnEdit">Adjust scores</button>
+  </div>
+  <div class="teams" id="teamBar"></div>
+  <div class="pwrow" id="pwRow"></div>
+  <div class="timer" id="timerWrap"><div class="ttrack"><div id="timerBar"></div></div><span id="timerNum"></span></div>
+  <div class="banner" id="banner"></div>
+
+  <article class="sheet qcard" id="qcard">
+    <div class="qhead" id="qTags"></div>
+    <div class="qbody">
+      <div class="qtext" id="qText"></div>
+      <p class="ask" id="qAsk"></p>
+      <p class="unittip" id="qUnitTip">Write the number and the unit, for example 12 tablets, 4.5 mL or 80 mL/h.</p>
+      <div id="typeRow">
+        <label class="ansl" for="ans">Your answer</label>
+        <div class="inputrow">
+          <input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Number and unit">
+          <button class="btn primary" id="btnSubmit">Check answer</button>
+        </div>
+      </div>
+      <div class="ansmark" id="ansMark"></div>
+      <div class="mc" id="mcRow"></div>
+      <div class="wb" id="wbRow">
+        <p>All teams: write your answer and its unit on your whiteboard.</p>
+        <button class="btn primary" id="btnReveal">Reveal the answer</button>
+      </div>
+      <div class="fbx" id="fb" aria-live="polite"></div>
+      <div class="steal" id="stealBox"></div>
+      <div class="award" id="awardBox"></div>
+      <div class="skiprow" id="skipRow"><button class="btn small ghost" id="btnSkip">Skip this question</button></div>
+      <button class="btn primary big" id="btnNext">Next question</button>
+    </div>
+    <aside class="help" id="hintBox">
+      <h3>Help</h3>
+      <p class="hbcost" id="hbCost"></p>
+      <div class="hbtiers" id="hbTiers">
+        <button class="btn ghost" data-t="1">Show the formula</button>
+        <button class="btn ghost" data-t="2">Show the first step</button>
+        <button class="btn ghost" data-t="3">Walk me through it</button>
+        <a class="btn ghost bnflink" id="bnfLink" target="_blank" rel="noopener"></a>
+      </div>
+      <div id="hbOut"></div>
+    </aside>
+  </article>
+</section>
+
+<!-- ============ END ============ -->
+<section id="scr-end" class="screen"><div class="sheet endwrap" id="endBody"></div></section>
+
+<!-- ============ WORKSHEET ============ -->
+<section id="scr-sheet" class="screen">
+  <div class="sheetbar">
+    <button class="btn primary" id="btnPrint">Print</button>
+    <button class="btn" id="btnNewSheet">New set of questions</button>
+    <button class="btn ghost" id="btnSheetBack">Back to set-up</button>
+  </div>
+  <div id="sheetBody"></div>
+</section>
+</main>
+
+<div id="pip">
+  <svg class="pipf" id="pipFace" viewBox="0 0 48 48" role="img" aria-label="Pip"><g transform="rotate(-32 24 24)"><rect x="5" y="15" width="38" height="18" rx="9" fill="#fff" stroke="#1B2A72" stroke-width="2.4"/><path d="M24 15h10a9 9 0 0 1 0 18H24z" fill="#C21F32" stroke="#1B2A72" stroke-width="2.4"/></g><circle cx="18.5" cy="25.5" r="1.9" fill="#1B2A72"/><circle cx="24.5" cy="21.5" r="1.9" fill="#1B2A72"/><path d="M19 30.5q4 2 7.5-1.5" fill="none" stroke="#1B2A72" stroke-width="1.8" stroke-linecap="round"/></svg>
+  <div class="pipb" id="pipText"></div>
+</div>
+
+<div class="modal" id="mFormula"><div class="mbox" role="dialog" aria-label="Formula sheet">
+  <div class="mhead"><h2>Formula sheet</h2><button class="btn small ghost" data-close>Close</button></div>
+  <h3>Drug doses (WIG)</h3>
+  <div class="fbox">Dose = <span class="frac"><span>what you Want</span><span>what you've Got</span></span> × what it's In</div>
+  <p>Want 500 mg, got 250 mg in 5 mL: 500 ÷ 250 × 5 = 10 mL. Make the units match first.</p>
+  <h3>Conversions</h3>
+  <div class="fbox">g to mg to micrograms: × 1000 each step. Back up: ÷ 1000 each step.</div>
+  <p>1 L = 1000 mL. 1 kg = 1000 g. 1 hour = 60 minutes. 1% w/v = 1 g in 100 mL = 10 mg/mL.</p>
+  <h3>BMI</h3>
+  <div class="fbox">BMI = <span class="frac"><span>weight (kg)</span><span>height (m)²</span></span></div>
+  <p>Adult ranges: under 18.5 underweight, 18.5 to 24.9 healthy, 25 to 29.9 overweight, 30 to 39.9 obese, 40 or more severely obese. NICE advises lower thresholds (overweight from 23, obesity from 27.5) for people of South Asian, Chinese, other Asian, Middle Eastern, Black African or African-Caribbean family background. For under 18s, BMI is plotted on a centile chart.</p>
+  <h3>Flow rates</h3>
+  <div class="fbox">Pump rate (mL/h) = <span class="frac"><span>volume (mL)</span><span>time (hours)</span></span></div>
+  <div class="fbox" style="margin-top:8px">Drops per minute = <span class="frac"><span>volume (mL) × drop factor</span><span>time (minutes)</span></span></div>
+  <p>Standard giving set: 20 drops/mL. Blood giving set: 15 drops/mL. Children's IV fluids always run through a pump. Holliday-Segar maintenance fluids per day: 100 mL/kg for the first 10 kg, 50 mL/kg for the next 10 kg, 20 mL/kg for each kg above 20 kg.</p>
+  <h3>Fluid balance</h3>
+  <div class="fbox">Balance = total in minus total out</div>
+  <p>Positive means more in than out. Urine output (mL/kg/h) = urine ÷ weight ÷ hours. A commonly used minimum is 0.5 mL/kg/h for adults and 1 mL/kg/h for children. For nappies, 1 g of extra weight is taken as 1 mL of urine.</p>
+  <h3>Rearranging (missing values)</h3>
+  <p>Volume = rate × time. Time = volume ÷ rate. Weight = BMI × height². Intake = output + balance. Weight = dose ÷ dose per kg.</p>
+  <h3>Using the BNF</h3>
+  <p>The BNF (adults) and BNFC (children) give doses, maximum doses and how often a medicine can be given. For a maximum dose check, find the maximum, add up what has been given, subtract, and make sure the units match. The look-up buttons open a search on the BNF or BNFC website. Reference boxes in questions are simplified for practice, so use the current BNF on placement.</p>
+  <h3>Writing units</h3>
+  <p>Always write the unit. Write "micrograms" in full rather than mcg or µg, and use mL rather than cc. Examples: 2 tablets, 7.5 mL, 125 mL/h, 28 drops/min, 24.7 kg/m², 0.35 mg, 1.5 g, 6 hours.</p>
+</div></div>
+
+<div class="modal" id="mCalc"><div class="mbox small" role="dialog" aria-label="Calculator">
+  <div class="mhead"><h2>Calculator</h2><button class="btn small ghost" data-close>Close</button></div>
+  <p class="sub" style="margin:6px 0 10px">Check your exam rules: some allow calculators and some do not.</p>
+  <div class="calcd"><small id="calcPrev"></small><span id="calcOut">0</span></div>
+  <div class="calcg" id="calcGrid"></div>
+</div></div>
+
+<div class="modal" id="mBreath"><div class="mbox center" role="dialog" aria-label="Breathing exercise">
+  <div class="mhead"><h2>Breathing exercise</h2><button class="btn small ghost" data-close>Close</button></div>
+  <p style="margin-top:10px">Box breathing: in for 4, hold for 4, out for 4, hold for 4. Three rounds takes under a minute.</p>
+  <div class="breath"><div class="bcirc" id="bCirc"></div><div id="bTxt">Ready?</div></div>
+  <button class="btn primary big" id="btnBreathGo">Start</button>
+</div></div>
+
+<div id="toasts" aria-live="polite"></div>
+<canvas id="confetti"></canvas>
+
+<script>
+//GEN-START
+/* ================= helpers ================= */
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const P=a=>a[Math.floor(Math.random()*a.length)];
+const rd=(x,dp)=>{const f=Math.pow(10,dp);return Math.round(x*f+(x>=0?1e-9:-1e-9))/f;};
+const nf=x=>{const v=rd(x,4);return v.toLocaleString('en-GB',{maximumFractionDigits:4});};
+const nfd=(x,dp)=>rd(x,dp).toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const fa=(q,v)=>q.dp!=null?nfd(v,q.dp):nf(v);
+const sgn=x=>(x>0?'+':'')+nf(x);
+const pl=(n,w)=>n===1?w:w+'s';
+const sum=a=>a.reduce((s,x)=>s+x,0);
+const hm=t=>{const h=Math.floor(t+1e-9),m=Math.round((t-h)*60);return (h?h+' '+pl(h,'hour'):'')+(h&&m?' ':'')+(m?m+' minutes':'');};
+const andList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+const TO_MG={mcg:0.001,mg:1,g:1000};
+const dstr=(v,u)=>nf(v)+' '+(u==='mcg'?pl(v,'microgram'):u);
+
+function Q(o){
+  if(o.dp==null){o.answer=rd(o.answer,4);o.tol=0.001;}
+  else{o.exact=o.answer;o.answer=rd(o.answer,o.dp);o.tol=o.dp===0?0.001:0.5*Math.pow(10,-o.dp)+1e-9;}
+  o.traps=(o.traps||[]).filter(t=>t&&isFinite(t[0])&&Math.abs(t[0]-o.answer)>o.tol);
+  o.steps=o.steps.map(x=>x.replace(/(^|[^\d.])1 tablets/g,'$11 tablet'));
+  o.alts=[...(o.alts||[]),...o.traps.map(t=>t[0])];
+  return o;
+}
+
+/* ================= fields ================= */
+const FIELDS={
+  adult:{label:'Adult',icon:'',color:'#2F5DA8',
+    names:['Mr Okafor','Mrs Jones','Ms Kaur','Mr Davies','Mrs Chen','Mr Murphy','Ms Ahmed','Mrs Williams','Mr Nowak','Ms Evans'],
+    places:['on a surgical ward','on the acute medical unit','on a respiratory ward','on an orthopaedic ward','on a care of older people ward','in a GP practice nurse clinic'],
+    hosp:['on a surgical ward','on the acute medical unit','on a respiratory ward','on an orthopaedic ward','on a care of older people ward']},
+  child:{label:'Child',icon:'',color:'#B86E00',
+    names:[['Ava',6],['Noah',4],['Ivy',8],['Theo',5],['Zara',7],['Oscar',3],['Maya',9],['Alfie',10],['Isla',2],['Leo',6]],
+    places:["on the children's ward","in the paediatric assessment unit","on a children's surgical ward"],
+    hosp:["on the children's ward","in the paediatric assessment unit","on a children's surgical ward"]},
+  mh:{label:'Mental health',icon:'',color:'#6B3FA0',
+    names:['Jordan','Sam','Priya','Daniel','Chloe','Marcus','Aisha','Tom','Kofi','Megan'],
+    places:['on an acute mental health inpatient ward','at a community mental health team clinic','on a psychiatric intensive care unit','on an older adult mental health ward','at a crisis team home visit'],
+    hosp:['on a general medical ward, supported by the mental health liaison team','on the acute medical unit after transfer from the mental health unit']},
+  ld:{label:'Learning disability',icon:'',color:'#1F7A5C',
+    names:['Ben','Grace','Ryan','Sophie','Liam','Hannah','Kieran','Ellie','Josh','Fatima'],
+    places:['in a supported living service','at their annual health check','in a specialist learning disability assessment unit','at a respite service','at home with their support worker'],
+    hosp:['on a medical ward, supported by the learning disability liaison nurse','in hospital, with their hospital passport in the notes']}
+};
+function ctx(f,hosp){
+  const F=FIELDS[f];const n=P(F.names);
+  const c={f,place:P(hosp?F.hosp:F.places)};
+  if(f==='child'){c.short=n[0];c.age=n[1];c.who=`${n[0]}, aged ${n[1]},`;c.weight=(n[1]+4)*2;}
+  else{c.short=n;c.who=n;}
+  return c;
+}
+function teen(){
+  const n=P([['Jade',16],['Ethan',15],['Ruby',17],['Kai',16],['Leah',15],['Harvey',17]]);
+  return {f:'child',short:n[0],who:`${n[0]}, aged ${n[1]},`,place:P(['at a school nurse drop-in',"at a young people's clinic",'on the adolescent ward'])};
+}
+
+/* ================= WIG data ================= */
+const WG={
+ adult:{
+  1:[{n:'Paracetamol',s:'500 mg tablets',st:500,d:[1000]},
+     {n:'Furosemide',s:'40 mg tablets',st:40,d:[40,80]},
+     {n:'Prednisolone',s:'5 mg tablets',st:5,d:[20,30,40]},
+     {n:'Codeine phosphate',s:'30 mg tablets',st:30,d:[30,60]},
+     {n:'Ondansetron',s:'injection 4 mg in 2 mL',st:4,v:2,out:'mL',r:'IV',d:[4,8]},
+     {n:'Furosemide',s:'injection 10 mg/mL',st:10,out:'mL',r:'IV',d:[20,40]}],
+  2:[{n:'Amoxicillin',s:'oral suspension 250 mg in 5 mL',st:250,v:5,out:'mL',d:[500]},
+     {n:'Morphine sulfate',s:'oral solution 10 mg in 5 mL',st:10,v:5,out:'mL',d:[2.5,5]},
+     {n:'Oxycodone',s:'oral solution 5 mg in 5 mL',st:5,v:5,out:'mL',d:[2.5,7.5]},
+     {n:'Metoclopramide',s:'injection 10 mg in 2 mL',st:10,v:2,out:'mL',r:'IV',d:[5]},
+     {n:'Cyclizine',s:'injection 50 mg/mL',st:50,out:'mL',r:'IV',d:[25]},
+     {n:'Furosemide',s:'40 mg tablets',st:40,d:[20]},
+     {n:'Paracetamol',s:'oral suspension 250 mg in 5 mL',st:250,v:5,out:'mL',d:[500,1000]}],
+  3:[{n:'Paracetamol',s:'500 mg tablets',st:500,d:[[1,'g']]},
+     {n:'Metformin',s:'500 mg tablets',st:500,d:[[1,'g']]},
+     {n:'Digoxin',s:'62.5 microgram tablets',st:62.5,su:'mcg',d:[[0.125,'mg'],[0.0625,'mg']]},
+     {n:'Levothyroxine',s:'25 microgram tablets',st:25,su:'mcg',d:[[0.05,'mg'],[0.075,'mg'],[0.1,'mg']]},
+     {n:'Amoxicillin',s:'oral suspension 250 mg in 5 mL',st:250,v:5,out:'mL',d:[[0.5,'g'],[1,'g']]}]
+ },
+ child:{
+  1:[{n:'Paracetamol',s:'oral suspension 120 mg in 5 mL',st:120,v:5,out:'mL',d:[120,240]},
+     {n:'Ibuprofen',s:'oral suspension 100 mg in 5 mL',st:100,v:5,out:'mL',d:[100,200]},
+     {n:'Amoxicillin',s:'oral suspension 125 mg in 5 mL',st:125,v:5,out:'mL',d:[125,250]},
+     {n:'Prednisolone',s:'5 mg soluble tablets',st:5,d:[10,20]}],
+  2:[{n:'Paracetamol',s:'oral suspension 120 mg in 5 mL',st:120,v:5,out:'mL',d:[60,180]},
+     {n:'Ibuprofen',s:'oral suspension 100 mg in 5 mL',st:100,v:5,out:'mL',d:[50,150]},
+     {n:'Phenoxymethylpenicillin',s:'oral solution 125 mg in 5 mL',st:125,v:5,out:'mL',d:[62.5]},
+     {n:'Trimethoprim',s:'oral suspension 50 mg in 5 mL',st:50,v:5,out:'mL',d:[25,75]},
+     {n:'Amoxicillin',s:'oral suspension 250 mg in 5 mL',st:250,v:5,out:'mL',d:[125,375]}],
+  3:[{n:'Amoxicillin',s:'oral suspension 250 mg in 5 mL',st:250,v:5,out:'mL',d:[[0.25,'g'],[0.5,'g']]},
+     {n:'Digoxin',s:'oral solution 50 micrograms/mL',st:50,su:'mcg',out:'mL',d:[[0.1,'mg'],[0.05,'mg']]},
+     {n:'Levothyroxine',s:'oral solution 25 micrograms in 5 mL',st:25,su:'mcg',v:5,out:'mL',d:[[0.025,'mg'],[0.05,'mg']]},
+     {n:'Paracetamol',s:'oral suspension 120 mg in 5 mL',st:120,v:5,out:'mL',d:[[0.24,'g'],[0.18,'g']]}]
+ },
+ mh:{
+  1:[{n:'Olanzapine',s:'5 mg tablets',st:5,d:[5,10]},
+     {n:'Sertraline',s:'50 mg tablets',st:50,d:[50,100]},
+     {n:'Lorazepam',s:'1 mg tablets',st:1,d:[1,2]},
+     {n:'Promethazine',s:'25 mg tablets',st:25,d:[25,50]},
+     {n:'Quetiapine',s:'25 mg tablets',st:25,d:[50,75]},
+     {n:'Procyclidine',s:'5 mg tablets',st:5,d:[5,10]},
+     {n:'Haloperidol',s:'injection 5 mg/mL',st:5,out:'mL',r:'IM',d:[5]}],
+  2:[{n:'Lorazepam',s:'1 mg tablets',st:1,d:[0.5]},
+     {n:'Haloperidol',s:'injection 5 mg/mL',st:5,out:'mL',r:'IM',d:[2.5]},
+     {n:'Lithium citrate',s:'oral solution 520 mg in 5 mL',st:520,v:5,out:'mL',d:[780,1040]},
+     {n:'Risperidone',s:'oral solution 1 mg/mL',st:1,out:'mL',d:[0.5,1.5,2]},
+     {n:'Aripiprazole',s:'oral solution 1 mg/mL',st:1,out:'mL',d:[10,15]},
+     {n:'Diazepam',s:'oral solution 2 mg in 5 mL',st:2,v:5,out:'mL',d:[4,5]},
+     {n:'Olanzapine',s:'2.5 mg tablets',st:2.5,d:[7.5]}],
+  3:[{n:'Lithium carbonate',s:'400 mg modified-release tablets',st:400,d:[[0.4,'g'],[0.8,'g']]},
+     {n:'Sertraline',s:'50 mg tablets',st:50,d:[[0.1,'g'],[0.15,'g']]},
+     {n:'Lorazepam',s:'1 mg tablets',st:1,d:[[500,'mcg']]},
+     {n:'Haloperidol',s:'500 microgram tablets',st:500,su:'mcg',d:[[1,'mg'],[1.5,'mg']]},
+     {n:'Quetiapine',s:'100 mg tablets',st:100,d:[[0.2,'g'],[0.3,'g']]}]
+ },
+ ld:{
+  1:[{n:'Lamotrigine',s:'25 mg dispersible tablets',st:25,d:[25,50,100]},
+     {n:'Sodium valproate',s:'oral solution 200 mg in 5 mL',st:200,v:5,out:'mL',d:[200,400]},
+     {n:'Carbamazepine',s:'oral suspension 100 mg in 5 mL',st:100,v:5,out:'mL',d:[100,200]},
+     {n:'Paracetamol',s:'oral suspension 250 mg in 5 mL',st:250,v:5,out:'mL',d:[500,1000]},
+     {n:'Levetiracetam',s:'oral solution 100 mg/mL',st:100,out:'mL',d:[500,1000]}],
+  2:[{n:'Sodium valproate',s:'oral solution 200 mg in 5 mL',st:200,v:5,out:'mL',d:[300,500]},
+     {n:'Levetiracetam',s:'oral solution 100 mg/mL',st:100,out:'mL',d:[250,750]},
+     {n:'Carbamazepine',s:'oral suspension 100 mg in 5 mL',st:100,v:5,out:'mL',d:[150,300]},
+     {n:'Risperidone',s:'oral solution 1 mg/mL',st:1,out:'mL',d:[0.5]},
+     {n:'Clobazam',s:'10 mg tablets',st:10,d:[5]}],
+  3:[{n:'Levetiracetam',s:'oral solution 100 mg/mL',st:100,out:'mL',d:[[1,'g'],[1.5,'g']]},
+     {n:'Sodium valproate',s:'oral solution 200 mg in 5 mL',st:200,v:5,out:'mL',d:[[0.4,'g'],[0.6,'g']]},
+     {n:'Levothyroxine',s:'oral solution 50 micrograms in 5 mL',st:50,su:'mcg',v:5,out:'mL',d:[[0.1,'mg'],[0.075,'mg'],[0.05,'mg']]},
+     {n:'Lamotrigine',s:'25 mg dispersible tablets',st:25,d:[[0.1,'g']]}]
+ }
+};
+const norm=e=>Object.assign({su:'mg',v:1,out:'tab',r:'orally'},e);
+
+/* ================= WIG ================= */
+function genWIG(L,f){
+  const c=ctx(f);
+  if(L===4) return wig4(c);
+  const e=norm(P(WG[f][L]));
+  let dose=P(e.d),du=e.su;
+  if(Array.isArray(dose)){du=dose[1];dose=dose[0];}
+  const want=rd(dose*TO_MG[du]/TO_MG[e.su],6);
+  const ans=want/e.st*e.v,tab=e.out==='tab';
+  const extra=(f==='ld'&&!tab&&e.r==='orally')?' They find tablets hard to swallow, so a liquid has been prescribed.':'';
+  const steps=[];
+  if(du!==e.su) steps.push(`The units do not match, so convert first: ${dstr(dose,du)} ${TO_MG[du]>TO_MG[e.su]?'× 1000':'÷ 1000'} = <b>${dstr(want,e.su)}</b>`);
+  steps.push(`Use WIG: Want ${nf(want)}, Got ${nf(e.st)}, In ${tab?'1 tablet':nf(e.v)+' mL'}`);
+  steps.push(`${nf(want)} ÷ ${nf(e.st)} × ${tab?'1':nf(e.v)} = <b>${nf(ans)} ${tab?pl(ans,'tablet'):'mL'}</b>`);
+  return Q({fk:'wig',drug:e.n,
+    text:`${c.who} is ${c.place}.${extra} They are prescribed <b>${e.n} ${dstr(dose,du)} ${e.r}</b>. You have <b>${e.n} ${e.s}</b>.`,
+    ask:tab?'How many tablets will you give?':'What volume will you give?',
+    answer:ans,unit:tab?'tablets':'mL',steps,
+    hint:'Check the units match first. Then put the numbers into Want ÷ Got × In.',
+    traps:[[e.st/want*e.v,'inverted'],du!==e.su?[dose/e.st*e.v,'noconv']:null],alts:[ans*2]});
+}
+function wig4(c){
+  const f=c.f;
+  if(f==='adult'){
+    if(Math.random()<0.5){
+      const w=R(36,49),mg=15*w,ml=mg/10;
+      return Q({fk:'mgkg',drug:'Paracetamol',text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>. They are prescribed <b>IV paracetamol 15 mg/kg</b> (the dose for adults under 50 kg). The infusion contains <b>10 mg/mL</b>.`,
+        ask:'What volume of paracetamol infusion is needed?',answer:ml,unit:'mL',
+        steps:[`Dose = 15 mg × ${w} kg = <b>${nf(mg)} mg</b>`,`Volume = ${nf(mg)} ÷ 10 × 1 = <b>${nf(ml)} mL</b>`],
+        hint:'Step 1: dose per kg × weight. Step 2: Want ÷ Got × In.',traps:[[15*w/100,'calc'],[10/mg,'inverted']],alts:[ml/10]});
+    }
+    const dose=P([30,40]),days=P([5,7]),per=dose/5,tot=per*days;
+    return Q({fk:'course',drug:'Prednisolone',text:`${c.who} is ${c.place}. They are prescribed <b>prednisolone ${dose} mg once daily for ${days} days</b>. You have <b>prednisolone 5 mg tablets</b>.`,
+      ask:'How many tablets are needed for the whole course?',answer:tot,unit:'tablets',
+      steps:[`Tablets per dose = ${dose} ÷ 5 = <b>${per}</b>`,`Whole course = ${per} × ${days} days = <b>${tot} tablets</b>`],
+      hint:'Work out one dose first, then multiply by the number of days.',traps:[[per,'missedstep']],alts:[dose*days/10]});
+  }
+  if(f==='child'){
+    const w=c.weight;
+    if(Math.random()<0.5){
+      const mg=15*w,ml=mg/120*5;
+      return Q({fk:'mgkg',drug:'Paracetamol',text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>. They are prescribed <b>paracetamol 15 mg/kg</b> orally. You have <b>paracetamol oral suspension 120 mg in 5 mL</b>.`,
+        ask:'What volume will you give? Round to 1 decimal place.',answer:ml,dp:1,unit:'mL',
+        steps:[`Dose = 15 mg × ${w} kg = <b>${nf(mg)} mg</b>`,`Volume = ${nf(mg)} ÷ 120 × 5 = ${nf(ml)}`,`Rounded to 1 decimal place: <b>${nfd(ml,1)} mL</b>`],
+        hint:'Step 1: dose per kg × weight. Step 2: Want ÷ Got × In.',traps:[[120/mg*5,'inverted'],[mg/120,'missedstep']]});
+    }
+    const mg=5*w,ml=mg/100*5;
+    return Q({fk:'mgkg',drug:'Ibuprofen',text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>. They are prescribed <b>ibuprofen 5 mg/kg</b> orally. You have <b>ibuprofen oral suspension 100 mg in 5 mL</b>.`,
+      ask:'What volume will you give?',answer:ml,unit:'mL',
+      steps:[`Dose = 5 mg × ${w} kg = <b>${nf(mg)} mg</b>`,`Volume = ${nf(mg)} ÷ 100 × 5 = <b>${nf(ml)} mL</b>`],
+      hint:'Step 1: dose per kg × weight. Step 2: Want ÷ Got × In.',traps:[[mg/100,'missedstep'],[100/mg*5,'inverted']],alts:[ml*2]});
+  }
+  if(f==='mh'){
+    const t=R(0,2);
+    if(t===0){
+      const [drug,st,doses,when]=P([['sertraline',50,[100,150],'once daily'],['olanzapine',5,[10,15,20],'at night'],['mirtazapine',15,[30,45],'at night']]);
+      const dose=P(doses),days=P([7,14,28]),per=dose/st,tot=per*days;
+      return Q({fk:'course',drug,text:`${c.who} is going home with a supply of medicine. They are prescribed <b>${drug} ${dose} mg ${when}</b>. You have <b>${drug} ${st} mg tablets</b>.`,
+        ask:`How many tablets are needed for a ${days} day supply?`,answer:tot,unit:'tablets',
+        steps:[`Tablets per day = ${dose} ÷ ${st} = <b>${per}</b>`,`For ${days} days: ${per} × ${days} = <b>${tot} tablets</b>`],
+        hint:'Tablets per day first, then multiply by the number of days.',traps:[[per,'missedstep']],alts:[days,tot/2]});
+    }
+    if(t===1){
+      const [daily,st]=P([[300,50],[400,100],[600,100]]),per=daily/2,tabs=per/st;
+      return Q({fk:'divided',drug:'Quetiapine',text:`${c.who} is ${c.place}. They are prescribed <b>quetiapine ${daily} mg daily in 2 divided doses</b>. You have <b>quetiapine ${st} mg tablets</b>.`,
+        ask:'How many tablets are needed for each dose?',answer:tabs,unit:'tablets',
+        steps:[`Each dose = ${daily} ÷ 2 = <b>${per} mg</b>`,`WIG: ${per} ÷ ${st} × 1 = <b>${nf(tabs)} tablets</b>`],
+        hint:'Split the daily dose first, then use Want ÷ Got × In.',traps:[[daily/st,'notdivided']],alts:[tabs+1]});
+    }
+    const daily=P([1040,1560,2080]),per=daily/2,ml=per/520*5;
+    return Q({fk:'divided',drug:'Lithium citrate',text:`${c.who} is ${c.place}. They are prescribed <b>lithium citrate ${daily} mg daily in 2 divided doses</b>. You have <b>lithium citrate oral solution 520 mg in 5 mL</b>.`,
+      ask:'What volume is needed for each dose?',answer:ml,unit:'mL',
+      steps:[`Each dose = ${daily} ÷ 2 = <b>${per} mg</b>`,`WIG: ${per} ÷ 520 × 5 = <b>${nf(ml)} mL</b>`],
+      hint:'Split the daily dose first, then use Want ÷ Got × In.',traps:[[daily/520*5,'notdivided'],[520/per*5,'inverted']]});
+  }
+  if(Math.random()<0.5){
+    const w=P([50,60,70,80]),daily=20*w,per=daily/2,ml=per/200*5;
+    return Q({fk:'divided',drug:'Sodium valproate',text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>. They are prescribed <b>sodium valproate 20 mg/kg/day in 2 divided doses</b>. They find tablets hard to swallow, so you have <b>sodium valproate oral solution 200 mg in 5 mL</b>.`,
+      ask:'What volume is needed for each dose?',answer:ml,unit:'mL',
+      steps:[`Daily dose = 20 mg × ${w} kg = <b>${nf(daily)} mg</b>`,`Each dose = ${nf(daily)} ÷ 2 = <b>${nf(per)} mg</b>`,`WIG: ${nf(per)} ÷ 200 × 5 = <b>${nf(ml)} mL</b>`],
+      hint:'Dose per kg × weight, split into doses, then Want ÷ Got × In.',traps:[[ml*2,'notdivided'],[per/200,'missedstep']]});
+  }
+  const daily=P([400,600,800]),per=daily/2,ml=per/100*5;
+  return Q({fk:'divided',drug:'Carbamazepine',text:`${c.who} is ${c.place}. They are prescribed <b>carbamazepine ${daily} mg daily in 2 divided doses</b>. You have <b>carbamazepine oral suspension 100 mg in 5 mL</b>.`,
+    ask:'What volume is needed for each dose?',answer:ml,unit:'mL',
+    steps:[`Each dose = ${daily} ÷ 2 = <b>${per} mg</b>`,`WIG: ${per} ÷ 100 × 5 = <b>${nf(ml)} mL</b>`],
+    hint:'Split the daily dose first, then use Want ÷ Got × In.',traps:[[ml*2,'notdivided'],[per/100,'missedstep']]});
+}
+
+/* ================= Conversions ================= */
+const CF={'g>mg':1000,'mg>g':0.001,'L>mL':1000,'mL>L':0.001,'mg>mcg':1000,'mcg>mg':0.001,'kg>g':1000,'h>min':60,'min>h':1/60};
+const UN={g:'g',mg:'mg',mcg:'micrograms',L:'L',mL:'mL',kg:'kg',h:'hours',min:'minutes'};
+const CONV1=[['g','mg',[0.5,1,1.5,2,2.5,3]],['mg','g',[500,1000,1500,2000,3000]],['L','mL',[0.5,1,1.5,2,3]],['mL','L',[500,1000,1500,2000,2500]],['mg','mcg',[1,2,0.5,3]],['kg','g',[1,2,2.5,3.5]]];
+const CONV2=[['g','mg',[0.25,0.125,0.75,0.05,0.6]],['mg','mcg',[0.125,0.25,0.4,0.075,0.0625]],['mcg','mg',[250,125,62.5,50,500,25]],['mL','L',[250,750,125,50]],['h','min',[1.5,2.5,0.75,1.25,0.25]],['min','h',[90,45,150,30,15]]];
+const CONV_LEAD={adult:['Checking a drug chart on the ward:','Getting ready for the medicines round:','Quick check before handover:'],
+  child:["On the children's ward:","Checking a child's prescription chart:"],
+  mh:['On the mental health ward medicines round:','Preparing for the depot clinic:','Checking a discharge prescription:'],
+  ld:['Checking a medicines administration record (MAR) in supported living:','Preparing for an annual health check:']};
+const DAILY={
+  adult:[['Amoxicillin','amoxicillin 500 mg three times a day',500,3,'per day'],['Paracetamol','paracetamol 1000 mg four times a day',1000,4,'per day'],['Metformin','metformin 500 mg three times a day',500,3,'per day'],['Codeine phosphate','codeine phosphate 30 mg four times a day',30,4,'per day']],
+  child:[['Paracetamol','paracetamol 240 mg four times a day',240,4,'per day'],['Amoxicillin','amoxicillin 250 mg three times a day',250,3,'per day'],['Ibuprofen','ibuprofen 150 mg three times a day',150,3,'per day']],
+  mh:[['Lithium carbonate','lithium carbonate 400 mg twice a day',400,2,'per day'],['Quetiapine','quetiapine 150 mg twice a day',150,2,'per day'],['Sertraline','sertraline 100 mg once a day',100,7,'per week']],
+  ld:[['Sodium valproate','sodium valproate 600 mg twice a day',600,2,'per day'],['Levetiracetam','levetiracetam 750 mg twice a day',750,2,'per day'],['Carbamazepine','carbamazepine 200 mg twice a day',200,2,'per day']]};
+const WEEKLY={adult:[['Levothyroxine',100],['Digoxin',125]],child:[['Levothyroxine',25]],mh:[['Levothyroxine',50]],ld:[['Levothyroxine',75],['Levothyroxine',100]]};
+const CUP={adult:['cups of tea',200],child:['beakers of milk',120],mh:['mugs of coffee',250],ld:['beakers of thickened juice',150]};
+function genConv(L,f){
+  const c=ctx(f);
+  if(L<=2){
+    const [a,b,vals]=P(L===1?CONV1:CONV2),v=P(vals),k=CF[a+'>'+b],ans=v*k,time=(a==='h'||a==='min');
+    const op=k>1?`× ${nf(k)}`:`÷ ${nf(1/k)}`;
+    const why=time?(k>1?'There are 60 minutes in an hour, so multiply by 60.':'There are 60 minutes in an hour, so divide by 60.')
+                   :(k>1?'Bigger unit to smaller unit, so the number gets bigger: multiply by 1000.':'Smaller unit to bigger unit, so the number gets smaller: divide by 1000.');
+    return Q({fk:time?'time':'conv',text:`${P(CONV_LEAD[f])} convert <b>${nf(v)} ${UN[a]}</b> into <b>${UN[b]}</b>.`,ask:`What is it in ${UN[b]}?`,answer:ans,unit:UN[b],
+      steps:[why,`${nf(v)} ${op} = <b>${nf(ans)} ${UN[b]}</b>`],
+      hint:time?'Hours to minutes: × 60. Minutes to hours: ÷ 60.':'Ask yourself: should the number get bigger or smaller?',
+      traps:[[v/k,'wrongway']]});
+  }
+  if(L===3){
+    const t=R(0,2);
+    if(t===0){
+      const [drug,lab,mg,n,per]=P(DAILY[f]),tot=mg*n,g=tot/1000;
+      return Q({fk:'conv',drug,text:`${c.who} is ${c.place} and takes <b>${lab}</b>.`,ask:`What is the total dose in grams ${per}?`,answer:g,unit:'g',
+        steps:[`Total = ${nf(mg)} mg × ${n} = <b>${nf(tot)} mg</b>`,`mg to g: ${nf(tot)} ÷ 1000 = <b>${nf(g)} g</b>`],
+        hint:'Find the total in mg first, then divide by 1000 to get grams.',traps:[[mg/1000,'missedstep']],alts:[g*10]});
+    }
+    if(t===1){
+      const [drug,mcg]=P(WEEKLY[f]),wk=mcg*7,mg=wk/1000;
+      return Q({fk:'conv',drug,text:`${c.who} is ${c.place} and takes <b>${drug.toLowerCase()} ${mcg} micrograms once a day</b>.`,ask:'How many mg is that in one week?',answer:mg,unit:'mg',
+        steps:[`Weekly total = ${mcg} × 7 = <b>${nf(wk)} micrograms</b>`,`micrograms to mg: ${nf(wk)} ÷ 1000 = <b>${nf(mg)} mg</b>`],
+        hint:'Multiply by 7 days, then divide by 1000 to change micrograms into mg.',traps:[[mcg/1000,'missedstep']],alts:[mg*10]});
+    }
+    const [what,size]=CUP[f],n=R(5,8),ml=n*size,l=ml/1000;
+    return Q({fk:'cups',text:`${c.who} is ${c.place}. Today they have had <b>${n} ${what}</b>, each holding <b>${size} mL</b>.`,ask:'What is their total intake in litres?',answer:l,unit:'L',
+      steps:[`Total = ${n} × ${size} = <b>${nf(ml)} mL</b>`,`mL to L: ${nf(ml)} ÷ 1000 = <b>${nf(l)} L</b>`],
+      hint:'Total in mL first, then divide by 1000 to get litres.',alts:[l*10]});
+  }
+  const ch=ctx(f,true);
+  if(Math.random()<0.75){
+    const opts=f==='child'?[['sodium chloride 0.9%',0.9,[500]],['glucose 10%',10,[100,250,500]],['glucose 5%',5,[500]]]
+                         :[['sodium chloride 0.9%',0.9,[500,1000]],['glucose 5%',5,[500,1000]],['glucose 10%',10,[100,250,500]]];
+    const [name,pct,vols]=P(opts),vol=P(vols),lots=vol/100,g=pct*lots,solute=name.split(' ').slice(0,-1).join(' ');
+    return Q({fk:'pct',text:`${ch.who} is ${ch.place}. They have a bag of <b>${vol} mL ${name}</b>.`,ask:`How many grams of ${solute} are in the bag?`,answer:g,unit:'g',
+      steps:[`% w/v means grams in every 100 mL, so ${name} has <b>${nf(pct)} g in 100 mL</b>`,`Number of 100 mL lots = ${vol} ÷ 100 = ${nf(lots)}`,`${nf(pct)} g × ${nf(lots)} = <b>${nf(g)} g</b>`],
+      hint:'Percentage w/v = grams in 100 mL.',traps:[[pct*vol,'missedstep']],alts:[g*10,g/10]});
+  }
+  const ml=P([2,5,10]),mg=ml*10;
+  return Q({fk:'pct',drug:'Lidocaine',text:`${ch.who} is ${ch.place} and needs a cannula. The doctor uses <b>${ml} mL of lidocaine 1%</b> as local anaesthetic.`,ask:'How many mg of lidocaine is that?',answer:mg,unit:'mg',
+    steps:['1% w/v = 1 g in 100 mL = 1000 mg in 100 mL = <b>10 mg in 1 mL</b>',`${ml} mL × 10 mg = <b>${mg} mg</b>`],
+    hint:'1% means 1 g in 100 mL. Change that into mg per mL.',traps:[[ml,'missedstep'],[ml/100,'missedstep']],alts:[mg*10]});
+}
+
+/* ================= BMI ================= */
+const bmiCat=b=>b<18.5?'underweight':b<25?'healthy weight':b<30?'overweight':b<40?'obese':'severely obese';
+const BMI_WHY={adult:'at a pre-operative assessment clinic',mh:'as part of physical health monitoring for antipsychotic medication',ld:'at their annual health check'};
+function genBMI(L,f){
+  const c=f==='child'?teen():ctx(f);
+  const where=f==='child'?c.place:BMI_WHY[f];
+  let w,hcm,h,text,ask='What is their BMI? Round to 1 decimal place.';const steps=[];
+  if(L===4&&f!=='child'){
+    hcm=R(155,185);h=hcm/100;const h2=rd(h*h,4),b0=R(27,34)+R(0,9)/10;
+    w=rd(b0*h2,1);const tw=25*h2,ans=w-tw;
+    return Q({fk:'bmiTarget',text:`${c.who} has had their weight checked ${where}. They weigh <b>${nf(w)} kg</b> and are <b>${hcm} cm</b> tall. They would like to reach a BMI of 25.`,
+      ask:'How many kg would they need to lose to reach a BMI of 25? Round to 1 decimal place.',answer:ans,dp:1,unit:'kg',
+      steps:[`Height in metres = ${hcm} ÷ 100 = ${nf(h)} m`,`Height² = ${nf(h)} × ${nf(h)} = ${nf(h2)}`,`Target weight = 25 × ${nf(h2)} = ${nf(tw)} kg`,`Weight to lose = ${nf(w)} - ${nf(tw)} = ${nf(ans)}, so <b>${nfd(ans,1)} kg</b>`],
+      hint:'Rearrange BMI: weight = BMI × height². Work out the target weight, then subtract.',traps:[[tw,'missedstep'],[w-25*h,'nosquare']]});
+  }
+  if(L===1){
+    h=P([1.5,1.6,1.7,1.8]);w=R(50,95);
+    text=`${c.who} is having their BMI checked ${where}. They weigh <b>${w} kg</b> and are <b>${nf(h)} m</b> tall.`;
+  } else if(L===2){
+    hcm=R(150,190);h=hcm/100;w=R(48,110);
+    text=`${c.who} is having their BMI checked ${where}. They weigh <b>${w} kg</b> and are <b>${hcm} cm</b> tall.`;
+  } else {
+    hcm=L===4?R(1505,1849)/10:R(152,188);h=rd(hcm/100,4);
+    const w0=R(50,90)+P([0,0.5]),chg=P([2,2.5,3,3.5,4,5]),gain=f!=='adult'||Math.random()<0.5;
+    w=gain?w0+chg:w0-chg;
+    text=`${c.who} was weighed ${where}. Last month they weighed <b>${nf(w0)} kg</b>. Since then they have ${gain?'gained':'lost'} <b>${nf(chg)} kg</b>. Their height is <b>${nf(hcm)} cm</b>.`;
+    ask='What is their BMI now? Round to 1 decimal place.';
+    steps.push(`Current weight = ${nf(w0)} ${gain?'+':'-'} ${nf(chg)} = <b>${nf(w)} kg</b>`);
+  }
+  const h2=rd(h*h,L===4?6:4),b=w/h2;
+  if(hcm) steps.push(`Change cm to m: ${nf(hcm)} ÷ 100 = ${nf(h)} m`);
+  steps.push(`Height² = ${nf(h)} × ${nf(h)} = ${nf(h2)}`);
+  steps.push(`BMI = ${nf(w)} ÷ ${nf(h2)} = ${nf(b)}, so <b>${nfd(b,1)} kg/m²</b>`);
+  const note=f==='child'?'For under 18s, the BMI is then plotted on a centile chart for age and sex.':`For adults, ${nfd(b,1)} is in the standard <b>${bmiCat(rd(b,1))}</b> range.`;
+  return Q({fk:'bmi',text,ask,answer:b,dp:1,unit:'kg/m²',steps,note,hint:'Change cm to m (÷ 100). Square the height (height × height). Then weight ÷ height².',traps:[[w/h,'nosquare'],[w/(h*2),'nosquare'],[h2/w,'inverted']]});
+}
+
+/* ================= Flow rates ================= */
+const FLUID={adult:['sodium chloride 0.9%',"Hartmann's solution",'glucose 5%'],child:['sodium chloride 0.9% with glucose 5%','sodium chloride 0.9%'],mh:['sodium chloride 0.9%','glucose 5%'],ld:['sodium chloride 0.9%',"Hartmann's solution"]};
+function genFlow(L,f){
+  const c=ctx(f,true),fl=P(FLUID[f]),kid=f==='child';
+  if(L===1){
+    const [v,h]=P(kid?[[500,10],[250,5],[480,12],[360,12],[500,20],[240,8]]:[[1000,8],[1000,10],[500,4],[500,5],[1000,4],[1000,5],[500,10],[250,2]]);
+    const ans=v/h;
+    return Q({fk:'rate',text:`${c.who} is ${c.place}. They are prescribed <b>${v} mL of ${fl}</b> to run over <b>${h} hours</b> using an infusion pump.`,
+      ask:'What rate should you set the pump to?',answer:ans,unit:'mL/h',
+      steps:['Rate (mL/h) = volume (mL) ÷ time (hours)',`${v} ÷ ${h} = <b>${nf(ans)} mL/h</b>`],hint:'Pumps work in mL per hour: volume ÷ hours.',traps:[[v/(h*60),'minutes'],[h/v,'inverted']],alts:[ans*2,ans/2]});
+  }
+  if(L===2){
+    if(Math.random()<0.5){
+      const [v,m]=P(kid?[[50,30],[20,30],[50,15],[25,30],[30,20]]:[[100,30],[100,20],[250,60],[50,15],[100,15],[250,30],[50,30]]);
+      const ans=v/m*60;
+      return Q({fk:'rateMin',text:`${c.who} is ${c.place}. They are prescribed an <b>IV antibiotic diluted to ${v} mL</b>, to be given over <b>${m} minutes</b> by infusion pump.`,
+        ask:'What rate should you set the pump to?',answer:ans,unit:'mL/h',
+        steps:['Pumps run in mL per <b>hour</b>, but the time is in minutes.',`Rate = volume ÷ minutes × 60 = ${v} ÷ ${m} × 60 = <b>${nf(ans)} mL/h</b>`],
+        hint:'Minutes are not hours! Divide by the minutes, then × 60.',traps:[[v/m,'minutes'],[v*m/60,'inverted']],alts:[v]});
+    }
+    const [v,h]=P(kid?[[500,12],[250,6],[400,24],[1000,24],[500,7]]:[[1000,6],[1000,12],[500,3],[500,6],[1000,9],[500,12]]);
+    const ex=v/h;
+    return Q({fk:'rate',text:`${c.who} is ${c.place}. They are prescribed <b>${v} mL of ${fl}</b> over <b>${h} hours</b> by infusion pump.`,
+      ask:'What rate should you set? Round to 1 decimal place.',answer:ex,dp:1,unit:'mL/h',
+      steps:['Rate (mL/h) = volume ÷ hours',`${v} ÷ ${h} = ${nf(ex)}`,`Rounded to 1 decimal place: <b>${nfd(ex,1)} mL/h</b>`],hint:'mL/h = volume ÷ hours. Round only at the end.',traps:[[v/(h*60),'minutes']],alts:[ex*2,ex+10]});
+  }
+  if(L===3){
+    if(kid){
+      const v=P([1100,1200,1300,1400,1500]),ex=v/24;
+      return Q({fk:'rate',text:`${c.who} is ${c.place}. They need <b>${v} mL of ${fl}</b> over <b>24 hours</b>. Children's IV fluids always run through a pump.`,
+        ask:'What hourly rate should the pump be set to? Round to 1 decimal place.',answer:ex,dp:1,unit:'mL/h',
+        steps:['Rate = volume ÷ hours',`${v} ÷ 24 = ${nf(ex)}`,`Rounded to 1 decimal place: <b>${nfd(ex,1)} mL/h</b>`],hint:'There are 24 hours in a day.',traps:[[v/(24*60),'minutes'],[v/12,'calc']],alts:[ex*2]});
+    }
+    const v=P([500,1000]),h=P([4,5,6,8,10,12]),m=h*60,ex=v*20/m;
+    return Q({fk:'drops',text:`${c.who} is ${c.place}. They are prescribed <b>${v} mL of ${fl}</b> over <b>${h} hours</b>. No pump is available, so you will use a <b>standard giving set (20 drops/mL)</b>.`,
+      ask:'How many drops per minute? Round to the nearest whole drop.',answer:ex,dp:0,unit:'drops/min',
+      steps:[`Time in minutes = ${h} × 60 = <b>${m} minutes</b>`,'Drops/min = volume × drop factor ÷ minutes',`${v} × 20 ÷ ${m} = ${nf(ex)}, so <b>${rd(ex,0)} drops/min</b>`],
+      hint:'Change hours into minutes first, then volume × 20 ÷ minutes.',traps:[[v*20/h,'minutes'],[v*15/m,'dropfactor'],[v/m,'missedstep']]});
+  }
+  if(kid){
+    const w=c.weight,a=Math.min(w,10)*100,mid=Math.max(0,Math.min(w,20)-10),b=mid*50,over=Math.max(0,w-20),cc=over*20,tot=a+b+cc,ex=tot/24;
+    return Q({fk:'hs',text:`${c.who} weighs <b>${w} kg</b> and needs maintenance IV fluids. Use the Holliday-Segar formula: <b>100 mL/kg/day</b> for the first 10 kg, <b>50 mL/kg/day</b> for the next 10 kg and <b>20 mL/kg/day</b> for each kg above 20 kg.`,
+      ask:'What hourly rate should the pump be set to? Round to 1 decimal place.',answer:ex,dp:1,unit:'mL/h',
+      steps:[`First 10 kg: 10 × 100 = ${a} mL`,`Next ${mid} kg: ${mid} × 50 = ${b} mL`,`Above 20 kg: ${over} × 20 = ${cc} mL`,`Total per day = <b>${tot} mL</b>`,`Rate = ${tot} ÷ 24 = ${nf(ex)}, so <b>${nfd(ex,1)} mL/h</b>`],
+      hint:'Work out the daily total in three chunks, then divide by 24.',traps:[[w*100/24,'missedstep'],[tot/(24*60),'minutes']],alts:[tot/12]});
+  }
+  const t=R(0,2);
+  if(t===0){
+    const v=P([250,280,300,320,350]),h=P([2,3,4]),m=h*60,ex=v*15/m;
+    return Q({fk:'drops',text:`${c.who} is ${c.place} and is prescribed <b>1 unit of red cells (${v} mL)</b> over <b>${h} hours</b>. You are using a <b>blood giving set (15 drops/mL)</b>.`,
+      ask:'How many drops per minute? Round to the nearest whole drop.',answer:ex,dp:0,unit:'drops/min',
+      steps:[`Time in minutes = ${h} × 60 = <b>${m} minutes</b>`,'Drops/min = volume × drop factor ÷ minutes',`${v} × 15 ÷ ${m} = ${nf(ex)}, so <b>${rd(ex,0)} drops/min</b>`],
+      hint:'Blood sets give 15 drops per mL. Time must be in minutes.',traps:[[v*20/m,'dropfactor'],[v*15/h,'minutes'],[v/m,'missedstep']]});
+  }
+  if(t===1){
+    const v=P([500,750,1000]),r=P([75,100,125,150,250]),ex=v/r;
+    return Q({fk:'duration',text:`${c.who} is ${c.place}. A <b>${v} mL bag of ${fl}</b> has just been started at <b>${r} mL/h</b>.`,
+      ask:'How long will the bag take to finish, in hours? Round to 1 decimal place.',answer:ex,dp:1,unit:'hours',
+      steps:['Time (hours) = volume ÷ rate',`${v} ÷ ${r} = ${nf(ex)}, so <b>${nfd(ex,1)} hours</b>`],note:`That is about ${hm(Math.round(ex*60)/60)}.`,
+      hint:'Time = volume ÷ rate.',traps:[[r/v,'inverted']],alts:[ex*60]});
+  }
+  const r=P([80,100,125,150]),tt=P([2.5,3,4.5,5,6]),used=r*tt,rem=1000-used;
+  return Q({fk:'remain',text:`${c.who} is ${c.place}. A <b>1000 mL bag of ${fl}</b> has been running at <b>${r} mL/h</b> for <b>${hm(tt)}</b>.`,
+    ask:'How much fluid is left in the bag?',answer:rem,unit:'mL',
+    steps:[`Time = ${nf(tt)} hours`,`Volume given = ${r} × ${nf(tt)} = <b>${nf(used)} mL</b>`,`Left = 1000 - ${nf(used)} = <b>${nf(rem)} mL</b>`],
+    hint:'Volume given = rate × time. Then take it away from the bag.',traps:[[used,'missedstep'],[1000-r*Math.floor(tt),'minutes']]});
+}
+
+/* ================= Fluid balance ================= */
+const DRINKS={adult:[['Cup of tea',200],['Glass of water',250],['Orange juice',150],['Soup',200],['Water from jug',300]],
+  child:[['Beaker of milk',120],['Cup of squash',150],['Yoghurt drink',100],['Water bottle',200]],
+  mh:[['Mug of coffee',250],['Glass of water',250],['Can of fizzy drink',330],['Cup of tea',200]],
+  ld:[['Beaker of thickened juice',150],['Thickened tea',200],['Glass of water',250],['Smoothie',150]]};
+const TIMES=['07:00','09:00','10:30','12:00','13:30','15:00','16:30','18:00','19:30','21:00'];
+function pickTimes(n){return [...TIMES].sort(()=>Math.random()-.5).slice(0,n).sort();}
+function table(title,rows,tot){
+  return `<table class="fc"><tr><th colspan="3">${title}</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="n">${typeof r[2]==='number'?nf(r[2])+' mL':r[2]}</td></tr>`).join('')}${tot?`<tr><th colspan="2">Total</th><th class="n">${tot}</th></tr>`:''}</table>`;
+}
+function urineVals(n,kid){return Array.from({length:n},()=>kid?R(5,15)*10:R(15,45)*10);}
+function genBal(L,f){
+  const kid=f==='child',c=ctx(f,L>=3);
+  if(L===1){
+    if(Math.random()<0.5){
+      const n=R(3,4),t=pickTimes(n),d=Array.from({length:n},()=>P(DRINKS[f])),tot=sum(d.map(x=>x[1]));
+      return Q({fk:'total',text:`${c.who} is ${c.place}. Here is their oral intake so far today:${table('Oral intake',d.map((x,i)=>[t[i],x[0],x[1]]))}`,
+        ask:'What is the total oral intake?',answer:tot,unit:'mL',
+        steps:['Add every entry together.',`${d.map(x=>x[1]).join(' + ')} = <b>${nf(tot)} mL</b>`],hint:'Add them two at a time if it helps.',traps:[[tot-d[0][1],'missedstep']],alts:[tot+100]});
+    }
+    const n=R(3,4),t=pickTimes(n),u=urineVals(n,kid),tot=sum(u);
+    return Q({fk:'total',text:`${c.who} is ${c.place}. Here is their urine output so far today:${table('Output',u.map((x,i)=>[t[i],'Urine',x]))}`,
+      ask:'What is the total urine output?',answer:tot,unit:'mL',
+      steps:['Add every entry together.',`${u.join(' + ')} = <b>${nf(tot)} mL</b>`],hint:'Add them two at a time if it helps.',traps:[[tot-u[0],'missedstep']],alts:[tot+100]});
+  }
+  if(L===2){
+    if(kid&&Math.random()<0.5){
+      const n=3,dry=P([20,25,30]),wet=Array.from({length:n},()=>dry+R(4,9)*10),tot=sum(wet)-n*dry;
+      return Q({fk:'nappy',text:`${c.who} is ${c.place} and wears nappies. Three wet nappies weighed <b>${andList(wet.map(x=>x+' g'))}</b>. A dry nappy weighs <b>${dry} g</b>. Take 1 g as 1 mL of urine.`,
+        ask:'What is the total urine output?',answer:tot,unit:'mL',
+        steps:[`Total weight of wet nappies = ${wet.join(' + ')} = ${sum(wet)} g`,`Weight of 3 dry nappies = 3 × ${dry} = ${3*dry} g`,`Urine = ${sum(wet)} - ${3*dry} = <b>${tot} mL</b>`],
+        hint:'Take the dry nappy weight away from each wet nappy.',traps:[[sum(wet),'missedstep'],[sum(wet)-dry,'missedstep']]});
+    }
+    const n=R(3,4),t=pickTimes(n),d=Array.from({length:n},()=>P(DRINKS[f])),inn=sum(d.map(x=>x[1]));
+    const m=R(2,3),t2=pickTimes(m),u=urineVals(m,kid).map(x=>x+(kid?0:R(0,1)*100)),out=sum(u),bal=inn-out;
+    return Q({fk:'balance',signed:true,text:`${c.who} is ${c.place}. Here is part of their fluid balance chart:${table('Intake',d.map((x,i)=>[t[i],x[0],x[1]]))}${table('Output',u.map((x,i)=>[t2[i],'Urine',x]))}`,
+      ask:'What is the fluid balance? Use a minus sign if it is negative.',answer:bal,unit:'mL',
+      steps:[`Total in = ${d.map(x=>x[1]).join(' + ')} = <b>${nf(inn)} mL</b>`,`Total out = ${u.join(' + ')} = <b>${nf(out)} mL</b>`,`Balance = in - out = ${nf(inn)} - ${nf(out)} = <b>${sgn(bal)} mL</b>`],
+      note:bal>=0?'Positive: more has gone in than come out.':'Negative: more has come out than gone in.',
+      hint:'Total IN, total OUT, then IN minus OUT.',traps:[[inn+out,'calc']]});
+  }
+  if(L===3){
+    const r=kid?P([30,40,50]):P([75,80,100,125]),h=P([4,6,8,12]),iv=r*h;
+    const d=Array.from({length:2},()=>P(DRINKS[f])),t=pickTimes(2),oral=sum(d.map(x=>x[1])),inn=iv+oral;
+    const u=urineVals(3,kid),t2=pickTimes(4);
+    const extraName=f==='adult'?'Wound drain':'Vomit',extra=kid?R(3,10)*10:(f==='adult'?R(2,15)*10:R(5,20)*10);
+    const out=sum(u)+extra,bal=inn-out;
+    return Q({fk:'balance',signed:true,text:`${c.who} is ${c.place}. IV fluid has been running at <b>${r} mL/h for ${h} hours</b>. They have also had:${table('Oral intake',d.map((x,i)=>[t[i],x[0],x[1]]))}${table('Output',[...u.map((x,i)=>[t2[i],'Urine',x]),[t2[3],extraName,extra]])}`,
+      ask:'What is the fluid balance for this period? Use a minus sign if it is negative.',answer:bal,unit:'mL',
+      steps:[`IV in = ${r} × ${h} = <b>${nf(iv)} mL</b>`,`Total in = ${nf(iv)} + ${d.map(x=>x[1]).join(' + ')} = <b>${nf(inn)} mL</b>`,`Total out = ${[...u,extra].join(' + ')} = <b>${nf(out)} mL</b>`,`Balance = ${nf(inn)} - ${nf(out)} = <b>${sgn(bal)} mL</b>`],
+      hint:'Do not forget the IV fluid: rate × hours.',traps:[[oral-out,'missedstep'],[inn-sum(u),'missedstep']]});
+  }
+  const w=kid?c.weight:P([50,60,65,70,75,80,90]),h=P([4,6,8]),rate=kid?P([0.5,0.8,1,1.5,2]):P([0.3,0.4,0.5,0.6,0.8,1]),urine=Math.round(rate*w*h),min=kid?1:0.5;
+  return Q({fk:'urine',text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>. Over the last <b>${h} hours</b> they have passed <b>${urine} mL</b> of urine.`,
+    ask:'What is their urine output in mL/kg/h? Round to 1 decimal place.',answer:urine/w/h,dp:1,unit:'mL/kg/h',
+    steps:[`Per hour: ${urine} ÷ ${h} = ${nf(urine/h)} mL/h`,`Per kg: ${nf(urine/h)} ÷ ${w} = ${nf(urine/w/h)}, so <b>${nfd(urine/w/h,1)} mL/kg/h</b>`],
+    note:rate>=min?`This meets the commonly used minimum of ${min} mL/kg/h.`:`This is <b>below</b> the commonly used minimum of ${min} mL/kg/h, so escalate to the nurse in charge or medical team.`,
+    hint:'Urine ÷ hours, then ÷ weight.',traps:[[urine/h,'missedstep'],[urine/w,'missedstep']]});
+}
+
+/* ================= Missing value ================= */
+function genMiss(L,f){
+  const kid=f==='child';
+  if(L===1){
+    const c=ctx(f,true);
+    if(Math.random()<0.5){
+      const r=kid?P([20,30,40,50]):P([50,75,100,125]),h=P([2,3,4,6,8]),v=r*h;
+      return Q({fk:'volume',text:`${c.who} is ${c.place}. Their IV fluid has been running at <b>${r} mL/h</b> for <b>${h} hours</b>. The total volume has not been filled in yet.`,
+        ask:'How much fluid has been given?',answer:v,unit:'mL',steps:['Volume = rate × time',`${r} × ${h} = <b>${nf(v)} mL</b>`],hint:'Volume = rate × time',traps:[[r/h,'inverted']],alts:[v/2]});
+    }
+    const c2=ctx(f),d=Array.from({length:3},()=>P(DRINKS[f])),t=pickTimes(3),tot=sum(d.map(x=>x[1])),miss=d[2][1];
+    return Q({fk:'missingEntry',text:`${c2.who} is ${c2.place}. Their chart shows a total oral intake of <b>${nf(tot)} mL</b>, but one entry is smudged:${table('Oral intake',[[t[0],d[0][0],d[0][1]],[t[1],d[1][0],d[1][1]],[t[2],d[2][0],'?']],nf(tot)+' mL')}`,
+      ask:'What volume is missing?',answer:miss,unit:'mL',
+      steps:[`Known entries = ${d[0][1]} + ${d[1][1]} = ${d[0][1]+d[1][1]} mL`,`Missing = ${nf(tot)} - ${d[0][1]+d[1][1]} = <b>${miss} mL</b>`],hint:'Total minus the entries you know.',alts:[tot,miss+50]});
+  }
+  if(L===2){
+    if(Math.random()<0.5){
+      const c=ctx(f,true),[v,r]=P(kid?[[500,50],[250,25],[480,40],[360,30]]:[[1000,125],[500,125],[1000,100],[500,50],[1000,250],[750,125]]),h=v/r;
+      return Q({fk:'duration',text:`${c.who} is ${c.place}. A <b>${v} mL</b> bag is running at <b>${r} mL/h</b>.`,ask:'How many hours will it take to finish?',answer:h,unit:'hours',
+        steps:['Time = volume ÷ rate',`${v} ÷ ${r} = <b>${nf(h)} hours</b>`],hint:'Time = volume ÷ rate',traps:[[r/v,'inverted'],[h*60,'unitAsked']]});
+    }
+    const c=ctx(f),b=(Math.random()<0.5?1:-1)*R(1,8)*50,out=kid?R(6,12)*100:R(12,24)*100,inn=out+b;
+    return Q({fk:'intake',text:`${c.who} is ${c.place}. Their 24 hour fluid balance is <b>${sgn(b)} mL</b>. The total output was <b>${nf(out)} mL</b>. The total intake box is blank.`,
+      ask:'What was the total intake?',answer:inn,unit:'mL',
+      steps:['Balance = in - out, so in = out + balance',`In = ${nf(out)} + (${sgn(b)}) = <b>${nf(inn)} mL</b>`],hint:'Rearrange: intake = output + balance',traps:[[out-b,'sign']],alts:[out]});
+  }
+  if(L===3){
+    if(Math.random()<0.5){
+      const c=f==='child'?teen():ctx(f),b=R(185,350)/10,hcm=R(150,190),h=hcm/100,h2=rd(h*h,4),w=b*h2;
+      return Q({fk:'bmiRev',text:`${c.who} has a recorded BMI of <b>${nf(b)}</b> and is <b>${hcm} cm</b> tall, but their weight is missing from the record.`,
+        ask:'What do they weigh? Round to 1 decimal place.',answer:w,dp:1,unit:'kg',
+        steps:['BMI = weight ÷ height², so weight = BMI × height²',`Height = ${hcm} ÷ 100 = ${nf(h)} m, height² = ${nf(h2)}`,`Weight = ${nf(b)} × ${nf(h2)} = ${nf(w)}, so <b>${nfd(w,1)} kg</b>`],
+        hint:'Rearrange BMI: weight = BMI × height (m)²',traps:[[b*h,'nosquare'],[b/h2,'inverted']]});
+    }
+    const c=ctx(f),pool=WG[f][2].map(norm).filter(e=>e.out==='mL'),e=P(pool),d=P(e.d.filter(x=>!Array.isArray(x))),vol=d/e.st*e.v,per=e.st/e.v;
+    return Q({fk:'doseFromVol',drug:e.n,text:`${c.who} is ${c.place}. During a second check, your colleague asks you to confirm the dose in <b>${nf(vol)} mL</b> of <b>${e.n} ${e.s}</b>.`,
+      ask:'What dose is in that volume (in mg)?',answer:d,unit:'mg',
+      steps:[`Strength per mL = ${nf(e.st)} ÷ ${nf(e.v)} = <b>${nf(per)} mg/mL</b>`,`Dose = ${nf(vol)} mL × ${nf(per)} = <b>${nf(d)} mg</b>`],hint:'Work out how many mg are in 1 mL first.',traps:[[vol*e.st,'missedstep'],[vol/e.st*e.v,'inverted']],alts:[d*2]});
+  }
+  const t=f==='mh'?1:R(0,1);
+  if(t===0){
+    if(f==='child'){
+      const c=ctx('child'),w=c.weight,mg=15*w;
+      return Q({fk:'weightFromDose',drug:'Paracetamol',text:`${c.who} is ${c.place}. They are prescribed <b>paracetamol 15 mg/kg</b> and the calculated dose on the chart is <b>${mg} mg</b>, but the weight box is empty.`,
+        ask:'What weight was used?',answer:w,unit:'kg',steps:['Dose = mg/kg × weight, so weight = dose ÷ mg/kg',`${mg} ÷ 15 = <b>${w} kg</b>`],hint:'Weight = dose ÷ dose per kg',traps:[[mg*15,'inverted']],alts:[w*2,mg/10]});
+    }
+    if(f==='adult'){
+      const c=ctx('adult',true),w=R(36,49),mg=15*w;
+      return Q({fk:'weightFromDose',drug:'Paracetamol',text:`${c.who} is ${c.place}. They are prescribed <b>IV paracetamol 15 mg/kg</b> and the calculated dose is <b>${mg} mg</b>, but the weight is not recorded.`,
+        ask:'What weight was used?',answer:w,unit:'kg',steps:['Weight = dose ÷ mg/kg',`${mg} ÷ 15 = <b>${w} kg</b>`],hint:'Weight = dose ÷ dose per kg',traps:[[mg*15,'inverted']],alts:[mg/10,w*2]});
+    }
+    const c=ctx('ld'),w=P([50,55,60,65,70,75,80]),daily=20*w;
+    return Q({fk:'weightFromDose',drug:'Sodium valproate',text:`${c.who} is ${c.place}. They take <b>sodium valproate 20 mg/kg/day</b>, which works out as <b>${nf(daily)} mg per day</b>. Their weight is missing from the MAR chart.`,
+      ask:'What weight was used?',answer:w,unit:'kg',steps:['Weight = daily dose ÷ mg/kg/day',`${nf(daily)} ÷ 20 = <b>${w} kg</b>`],hint:'Weight = dose ÷ dose per kg',traps:[[daily*20,'inverted']],alts:[daily/10,w*2]});
+  }
+  const c=ctx(f,true),fl=P(FLUID[f]),bag=kid?500:1000,r=kid?P([40,50,60]):P([80,100,125]),ran=P([2,3,4]),left=P([4,5,6]),rem=bag-r*ran,nr=rem/left;
+  return Q({fk:'newrate',text:`${c.who} is ${c.place}. A <b>${bag} mL bag of ${fl}</b> ran at <b>${r} mL/h for ${ran} hours</b>, then the pump was paused. The prescriber wants the rest of the bag to run over the next <b>${left} hours</b>.`,
+    ask:'What new rate is needed? Round to 1 decimal place.',answer:nr,dp:1,unit:'mL/h',
+    steps:[`Already given = ${r} × ${ran} = ${r*ran} mL`,`Left in bag = ${bag} - ${r*ran} = <b>${rem} mL</b>`,`New rate = ${rem} ÷ ${left} = ${nf(nr)}, so <b>${nfd(nr,1)} mL/h</b>`],
+    hint:'Find what is left in the bag, then divide by the hours remaining.',traps:[[bag/left,'missedstep'],[rem/ran,'calc']]});
+}
+
+/* ================= BNF max dose checks ================= */
+function bnfBox(title,lines,child){
+  return `<div class="bnfx"><div class="bnfh">${child?'BNFC':'BNF'}-style reference: ${title} <span>(simplified for practice)</span></div>${lines.map(l=>`<div class="bl">• ${l}</div>`).join('')}</div>`;
+}
+const DT=['06:00','10:00','14:00','18:00'];
+const gmg=d=>d>=1000?nf(d/1000)+' g':nf(d)+' mg';
+function givenText(doses,fmt){return andList(doses.map((d,i)=>`${fmt(d)} at ${DT[i]}`));}
+function genBNF(L,f){
+  const c=ctx(f);
+  if(f==='adult'||(f==='ld'&&Math.random()<0.4)){
+    const kind=f==='ld'?'paraLiq':(L===1?P(['para','cod']):L===2?P(['para','cod']):L===3?P(['para','cod','ibu']):P(['para','ibu']));
+    if(kind==='para'||kind==='paraLiq'){
+      const box=bnfBox('Paracetamol (oral), adults',['Dose: 0.5 to 1 g every 4 to 6 hours','<b>Maximum 4 g in 24 hours</b>']);
+      const n=L===1?2:3,doses=L===1?[1000,1000]:Array.from({length:n},()=>P([500,1000])),given=sum(doses),left=4000-given;
+      if(kind==='paraLiq'){
+        const toMl=d=>d/250*5;
+        if(L>=4||(L===3)){
+          const ml=left/250*5;
+          return Q({fk:'maxdose',drug:'Paracetamol',text:`${c.who} is ${c.place} and has paracetamol oral suspension <b>250 mg in 5 mL</b>. In the last 24 hours they have had ${givenText(doses,d=>`<b>${nf(toMl(d))} mL</b>`)}.${box}`,
+            ask:'What volume of suspension could still be given before reaching the 24 hour maximum?',answer:ml,unit:'mL',
+            steps:[`Given in mL: ${doses.map(toMl).join(' + ')} = ${sum(doses.map(toMl))} mL, which is ${sum(doses.map(toMl))} ÷ 5 × 250 = <b>${given} mg</b>`,`Maximum 4 g = 4000 mg, so ${4000} - ${given} = <b>${left} mg</b> left`,`Volume: ${left} ÷ 250 × 5 = <b>${nf(ml)} mL</b>`],
+            hint:'Turn the mL given into mg, take it from the maximum, then turn what is left back into mL.',traps:[[left,'unitAsked'],[(4000/250*5)-sum(doses),'calc']]});
+        }
+      }
+      if(L<=2) return Q({fk:'maxdose',drug:'Paracetamol',text:`${c.who} is ${c.place}. In the last 24 hours they have had paracetamol ${givenText(doses,d=>`<b>${gmg(d)}</b>`)}.${box}`,
+        ask:'How much more paracetamol (in mg) could be given before reaching the 24 hour maximum?',answer:left,unit:'mg',
+        steps:['Maximum = 4 g = <b>4000 mg</b>',`Given = ${doses.join(' + ')} = <b>${given} mg</b>`,`Left = 4000 - ${given} = <b>${left} mg</b>`],
+        hint:'Change the maximum into mg, add up what has been given, then subtract.',traps:[[4-given/1000,'noconv'],[4000+given,'calc']]});
+      if(L===3) return Q({fk:'maxdose',drug:'Paracetamol',text:`${c.who} is ${c.place}. In the last 24 hours they have had paracetamol ${givenText(doses,d=>`<b>${gmg(d)}</b>`)}. You have <b>paracetamol 500 mg tablets</b>.${box}`,
+        ask:'How many 500 mg tablets would take them up to the 24 hour maximum?',answer:left/500,unit:'tablets',
+        steps:['Maximum = 4 g = <b>4000 mg</b>',`Given = ${doses.join(' + ')} = <b>${given} mg</b>`,`Left = 4000 - ${given} = ${left} mg`,`Tablets = ${left} ÷ 500 = <b>${left/500} tablets</b>`],
+        hint:'Find what is left in mg, then divide by the tablet strength.',traps:[[left,'unitAsked'],[given/500,'missedstep']]});
+      return Q({fk:'maxdose',drug:'Paracetamol',text:`${c.who} is ${c.place}. In the last 24 hours they have had paracetamol ${givenText(doses,d=>`<b>${gmg(d)}</b>`)}.${box}`,
+        ask:'How much more paracetamol could be given before the 24 hour maximum? Answer in grams.',answer:left/1000,unit:'g',
+        steps:[`Given = ${doses.join(' + ')} = ${given} mg = <b>${nf(given/1000)} g</b>`,`Left = 4 - ${nf(given/1000)} = <b>${nf(left/1000)} g</b>`],
+        hint:'Work in grams: change every dose into g first.',traps:[[left,'unitAsked']]});
+    }
+    if(kind==='cod'){
+      const box=bnfBox('Codeine phosphate (oral), adults',['Dose: 30 to 60 mg every 4 hours when necessary','<b>Maximum 240 mg per day</b>']);
+      const doses=L===1?[60,60]:Array.from({length:3},()=>P([30,60])),given=sum(doses),left=240-given;
+      if(L<=2) return Q({fk:'maxdose',drug:'Codeine phosphate',text:`${c.who} is ${c.place}. Today they have had codeine phosphate ${givenText(doses,d=>`<b>${d} mg</b>`)}.${box}`,
+        ask:'How much more codeine (in mg) could be given today?',answer:left,unit:'mg',
+        steps:[`Given = ${doses.join(' + ')} = <b>${given} mg</b>`,`Left = 240 - ${given} = <b>${left} mg</b>`],hint:'Maximum minus what has been given.',traps:[[240+given,'calc']]});
+      return Q({fk:'maxdose',drug:'Codeine phosphate',text:`${c.who} is ${c.place}. Today they have had codeine phosphate ${givenText(doses,d=>`<b>${d} mg</b>`)}. You have <b>codeine phosphate 30 mg tablets</b>.${box}`,
+        ask:'How many more 30 mg tablets could be given today without going over the maximum?',answer:left/30,unit:'tablets',
+        steps:[`Given = ${doses.join(' + ')} = <b>${given} mg</b>`,`Left = 240 - ${given} = ${left} mg`,`Tablets = ${left} ÷ 30 = <b>${left/30} tablets</b>`],hint:'Find what is left in mg, then divide by 30.',traps:[[left,'unitAsked']]});
+    }
+    const box=bnfBox('Ibuprofen (oral), adults',['Dose: 300 to 400 mg 3 to 4 times a day','<b>Maximum 2.4 g per day</b>']);
+    const [d,n]=P([[400,3],[200,3],[400,4],[200,4]]),daily=d*n,left=2400-daily;
+    if(L===3) return Q({fk:'maxdose',drug:'Ibuprofen',text:`${c.who} is ${c.place} and takes <b>ibuprofen ${d} mg ${n===3?'three':'four'} times a day</b>.${box}`,
+      ask:'How many more mg per day could be given before reaching the maximum?',answer:left,unit:'mg',
+      steps:['Maximum = 2.4 g = <b>2400 mg</b>',`Current daily dose = ${d} × ${n} = <b>${daily} mg</b>`,`Left = 2400 - ${daily} = <b>${left} mg</b>`],hint:'Change 2.4 g into mg first.',traps:[[2.4-daily,'noconv'],[2400-d,'missedstep']]});
+    return Q({fk:'maxdose',drug:'Ibuprofen',text:`${c.who} is ${c.place} and takes <b>ibuprofen ${d} mg ${n===3?'three':'four'} times a day</b>. You have <b>ibuprofen 200 mg tablets</b>.${box}`,
+      ask:'How many extra 200 mg tablets per day would take them to the maximum?',answer:left/200,unit:'tablets',
+      steps:['Maximum = 2.4 g = <b>2400 mg</b>',`Current daily dose = ${d} × ${n} = <b>${daily} mg</b>`,`Left = 2400 - ${daily} = ${left} mg`,`Tablets = ${left} ÷ 200 = <b>${left/200} tablets</b>`],hint:'mg left ÷ tablet strength.',traps:[[left,'unitAsked'],[2400/200,'missedstep']]});
+  }
+  if(f==='child'){
+    const w=c.weight,box=bnfBox('Ibuprofen (oral), child',['Dose: 5 to 10 mg/kg 3 to 4 times a day','<b>Maximum 30 mg/kg per day</b>'],true),max=30*w,dose=5*w,ml=dose/100*5;
+    if(L===1) return Q({fk:'maxdose',drug:'Ibuprofen',child:true,text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>.${box}`,
+      ask:'What is the maximum amount of ibuprofen they can have in one day (in mg)?',answer:max,unit:'mg',
+      steps:[`Maximum = 30 mg × ${w} kg = <b>${max} mg</b>`],hint:'Maximum per kg × weight.',traps:[[10*w,'missedstep'],[30+w,'calc']]});
+    if(L===2) return Q({fk:'maxdose',drug:'Ibuprofen',child:true,text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>. Today they have had two doses of <b>${dose} mg</b> ibuprofen.${box}`,
+      ask:'How much more ibuprofen (in mg) could be given today?',answer:max-2*dose,unit:'mg',
+      steps:[`Maximum = 30 × ${w} = <b>${max} mg</b>`,`Given = 2 × ${dose} = <b>${2*dose} mg</b>`,`Left = ${max} - ${2*dose} = <b>${max-2*dose} mg</b>`],hint:'Work out the daily maximum, then subtract what has been given.',traps:[[max-dose,'missedstep'],[max,'missedstep']]});
+    if(L===3) return Q({fk:'maxdose',drug:'Ibuprofen',child:true,text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>. Today they have had three doses of <b>${nf(ml)} mL</b> of ibuprofen oral suspension <b>100 mg in 5 mL</b>.${box}`,
+      ask:'How much more ibuprofen (in mg) could be given today?',answer:max-3*dose,unit:'mg',
+      steps:[`Each dose = ${nf(ml)} ÷ 5 × 100 = <b>${dose} mg</b>`,`Given = 3 × ${dose} = <b>${3*dose} mg</b>`,`Maximum = 30 × ${w} = <b>${max} mg</b>`,`Left = ${max} - ${3*dose} = <b>${max-3*dose} mg</b>`],hint:'Turn mL into mg first.',traps:[[max-3*ml,'missedstep'],[max,'missedstep']]});
+    const left=max-3*dose,lml=left/100*5;
+    return Q({fk:'maxdose',drug:'Ibuprofen',child:true,text:`${c.who} is ${c.place} and weighs <b>${w} kg</b>. Today they have had three doses of <b>${dose} mg</b> ibuprofen. You have ibuprofen oral suspension <b>100 mg in 5 mL</b>.${box}`,
+      ask:'What volume of suspension could still be given today before reaching the maximum?',answer:lml,unit:'mL',
+      steps:[`Maximum = 30 × ${w} = <b>${max} mg</b>`,`Given = 3 × ${dose} = <b>${3*dose} mg</b>`,`Left = ${max} - ${3*dose} = ${left} mg`,`Volume = ${left} ÷ 100 × 5 = <b>${nf(lml)} mL</b>`],hint:'Find the mg left, then use Want ÷ Got × In.',traps:[[left,'unitAsked'],[max/100*5,'missedstep']]});
+  }
+  if(f==='mh'){
+    const pick=L===1?P(['sert','olz']):L===2?P(['sert','olz','quet']):L===3?P(['sert','olz','quet']):P(['sert','olz']);
+    if(pick==='sert'){
+      const box=bnfBox('Sertraline, adults (depression)',['Initially 50 mg once daily','Increase in steps of 50 mg, at least 1 week apart','<b>Maximum 200 mg per day</b>']);
+      const D=P([50,100,150]);
+      if(L===1) return Q({fk:'maxdose',drug:'Sertraline',text:`${c.who} is ${c.place} and takes <b>sertraline ${D} mg once daily</b>.${box}`,
+        ask:'By how many mg could the daily dose still be increased?',answer:200-D,unit:'mg',steps:[`200 - ${D} = <b>${200-D} mg</b>`],hint:'Maximum minus current dose.',traps:[[200+D,'calc']]});
+      if(L===2) return Q({fk:'maxdose',drug:'Sertraline',text:`${c.who} is ${c.place} and takes sertraline. The team are discussing the maximum dose. You have <b>sertraline 50 mg tablets</b>.${box}`,
+        ask:'At the maximum daily dose, how many 50 mg tablets would be taken each day?',answer:4,unit:'tablets',steps:['Maximum = 200 mg per day',`200 ÷ 50 = <b>4 tablets</b>`],hint:'Maximum ÷ tablet strength.',traps:[[200,'unitAsked']]});
+      if(L===3){const g=D/1000;return Q({fk:'maxdose',drug:'Sertraline',text:`${c.who} is ${c.place}. Their chart says <b>sertraline ${nf(g)} g once daily</b>.${box}`,
+        ask:'By how many mg could the daily dose still be increased?',answer:200-D,unit:'mg',steps:[`${nf(g)} g × 1000 = <b>${D} mg</b>`,`200 - ${D} = <b>${200-D} mg</b>`],hint:'Change grams into mg first.',traps:[[200-g,'noconv']]});}
+      const nd=D+50,days=P([14,28]),tabs=nd/50*days;
+      return Q({fk:'maxdose',drug:'Sertraline',text:`${c.who} is ${c.place} and takes <b>sertraline ${D} mg once daily</b>. The prescriber increases it by one 50 mg step. You have <b>sertraline 50 mg tablets</b>.${box}`,
+        ask:`How many tablets are needed for ${days} days at the new dose?`,answer:tabs,unit:'tablets',steps:[`New dose = ${D} + 50 = <b>${nd} mg</b> (still within 200 mg)`,`Tablets per day = ${nd} ÷ 50 = ${nd/50}`,`For ${days} days: ${nd/50} × ${days} = <b>${tabs} tablets</b>`],hint:'New dose, then tablets per day, then × days.',traps:[[D/50*days,'missedstep'],[nd/50,'missedstep']]});
+    }
+    if(pick==='olz'){
+      const box=bnfBox('Olanzapine, adults',['Usual range 5 to 20 mg daily','<b>Maximum 20 mg in 24 hours</b> (regular and when-required doses added together)']);
+      const reg=P([10,15]);
+      if(L===1) return Q({fk:'maxdose',drug:'Olanzapine',text:`${c.who} is ${c.place} and takes <b>olanzapine ${reg} mg</b> regularly. They are also prescribed olanzapine when required.${box}`,
+        ask:'What is the most olanzapine (in mg) that could be given when required in 24 hours?',answer:20-reg,unit:'mg',steps:[`20 - ${reg} = <b>${20-reg} mg</b>`],hint:'Maximum minus regular dose.',traps:[[20,'missedstep']]});
+      if(L===2) return Q({fk:'maxdose',drug:'Olanzapine',text:`${c.who} is ${c.place} and takes <b>olanzapine ${reg} mg</b> regularly. When-required olanzapine comes as <b>5 mg tablets</b>.${box}`,
+        ask:'How many 5 mg when-required tablets could be given in 24 hours at most?',answer:(20-reg)/5,unit:'tablets',steps:[`Room left = 20 - ${reg} = <b>${20-reg} mg</b>`,`${20-reg} ÷ 5 = <b>${(20-reg)/5} tablets</b>`],hint:'Room left ÷ tablet strength.',traps:[[20-reg,'unitAsked'],[4,'missedstep']]});
+      if(L===3) return Q({fk:'maxdose',drug:'Olanzapine',text:`${c.who} is ${c.place} and takes <b>olanzapine ${reg} mg</b> regularly. When-required olanzapine comes as <b>2.5 mg tablets</b>.${box}`,
+        ask:'How many 2.5 mg when-required tablets could be given in 24 hours at most?',answer:(20-reg)/2.5,unit:'tablets',steps:[`Room left = 20 - ${reg} = <b>${20-reg} mg</b>`,`${20-reg} ÷ 2.5 = <b>${(20-reg)/2.5} tablets</b>`],hint:'Room left ÷ tablet strength.',traps:[[20-reg,'unitAsked']]});
+      const prn=P([2.5,5]),left=20-10-prn;
+      return Q({fk:'maxdose',drug:'Olanzapine',text:`${c.who} is ${c.place}. They take <b>olanzapine 10 mg</b> regularly and have already had <b>${nf(prn)} mg</b> when required today. More when-required olanzapine comes as <b>2.5 mg tablets</b>.${box}`,
+        ask:'How many more 2.5 mg tablets could be given in this 24 hours?',answer:left/2.5,unit:'tablets',steps:[`Given so far = 10 + ${nf(prn)} = <b>${nf(10+prn)} mg</b>`,`Room left = 20 - ${nf(10+prn)} = ${nf(left)} mg`,`${nf(left)} ÷ 2.5 = <b>${nf(left/2.5)} tablets</b>`],hint:'Add up everything given, take it from 20 mg, then divide by 2.5.',traps:[[10/2.5,'missedstep'],[left,'unitAsked']]});
+    }
+    const box=bnfBox('Quetiapine, adults (schizophrenia)',['Usually 300 to 450 mg daily in 2 divided doses','<b>Maximum 750 mg per day</b>']);
+    const x=P([200,250,300]),left=750-2*x;
+    return Q({fk:'maxdose',drug:'Quetiapine',text:`${c.who} is ${c.place} and takes <b>quetiapine ${x} mg twice daily</b>.${box}`,
+      ask:'How many more mg per day could be prescribed before reaching the maximum?',answer:left,unit:'mg',steps:[`Daily dose = ${x} × 2 = <b>${2*x} mg</b>`,`Left = 750 - ${2*x} = <b>${left} mg</b>`],hint:'Twice daily means × 2.',traps:[[750-x,'missedstep']]});
+  }
+  // ld levetiracetam
+  const box=bnfBox('Levetiracetam, adults (epilepsy)',['Initially 250 to 500 mg twice daily','Can be increased up to a <b>maximum of 1.5 g twice daily</b>']);
+  const D=P([500,750,1000]);
+  if(L===1) return Q({fk:'maxdose',drug:'Levetiracetam',text:`${c.who} is ${c.place} and takes <b>levetiracetam ${D} mg twice daily</b>.${box}`,
+    ask:'By how many mg could each dose still be increased?',answer:1500-D,unit:'mg',steps:['Maximum each dose = 1.5 g = <b>1500 mg</b>',`1500 - ${D} = <b>${1500-D} mg</b>`],hint:'Change 1.5 g into mg, then subtract.',traps:[[1.5-D,'noconv'],[3000-2*D,'missedstep']]});
+  if(L===2) return Q({fk:'maxdose',drug:'Levetiracetam',text:`${c.who} is ${c.place} and takes <b>levetiracetam ${D} mg twice daily</b>.${box}`,
+    ask:'How many more mg per day could be given before reaching the daily maximum?',answer:3000-2*D,unit:'mg',steps:['Maximum per day = 1500 × 2 = <b>3000 mg</b>',`Current per day = ${D} × 2 = <b>${2*D} mg</b>`,`Left = 3000 - ${2*D} = <b>${3000-2*D} mg</b>`],hint:'Twice daily means × 2 for both the maximum and the current dose.',traps:[[1500-D,'missedstep']]});
+  const shown=L===4?nf(D/1000)+' g':D+' mg',ml=(1500-D)/100;
+  return Q({fk:'maxdose',drug:'Levetiracetam',text:`${c.who} is ${c.place} and takes <b>levetiracetam ${shown} twice daily</b> as oral solution <b>100 mg/mL</b>.${box}`,
+    ask:'By how many mL could each dose still be increased before reaching the maximum?',answer:ml,unit:'mL',
+    steps:[...(L===4?[`${shown} × 1000 = <b>${D} mg</b>`]:[]),`Room per dose = 1500 - ${D} = <b>${1500-D} mg</b>`,`Volume = ${1500-D} ÷ 100 × 1 = <b>${nf(ml)} mL</b>`],hint:'Find the mg room per dose, then turn it into mL.',traps:[[1500-D,'unitAsked'],[(3000-2*D)/100,'missedstep']]});
+}
+
+const TOPICS={
+  bmi:{label:'BMI',icon:'',color:'#7B61A8',gen:genBMI},
+  conv:{label:'Conversions',icon:'',color:'#2B83A6',gen:genConv},
+  wig:{label:'WIG formula',icon:'',color:'#B5487E',gen:genWIG},
+  flow:{label:'Flow rates',icon:'',color:'#3A62B5',gen:genFlow},
+  bal:{label:'Fluid balance',icon:'',color:'#2E8B6E',gen:genBal},
+  miss:{label:'Missing value',icon:'',color:'#C98B00',gen:genMiss},
+  bnf:{label:'BNF maximum doses',icon:'',color:'#157A4A',gen:genBNF}
+};
+const LEVELS=[null,{label:'Simple',color:'#2E8B57',pts:10},{label:'Moderate',color:'#D4A017',pts:20},{label:'Difficult',color:'#D9661F',pts:30},{label:'Hard',color:'#C21F32',pts:50}];
+function makeQFor(L,f,t){const q=TOPICS[t].gen(L,f);q.topic=t;q.field=f;q.level=L;if(f==='child'&&q.drug)q.child=true;return q;}
+
+/* ================= units ================= */
+const UNIT_ALIASES={
+  'tablets':['tablet','tablets','tab','tabs','tablet(s)','tabs.'],
+  'mL':['ml','mls','millilitre','millilitres','milliliter','milliliters'],
+  'mL/h':['ml/h','ml/hr','ml/hrs','ml/hour','ml/hours','mls/h','mls/hr','mls/hour','millilitres/hour','millilitre/hour','ml/hourly'],
+  'drops/min':['drops/min','drops/mins','drops/minute','drops/minutes','drop/min','drop/minute','gtt/min','gtts/min','dpm'],
+  'kg/m²':['kg/m2','kgm2','kg/m^2','kg/msq','kg/sqm'],
+  'kg':['kg','kgs','kilogram','kilograms','kilo','kilos'],
+  'g':['g','gram','grams','gm','gms','gs'],
+  'mg':['mg','mgs','milligram','milligrams'],
+  'micrograms':['micrograms','microgram'],
+  'L':['l','litre','litres','liter','liters','ltr','ltrs'],
+  'hours':['h','hr','hrs','hour','hours'],
+  'minutes':['min','mins','minute','minutes'],
+  'mL/kg/h':['ml/kg/h','ml/kg/hr','ml/kg/hour','mls/kg/h','mls/kg/hr','ml/kg/hrs']
+};
+const UNIT_MAP={};Object.entries(UNIT_ALIASES).forEach(([k,a])=>a.forEach(x=>UNIT_MAP[x]=k));
+const BANNED={mcg:'mcg',mcgs:'mcg',ug:'mcg','µg':'mcg','μg':'mcg',cc:'cc',ccs:'cc'};
+function normUnit(s){return s.toLowerCase().replace(/\s+/g,'').replace(/²/g,'2').replace(/\bper\b/g,'/').replace(/per/g,'/').replace(/\.$/,'');}
+function matchUnit(rest){
+  if(!rest) return {kind:'none'};
+  const raw=rest.trim();const n0=raw.toLowerCase().replace(/\s+/g,'');
+  if(BANNED[n0]) return {kind:'banned',why:BANNED[n0],raw};
+  const n=normUnit(raw);
+  if(BANNED[n]) return {kind:'banned',why:BANNED[n],raw};
+  if(UNIT_MAP[n]) return {kind:'ok',canon:UNIT_MAP[n],raw};
+  return {kind:'unknown',raw};
+}
+function parseFull(raw){
+  if(raw==null) return null;
+  let s=String(raw).trim().replace(/,/g,'').replace(/[\u2212\u2013\u2014]/g,'-').replace(/½/g,'0.5');
+  const m=s.match(/^([+-]?)\s*(\d+\s*\/\s*\d+|\d*\.?\d+)/);
+  if(!m) return null;
+  const num=m[2].replace(/\s/g,'');let v;
+  if(num.includes('/')){const [a,b]=num.split('/');if(+b===0)return null;v=+a/+b;}else v=parseFloat(num);
+  if(m[1]==='-')v=-v;
+  return {v,unit:matchUnit(s.slice(m[0].length))};
+}
+const DIM={micrograms:['m',0.001],mg:['m',1],g:['m',1000],kg:['m',1e6],mL:['v',1],L:['v',1000],minutes:['t',1],hours:['t',60]};
+function equiv(v,u,a,qu){const A=DIM[u],B=DIM[qu];if(!A||!B||A[0]!==B[0])return false;return Math.abs(v*A[1]-a*B[1])<=Math.abs(a*B[1])*0.005+1e-9;}
+function numKind(q,v){
+  const a=q.answer,tl=Math.max(q.tol,q.dp!=null?0.5*Math.pow(10,-q.dp):0.001);
+  for(const [t,k] of q.traps) if(Math.abs(v-t)<=Math.max(tl,Math.abs(t)*0.01)) return k;
+  if(q.signed&&a!==0&&Math.abs(v+a)<=tl) return 'sign';
+  if(a!==0) for(const f of [1000,0.001,1e6,1e-6]) if(Math.abs(v-a*f)<=Math.abs(a*f)*0.01) return 'x1000';
+  if(q.exact!=null&&Math.abs(v-q.exact)<0.5*Math.pow(10,-q.dp)+1e-9) return 'rounding';
+  if(a!==0) for(const f of [10,0.1,100,0.01]) if(Math.abs(v-a*f)<=Math.abs(a*f)*0.01) return 'x10';
+  return 'calc';
+}
+function grade(q,p,unitsOn){
+  const kinds=[];const numOk=Math.abs(p.v-q.answer)<=q.tol;let unitOk=true;
+  const u=p.unit;
+  if(u.kind==='none'){if(unitsOn){unitOk=false;kinds.push('unitMissing');}}
+  else if(u.kind==='banned'){unitOk=false;kinds.push(u.why);}
+  else if(u.kind==='unknown'){unitOk=false;kinds.push('unitWrong');}
+  else if(u.canon!==q.unit){
+    unitOk=false;
+    if(equiv(p.v,u.canon,q.answer,q.unit)) return {ok:false,kinds:['unitAsked'],numOk:false,unitOk:false};
+    kinds.push('unitWrong');
+  }
+  if(!numOk) kinds.push(numKind(q,p.v));
+  return {ok:numOk&&unitOk,kinds,numOk,unitOk};
+}
+//GEN-END
+
+/* ================= formula cards ================= */
+const fr=(a,b)=>`<span class="frac"><span>${a}</span><span>${b}</span></span>`;
+const FORMULAS={
+  wig:['WIG formula',`Dose = ${fr('Want','Got')} × In<div class="small">Want is the prescribed dose. Got is the strength you have. In is what that strength comes in: 1 tablet, or a number of mL.</div>`],
+  mgkg:['Dose by weight, then WIG',`Dose = mg/kg × weight (kg)<br>Volume = ${fr('Want','Got')} × In`],
+  course:['Tablets for a course',`Per dose = ${fr('dose','tablet strength')}<br>Total = per dose × doses a day × days`],
+  divided:['Divided doses',`Each dose = ${fr('daily dose','number of doses')}<br>Then ${fr('Want','Got')} × In`],
+  conv:['Conversion ladder',`<div class="ladder"><span class="u">g</span><span class="a">× 1000<br>÷ 1000</span><span class="u">mg</span><span class="a">× 1000<br>÷ 1000</span><span class="u">micrograms</span></div><div class="ladder" style="margin-top:6px"><span class="u">L</span><span class="a">× 1000<br>÷ 1000</span><span class="u">mL</span></div><div class="small">Going right, multiply. Going left, divide.</div>`],
+  time:['Time conversions','hours × 60 = minutes<br>minutes ÷ 60 = hours'],
+  cups:['Adding up drinks',`Total mL = drinks × size<br>Litres = ${fr('mL','1000')}`],
+  pct:['Percentage strength (% w/v)','x% = x g in 100 mL<br>1% = 10 mg in 1 mL'],
+  bmi:['BMI',`BMI = ${fr('weight (kg)','height (m)²')}<div class="small">height² is height × height. cm ÷ 100 = m.</div>`],
+  bmiTarget:['BMI rearranged','Target weight = BMI × height²<br>To lose = current minus target'],
+  bmiRev:['BMI rearranged','weight = BMI × height (m)²'],
+  rate:['Pump rate',`mL/h = ${fr('volume (mL)','time (hours)')}`],
+  rateMin:['Pump rate, time in minutes',`mL/h = ${fr('volume (mL)','time (minutes)')} × 60`],
+  drops:['Gravity drip rate',`drops/min = ${fr('volume × drop factor','time (minutes)')}<div class="small">Standard set 20 drops/mL. Blood set 15 drops/mL.</div>`],
+  hs:['Holliday-Segar (children)',`100 mL/kg for the first 10 kg<br>50 mL/kg for the next 10 kg<br>20 mL/kg for each kg over 20<br>Rate = ${fr('daily total','24')}`],
+  duration:['Time to finish',`hours = ${fr('volume (mL)','rate (mL/h)')}`],
+  remain:['Left in the bag','Given = rate × time<br>Left = bag minus given'],
+  total:['Totals','Add every entry together'],
+  nappy:['Weighing nappies','Urine (mL) = wet weight minus dry weight<div class="small">1 g = 1 mL</div>'],
+  balance:['Fluid balance','Balance = total in minus total out<div class="small">IV in = rate × hours</div>'],
+  urine:['Urine output',`mL/kg/h = ${fr('urine (mL)','weight (kg) × hours')}`],
+  volume:['Volume given','Volume = rate × time'],
+  missingEntry:['Missing entry','Missing = total minus the entries you know'],
+  intake:['Fluid balance rearranged','In = out + balance'],
+  doseFromVol:['Dose in a volume',`mg per mL = ${fr('strength','volume')}<br>Dose = mL × mg per mL`],
+  weightFromDose:['Weight from a dose',`weight = ${fr('dose (mg)','dose per kg')}`],
+  newrate:['New rate',`Left = bag minus given<br>New rate = ${fr('volume left','hours left')}`],
+  maxdose:['Maximum dose check',`Room left = maximum minus already given<br>If asked: ${fr('room left','strength')} × In`]
+};
+const ERR={
+  unitMissing:['Leaving off the unit','A number on its own is not an answer on the ward. Finish with the unit, for example 7.5 mL or 125 mL/h.'],
+  unitWrong:['Using the wrong unit','Read the question again: it tells you what is being measured. mL/h is for pumps, drops/min for gravity drips, kg/m² for BMI.'],
+  unitAsked:['Right amount, different unit','Your amount was right, but not in the unit the question asked for. Convert it before you write it down.'],
+  mcg:['Abbreviating micrograms','Write "micrograms" in full. "mcg" and "µg" can be misread as mg, which is a 1000-fold error.'],
+  cc:['Writing "cc"','Use mL, not cc. "cc" can be misread, so it is best avoided.'],
+  x1000:['A conversion slip (1000 times out)','Use the ladder: g to mg to micrograms is × 1000 each step. Ask yourself whether the number should get bigger or smaller.'],
+  wrongway:['Converting the wrong way','Bigger unit to smaller unit: multiply. Smaller unit to bigger unit: divide.'],
+  x10:['A decimal point slip (10 times out)','Estimate first. If your answer is 10 times your estimate, check the decimal point.'],
+  rounding:['Rounding','Keep the full number until the very end, then round as the question asks. 5 or more rounds up.'],
+  sign:['Plus and minus in fluid balance','Always do in minus out. More out than in gives a minus number.'],
+  inverted:['Dividing the wrong way round','Check what goes on top. WIG: Want ÷ Got. Time: volume ÷ rate. BMI: weight ÷ height².'],
+  noconv:['Not matching the units first','Put both numbers into the same unit (both mg, or both g) before you calculate.'],
+  nosquare:['Not squaring the height','Height² means height × height (1.6 × 1.6 = 2.56), not height × 2.'],
+  minutes:['Mixing up hours and minutes','Pump rates are per hour. Drip rates are per minute. Change the time into the right unit first.'],
+  dropfactor:['Using the wrong drop factor','Standard giving set: 20 drops/mL. Blood giving set: 15 drops/mL.'],
+  notdivided:['Not splitting the daily dose','"In 2 divided doses" means divide the daily total by 2 before working out each dose.'],
+  missedstep:['Missing a step','For multi-step questions, write each step on its own line and tick off every number in the question.'],
+  calc:['A calculation slip','Your method may be fine but a sum slipped. Use the calculator and compare with your estimate.'],
+  skipped:['Skipped questions','Have a go even if unsure. Writing the formula down first often unlocks the rest.'],
+  timeout:['Running out of time','Speed comes with practice. Learn the formulas by heart so you can start straight away.']
+};
+const TADV={
+  bmi:'Change cm to m (÷ 100), square the height (height × height), then divide the weight by it. Round to 1 decimal place only at the end.',
+  conv:'Picture the ladder from g to mg to micrograms. Down a step: × 1000. Up a step: ÷ 1000. Hours to minutes: × 60.',
+  wig:'Match the units first, then Want ÷ Got × In. Sense check: tablet doses are usually 1 or 2, rarely more than 4.',
+  flow:'Pumps: volume ÷ hours. Gravity drips: volume × drop factor ÷ minutes. Write the formula down before the numbers.',
+  bal:'List everything in, list everything out, total both, then in minus out. Include IV fluids (rate × hours).',
+  miss:'Write the usual formula first, then rearrange it. If rate = volume ÷ time, then volume = rate × time.',
+  bnf:'Find the maximum in the reference, put it in the same unit as the doses, add up what has been given, then subtract.'
+};
+const TICK='<svg class="tk" viewBox="0 0 36 32" aria-hidden="true"><path d="M3 17 L12 27 L33 4"/></svg>';
+
+/* ================= app state ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+const S={mode:'solo',calm:'calm',classStyle:'turns',field:'mixed',topics:new Set(Object.keys(TOPICS)),level:'1',style:'type',hints:'on',bnf:'on',units:'on',teams:2,rounds:5,timer:60,sheetN:10,sound:true};
+const TEAMC=['#C21F32','#2F5DA8','#C98B00','#1F7A5C','#6B3FA0','#B5487E'];
+const TEAMN=['Drip Drops','Pill Pals','Flow Force','Balance Bunch','Dose Squad','Unit Heroes'];
+const EMO=['🦊','🐙','🦉','🐝','🐧','🦖','🐯','🐼','🐸','🦋','🐬','🦔'];
+let teamEmo=[0,1,2,3,4,5];
+const GOOD=['Spot on.','Correct, and with the unit.','That is a safe dose. Well done.','Exactly right.','Nicely worked.','Correct. Keep that rhythm going.'];
+const BADH=['Not this time, and that is fine.','Close. Here is what to change.','A useful mistake to make now rather than on placement.','Let\'s look at where it went differently.'];
+const TIPS=['Estimate first. If you need 10 tablets, something is probably wrong.','Round only at the very end of a calculation.','WIG: what you Want ÷ what you\'ve Got × what it\'s In.','Pumps run in mL per hour. Gravity drips run in drops per minute.','Write "micrograms" in full. "mcg" and "µg" are easy to misread.','Fluid balance: positive means more in than out.','Change cm to m before working out BMI.','Make the prescription and the stock the same unit before you calculate.','Every answer needs a unit: 2 tablets, 5 mL, 125 mL/h.'];
+const PIP={
+  start:['Deep breath. One step at a time.','Formula first, then the numbers, then the unit.','Mistakes here are safe. That is what practice is for.','Read it twice and highlight the numbers.'],
+  ok:['Lovely work!','See? You know this.','That is how a safe nurse does it.','Keep that rhythm going.'],
+  bad:['That is OK. Read the tip, then try the next one.','Every mistake here is one you won\'t make on placement.','The formula does the heavy lifting. Start there.','Look at which step changed the answer.'],
+  hint:['Good call. Checking a reference is what safe nurses do.','Using the formula is smart, not cheating.'],
+  bnf:['Nurses check the BNF all the time. Great habit.']
+};
+const BADGES={first:['🎯','First dose','First correct answer'],streak5:['🔥','On fire','5 correct in a row'],streak10:['⚡','Unstoppable','10 correct in a row'],
+  wig:['💊','WIG wizard','5 WIG questions correct'],flow:['💧','Flow pro','5 flow rate questions correct'],bal:['⚖️','Balance boss','5 fluid balance questions correct'],
+  bmi:['📏','BMI brain','5 BMI questions correct'],conv:['🔁','Conversion champ','5 conversions correct'],miss:['🔍','Detective','5 missing value questions correct'],
+  bnf:['📗','BNF pro','5 BNF checks correct'],golden:['🌟','Golden touch','A golden question right'],hard:['🏔️','Summit','Correct at Hard level'],
+  units:['✍️','Unit hero','10 correct with units in one session'],zen:['🧘','Calm and collected','Finished a breathing exercise'],perfect:['💯','Exam ready','10 out of 10 in Exam sprint']};
+const RANKS=[[0,'Student nurse'],[100,'Second-year student'],[250,'Final-year student'],[450,'Newly qualified nurse'],[700,'Staff nurse'],[1000,'Senior staff nurse'],[1400,'Charge nurse'],[2000,'Nurse consultant']];
+const CONFUSE={tablets:['mg','mL'],mL:['mg','L'],'mL/h':['mL/min','drops/min'],'drops/min':['mL/h','drops/h'],'kg/m²':['kg','kg/m'],kg:['g','kg/m²'],g:['mg','kg'],mg:['g','micrograms'],micrograms:['mg','g'],L:['mL','kg'],hours:['minutes'],minutes:['hours','seconds'],'mL/kg/h':['mL/h','mL/kg']};
+let G=null,turnInt=null,sprintInt=null,pipTimer=null;
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('#scr-'+id).classList.add('active');document.body.classList.toggle('ingame',id==='game');window.scrollTo({top:0,behavior:'smooth'});}
+function openModal(id){$(id).classList.add('show');const b=$(id).querySelector('[data-close]');if(b)b.focus();}
+function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'));stopBreath();}
+
+/* ================= home ================= */
+const GROUPS={grpMode:'mode',grpCalm:'calm',grpCStyle:'classStyle',grpField:'field',grpLevel:'level',grpStyle:'style',grpHints:'hints',grpBnf:'bnf',grpUnits:'units',grpTeams:'teams',grpRounds:'rounds',grpTimer:'timer',grpSheetN:'sheetN'};
+function syncChips(){
+  Object.entries(GROUPS).forEach(([id,k])=>document.querySelectorAll(`#${id} [data-val]`).forEach(b=>{const on=String(S[k])===b.dataset.val;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on);}));
+  document.querySelectorAll('#grpTopics [data-val]').forEach(b=>{const on=S.topics.has(b.dataset.val);b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on);});
+}
+function bindGroups(){
+  Object.entries(GROUPS).forEach(([id,k])=>{
+    document.querySelectorAll(`#${id} [data-val]`).forEach(b=>b.addEventListener('click',()=>{
+      const v=b.dataset.val;S[k]=['teams','rounds','timer','sheetN'].includes(k)?+v:v;
+      syncChips();tone(520,.05,'triangle');
+      if(k==='teams')buildTeamInputs();
+      refreshHome();
+    }));
+  });
+  document.querySelectorAll('#grpTopics [data-val]').forEach(b=>b.addEventListener('click',()=>{
+    const v=b.dataset.val;
+    if(S.topics.has(v)){if(S.topics.size===1){toast('Keep at least one topic ticked.');return;}S.topics.delete(v);}else S.topics.add(v);
+    syncChips();tone(520,.05,'triangle');
+  }));
+}
+function buildTopicChips(){$('#grpTopics').innerHTML=Object.entries(TOPICS).map(([k,t])=>`<button class="chip sel" data-val="${k}"><i class="sw" style="--c:${t.color}"></i>${t.label}</button>`).join('');}
+function buildTeamInputs(){
+  const old=[...document.querySelectorAll('#teamNames input')].map(i=>i.value);
+  $('#teamNames').innerHTML=Array.from({length:S.teams},(_,i)=>`<div class="tn"><button class="emo" data-i="${i}" style="--c:${TEAMC[i]}" aria-label="Change team ${i+1} animal">${EMO[teamEmo[i]]}</button><input maxlength="22" value="${(old[i]||TEAMN[i]).replace(/"/g,'')}" aria-label="Team ${i+1} name"></div>`).join('');
+  document.querySelectorAll('#teamNames .emo').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;teamEmo[i]=(teamEmo[i]+1)%EMO.length;b.textContent=EMO[teamEmo[i]];tone(700,.05,'triangle');});
+}
+function teamNames(){return [...document.querySelectorAll('#teamNames input')].map((i,k)=>i.value.trim()||TEAMN[k]);}
+function refreshHome(){
+  $('#soloOpts').classList.toggle('show',S.mode==='solo');
+  $('#classOpts').classList.toggle('show',S.mode==='class');
+  $('#sheetOpts').classList.toggle('show',S.mode==='sheet');
+  $('#liveOpts').classList.toggle('show',S.mode==='live');
+  if(location.protocol.startsWith('http'))$('#liveUrl').textContent=location.host+'/play';
+  $('#styleWrap').style.display=S.mode==='sheet'?'none':'';
+  $('#roundsHelp').textContent=S.classStyle==='turns'?'(each team answers once per round)':'(one question per round for every team)';
+  $('#btnStart').textContent=S.mode==='live'?'Open the host screen':S.mode==='sheet'?'Make the worksheet':S.mode==='class'?'Start the class battle':S.mode==='sprint'?'Start the exam sprint':'Start practising';
+  $('#tipText').innerHTML='<b>Tip:</b> '+P(TIPS);
+  renderProgress();
+}
+function gbar(p,c){return `<span class="gbar" style="--c:${c}"><i style="width:${Math.round(p*100)}%"></i></span>`;}
+function renderProgress(){
+  const m=store.get('dd_mastery',{}),best=store.get('dd_best',0),got=store.get('dd_badges',[]),ses=store.get('dd_sessions',[]);
+  const rows=Object.entries(TOPICS).map(([k,t])=>{const x=m[k];return `<div class="mrow"><span><i class="sw" style="--c:${t.color}"></i>${t.label}</span>${gbar(x&&x.n?x.r/x.n:0,t.color)}<small>${x&&x.n?`${x.r} of ${x.n} right`:'Not tried'}</small></div>`;}).join('');
+  $('#progCard').innerHTML=`<p class="h3">Your progress</p><p class="sub" style="margin-bottom:12px">Saved on this device only. Best solo score ${best}, ${ses.length} ${pl(ses.length,'session')} played.</p>
+    ${rows}
+    <div class="stamps">${Object.entries(BADGES).map(([k,b])=>`<span class="stamp ${got.includes(k)?'':'off'}" title="${b[2]}"><span>${b[0]}</span>${b[1]}</span>`).join('')}</div>
+    <p style="margin-top:16px"><button class="btn small ghost" id="btnReset">Reset my progress</button></p>`;
+  $('#btnReset').onclick=()=>{if(confirm('Reset all progress, scores and badges on this device?')){store.set('dd_mastery',{});store.set('dd_best',0);store.set('dd_badges',[]);store.set('dd_sessions',[]);renderProgress();toast('Progress reset.');}};
+}
+
+/* ================= sound + fx ================= */
+let AC=null;
+function tone(fr,d,type='sine',t0=0,vol=0.12){
+  if(!S.sound)return;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=fr;
+    const t=AC.currentTime+t0;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.02);}catch(e){}
+}
+const sfx={ok(){tone(660,.14,'triangle');tone(880,.22,'triangle',.11);},bad(){tone(330,.2,'triangle',0,.08);tone(262,.3,'triangle',.15,.08);},
+  up(){[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',i*.1));},tick(){tone(1200,.04,'square',0,.03);},
+  win(){[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',i*.12));},gold(){[880,1175,1568].forEach((f,i)=>tone(f,.15,'sine',i*.08));},
+  drum(){for(let i=0;i<10;i++)tone(120+i*6,.06,'square',i*.06,.04);}};
+function confetti(n=120,gold){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cv=$('#confetti'),cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
+  const cols=gold?['#FFE45C','#C98B00','#F3C623','#1B2A72']:['#1B2A72','#C21F32','#FFE45C','#157A4A','#9DB7E6'];
+  const ps=Array.from({length:n},()=>({x:innerWidth/2+(Math.random()-.5)*260,y:innerHeight/3,vx:(Math.random()-.5)*14,vy:-Math.random()*12-4,s:Math.random()*8+5,c:P(cols),r:Math.random()*6,vr:(Math.random()-.5)*.3}));
+  let t=0;cancelAnimationFrame(confetti.raf);
+  (function f(){cx.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.vx*=.99;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore();});
+    if(++t<150)confetti.raf=requestAnimationFrame(f);else cx.clearRect(0,0,cv.width,cv.height);})();
+}
+function toast(html){const d=document.createElement('div');d.className='toast';d.innerHTML=html;$('#toasts').appendChild(d);setTimeout(()=>d.remove(),3500);}
+function pip(msg,extra){
+  const b=$('#pipText');b.innerHTML=msg+(extra||'');b.classList.remove('hide');
+  clearTimeout(pipTimer);pipTimer=setTimeout(()=>b.classList.add('hide'),extra?12000:6000);
+  const bb=b.querySelector('[data-breath]');if(bb)bb.onclick=()=>openBreath();
+}
+
+/* ================= game ================= */
+function makeQ(L){const f=S.field==='mixed'?P(['adult','child','mh','ld']):S.field;return makeQFor(L,f,P([...S.topics]));}
+function start(){
+  if(S.mode==='sheet'){buildSheet();return;}
+  if(S.mode==='live'){const qs=new URLSearchParams({field:S.field,topics:[...S.topics].join(','),level:S.level,style:S.style,units:S.units});location.href='/host?'+qs.toString();return;}
+  const climb=S.level==='climb',cls=S.mode==='class';
+  G={mode:S.mode,calm:S.mode==='solo'&&S.calm==='calm',all:cls&&S.classStyle==='all',climb,level:climb?1:+S.level,score:0,streak:0,best:0,lives:3,run:0,n:0,wrongRun:0,unitsRight:0,
+     total:S.mode==='sprint'?10:cls?(S.classStyle==='turns'?S.rounds*S.teams:S.rounds):Infinity,hist:[],cnt:{},q:null,done:false,tier:0,newBadges:[],paused:false,double:false,lifeline:false,
+     teams:cls?teamNames().map((n,i)=>({name:n,emo:EMO[teamEmo[i]],score:0,right:0,color:TEAMC[i],pw:{double:1,life:1,time:1}})):null,
+     deadline:S.mode==='sprint'?Date.now()+15*60*1000:null};
+  document.body.classList.toggle('proj',cls);
+  show('game');
+  const solo=G.mode==='solo';
+  $('#hudLives').style.display=solo&&!G.calm?'':'none';
+  $('#hudStreak').style.display=solo?'':'none';
+  $('#hudScore').style.display=cls?'none':'';
+  $('#tctrl').classList.toggle('show',cls);
+  $('#btnPause').style.display=S.timer>0?'':'none';
+  $('#teamBar').classList.remove('editing');$('#btnEdit').textContent='Adjust scores';
+  $('#timerWrap').classList.toggle('show',cls&&S.timer>0);
+  clearInterval(sprintInt);
+  if(G.mode==='sprint'){sprintInt=setInterval(()=>{hud();if(Date.now()>=G.deadline){clearInterval(sprintInt);toast('Time is up.');finish();}},1000);}
+  pip(P(PIP.start));
+  next();
+}
+function curLevel(){
+  if(!G.climb) return G.level;
+  if(G.mode==='sprint') return [1,1,1,2,2,2,3,3,4,4][G.n]||4;
+  if(G.mode==='class') return Math.min(4,1+Math.floor(4*G.n/G.total));
+  return G.level;
+}
+function curTeamIdx(){return G.teams&&!G.all?G.n%G.teams.length:null;}
+function isFinal(){return G.mode==='class'&&G.n>=G.total-(G.all?1:G.teams.length);}
+function rankOf(s){let r=RANKS[0],nx=RANKS[1];for(let i=0;i<RANKS.length;i++){if(s>=RANKS[i][0]){r=RANKS[i];nx=RANKS[i+1]||null;}}return {r,nx};}
+function syringe(frac,marks,label){
+  frac=Math.max(0,Math.min(1,frac));
+  return `<div class="syr" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(frac*100)}" aria-label="${esc(label)}"><span class="syr-flange"></span><span class="syr-rod"></span><div class="syr-barrel" style="--m:${marks}"><div class="syr-fill" style="left:${frac*100}%"></div><span class="syr-plunger" style="left:${Math.max(frac*100,1.2)}%"></span></div><span class="syr-tip"></span></div><div class="syr-lab">${label}</div>`;
+}
+function hud(){
+  const L=G.q?G.q.level:curLevel(),lv=LEVELS[L];
+  $('#hudMode').textContent=G.mode==='solo'?(G.calm?'Calm practice':'Challenge'):G.mode==='class'?(G.all?'Class battle: everyone answers':'Class battle: taking turns'):'Exam sprint';
+  $('#hudLevel').innerHTML=`<i class="lv" style="--c:${lv.color}"></i>Level ${L}, ${lv.label.toLowerCase()}${G.climb?', climbing':''}`;
+  $('#hudScore').innerHTML=`<small>Score</small>${G.score}`;
+  $('#hudStreak').innerHTML=`<small>Streak</small>${G.streak}${G.streak>=5?' <em>×2</em>':G.streak>=3?' <em>×1.5</em>':''}`;
+  $('#hudLives').innerHTML=`<small>Lives</small><span class="lives">${[0,1,2].map(i=>`<i class="${i<G.lives?'on':''}"></i>`).join('')}</span>`;
+  let sy='';
+  if(G.mode==='sprint'){
+    const s=Math.max(0,Math.round((G.deadline-Date.now())/1000));
+    $('#hudProg').innerHTML=`<small>Time left</small>${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+    sy=syringe(G.n/10,10,`Question ${Math.min(G.n+1,10)} of 10`);
+  }else if(G.mode==='class'){
+    $('#hudProg').innerHTML=`<small>Question</small>${Math.min(G.n+1,G.total)} of ${G.total}`;
+    sy=syringe(G.n/G.total,Math.min(G.total,20),`${G.n} of ${G.total} questions done`);
+  }else{
+    $('#hudProg').innerHTML=`<small>Answered</small>${G.hist.length}`;
+    const {r,nx}=rankOf(G.score);
+    sy=syringe(nx?(G.score-r[0])/(nx[0]-r[0]):1,10,nx?`${r[1]}. ${nx[0]-G.score} more points to ${nx[1].toLowerCase()}.`:`${r[1]}, the top rank.`);
+  }
+  $('#syrWrap').innerHTML=sy;
+  renderTeams();
+}
+function renderTeams(bumpIdx){
+  if(!G.teams){$('#teamBar').innerHTML='';return;}
+  const cur=G.done?null:curTeamIdx(),top=Math.max(...G.teams.map(t=>t.score));
+  $('#teamBar').innerHTML=G.teams.map((t,i)=>`<div class="team ${i===cur?'now':''} ${i===bumpIdx?'bump':''}" style="--c:${t.color}"><div class="tn1"><span class="temo">${t.emo}</span>${esc(t.name)}</div><div class="tscore">${t.score}</div><div class="tmeta">${i===cur?'Answering now':t.score===top&&top>0?'In the lead':''}</div><div class="adj"><button data-i="${i}" data-d="-5" aria-label="Take 5 from ${esc(t.name)}">−5</button><button data-i="${i}" data-d="5" aria-label="Add 5 to ${esc(t.name)}">+5</button></div></div>`).join('');
+  document.querySelectorAll('#teamBar .adj button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;G.teams[i].score=Math.max(0,G.teams[i].score+ +b.dataset.d);renderTeams(i);});
+}
+function renderPower(){
+  const row=$('#pwRow');
+  if(G.mode!=='class'||G.all||G.done){row.classList.remove('show');row.innerHTML='';return;}
+  const t=G.teams[curTeamIdx()];
+  row.innerHTML=`<span class="lab">${t.emo} ${esc(t.name)} can use:</span>
+    <button class="pw ${G.double?'on':''}" data-p="double" ${t.pw.double?'':'disabled'}>Double points</button>
+    <button class="pw" data-p="life" ${t.pw.life&&!G.lifeline?'':'disabled'}>Lifeline: free first step</button>
+    ${S.timer>0?`<button class="pw" data-p="time" ${t.pw.time?'':'disabled'}>30 extra seconds</button>`:''}`;
+  row.classList.add('show');
+  row.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{
+    const p=b.dataset.p;if(!t.pw[p])return;t.pw[p]=0;
+    if(p==='double'){G.double=true;toast(`${esc(t.name)} are playing for double points.`);sfx.gold();}
+    if(p==='life'){G.lifeline=true;showHint(2,true);toast(`${esc(t.name)} used their lifeline.`);}
+    if(p==='time'){G.tEnd+=30000;G.tTotal+=30000;toast('30 extra seconds added.');}
+    renderPower();
+  });
+}
+function next(){
+  clearInterval(turnInt);
+  if(G.mode==='solo'&&!G.calm&&G.lives<=0) return finish();
+  if(G.n>=G.total) return finish();
+  G.q=makeQ(curLevel());G.done=false;G.tier=0;G.double=false;G.lifeline=false;
+  G.q.golden=G.mode!=='sprint'&&Math.random()<1/7;
+  render();hud();
+  if(G.q.golden){sfx.gold();pip('A golden question! Double points on this one.');}
+  if(G.mode==='class'&&S.timer>0) startTurnTimer(S.timer);
+}
+function tagsHTML(q){
+  const t=TOPICS[q.topic],f=FIELDS[q.field],l=LEVELS[q.level];
+  return `<span class="cell"><i class="sw" style="--c:${t.color}"></i>${t.label}</span><span class="cell"><small>Field</small>${f.label}</span><span class="cell"><i class="lv" style="--c:${l.color}"></i>${l.label}</span>`;
+}
+const bnfUrl=q=>`https://${q.child?'bnfc':'bnf'}.nice.org.uk/search/?q=${encodeURIComponent(q.drug.toLowerCase())}`;
+function render(){
+  const q=G.q,card=$('#qcard');
+  card.classList.toggle('golden',!!q.golden);
+  const bn=[];if(q.golden)bn.push('Golden question: double points');if(isFinal())bn.push('Final round: double points');
+  $('#banner').textContent=bn.join(', and ');$('#banner').classList.toggle('show',bn.length>0);
+  $('#qTags').innerHTML=tagsHTML(q);
+  $('#qText').innerHTML=q.text;
+  $('#qAsk').textContent=q.ask;
+  $('#qUnitTip').style.display=S.units==='on'&&!G.all?'':'none';
+  ['#fb','#stealBox','#awardBox'].forEach(s=>$(s).classList.remove('show'));
+  $('#hbOut').innerHTML='';$('#ansMark').innerHTML='';$('#ansMark').className='ansmark';
+  $('#btnNext').classList.remove('show');
+  const mc=S.style==='mc';
+  $('#typeRow').style.display=(!G.all&&!mc)?'':'none';
+  $('#mcRow').style.display=mc?'grid':'none';
+  $('#wbRow').style.display=G.all?'flex':'none';
+  $('#btnReveal').disabled=false;
+  if(mc){
+    q.opts=makeOptions(q);
+    const row=$('#mcRow');row.classList.toggle('showonly',G.all);
+    row.innerHTML=q.opts.map((o,i)=>`<button class="mcb" data-i="${i}" ${G.all?'tabindex="-1"':''}><span class="letter">${'ABCD'[i]}</span><span>${fa(q,o.v)} ${o.u}</span></button>`).join('');
+    if(!G.all) row.querySelectorAll('.mcb').forEach(b=>b.onclick=()=>submitMC(+b.dataset.i));
+  }else if(!G.all){
+    const inp=$('#ans');inp.value='';inp.disabled=false;inp.className='';$('#btnSubmit').disabled=false;
+    if(matchMedia('(pointer:fine)').matches) setTimeout(()=>inp.focus({preventScroll:true}),50);
+  }
+  const hintsOn=S.hints==='on'&&G.mode!=='sprint';
+  $('#hbTiers').querySelectorAll('button').forEach(b=>{b.style.display=hintsOn?'':'none';b.disabled=false;b.classList.remove('used');});
+  const bl=$('#bnfLink'),showBnf=S.bnf==='on'&&!!q.drug;
+  bl.style.display=showBnf?'':'none';
+  if(showBnf){bl.href=bnfUrl(q);bl.textContent=`Look up ${q.drug.toLowerCase()} in the ${q.child?'BNFC':'BNF'}`;bl.onclick=()=>{if(!G.bnfMsg){G.bnfMsg=1;pip(P(PIP.bnf));}};}
+  $('#hintBox').style.display=(hintsOn||showBnf)?'':'none';
+  $('#qcard').style.gridTemplateColumns=(hintsOn||showBnf)?'':'1fr';
+  $('#hbCost').textContent=hintsOn?(G.calm?'Help is free in calm practice.':G.mode==='class'?'Each level of help lowers the points for this question.':'Each level of help lowers the points a little. It is still worth using.'):'The BNF is allowed in this mode.';
+  $('#skipRow').style.display=G.mode==='class'?'none':'';
+  $('#btnSkip').disabled=false;
+  renderPower();
+}
+function makeOptions(q){
+  const fx=v=>q.dp!=null?rd(v,q.dp):rd(v,q.unit==='tablets'?2:4);
+  const a=fx(q.answer),out=[{v:a,u:q.unit}],seen=new Set([a+'|'+q.unit]);
+  if(S.units==='on'){const wu=P(CONFUSE[q.unit]||['mg']);out.push({v:a,u:wu});seen.add(a+'|'+wu);}
+  const s=Math.abs(a)<2?0.5:Math.abs(a)<10?1:Math.abs(a)<50?5:Math.abs(a)<500?25:100;
+  const pool=[...(q.alts||[]),q.signed?-a:null,...[a*10,a/10,a*2,a/2,a+s,a-s,a+2*s,a-2*s,a+3*s,a*1000,a/1000].sort(()=>Math.random()-.5)];
+  for(const v of pool){
+    if(out.length>=4)break;
+    if(v==null||!isFinite(v))continue;
+    const fv=fx(v),k=fv+'|'+q.unit;
+    if(seen.has(k)||fv===0)continue;
+    if(!q.signed&&fv<0)continue;
+    out.push({v:fv,u:q.unit});seen.add(k);
+  }
+  return out.sort(()=>Math.random()-.5);
+}
+function showHint(t,free){
+  if(!G||!G.q)return;
+  const q=G.q,F=FORMULAS[q.fk]||['Formula',q.hint];
+  if(!G.done&&!free) G.tier=Math.max(G.tier,t);
+  const pre=q.steps.slice(0,-1);
+  let h=`<div class="fcard"><div class="fct">${F[0]}</div><div class="fcb">${F[1]}</div></div><p class="tipline">${q.hint}</p>`;
+  if(t===2) h+=`<div class="stepbox"><b>First step:</b> ${pre.length?pre[0]:'Write the formula down, then put the first number in.'}</div>`;
+  if(t>=3) h+=pre.length?`<div class="stepbox"><b>Walk-through</b><ol class="steps">${pre.map(s=>`<li>${s}</li>`).join('')}</ol><p style="margin-top:6px">Now do the last step yourself.</p></div>`:`<div class="stepbox">This one is a single step: put the numbers into the formula.</div>`;
+  $('#hbOut').innerHTML=h;
+  $('#hbTiers').querySelectorAll('button').forEach(b=>{if(+b.dataset.t<=t){b.disabled=true;b.classList.add('used');}});
+  if(!free&&!G.done) pip(P(PIP.hint));
+}
+function multiplier(){
+  const q=G.q;let m=1;
+  if(q.golden)m*=2;if(isFinal())m*=2;if(G.double)m*=2;
+  m*=G.calm?1:[1,0.75,0.5,0.25][G.tier];
+  return m;
+}
+function submitMC(i){const o=G.q.opts[i];answer({v:o.v,unit:{kind:'ok',canon:o.u,raw:o.u}},`${fa(G.q,o.v)} ${o.u}`,false,i);}
+function submitTyped(){
+  if(!G||G.done)return;
+  const raw=$('#ans').value,p=parseFull(raw);
+  if(!p){const i=$('#ans');i.classList.remove('shake');void i.offsetWidth;i.classList.add('shake');toast('Type a number and a unit, for example 7.5 mL.');return;}
+  answer(p,raw.trim(),false);
+}
+function answer(p,raw,timeout,mcIdx){
+  if(!G||G.done)return;
+  const q=G.q;G.done=true;clearInterval(turnInt);
+  const res=timeout?{ok:false,kinds:['timeout']}:grade(q,p,S.units==='on');
+  const teamIdx=curTeamIdx();
+  G.hist.push({q,raw,ok:res.ok,kinds:res.kinds,tier:G.tier,team:teamIdx,golden:q.golden});
+  G.n++;
+  $('#btnSubmit').disabled=true;$('#ans').disabled=true;$('#btnSkip').disabled=true;
+  if(G.mode==='sprint'){
+    const d=document.createElement('div');d.className='saved';d.textContent='Answer saved';document.body.appendChild(d);setTimeout(()=>d.remove(),800);
+    tone(600,.08,'triangle');setTimeout(next,380);return;
+  }
+  if(S.style==='mc') markMC(mcIdx);
+  else{
+    $('#ans').classList.add(res.ok?'right':'wrong');
+    const am=$('#ansMark');
+    am.className='ansmark '+(res.ok?'green':'red');
+    am.innerHTML=res.ok?TICK:`${fa(q,q.answer)} ${q.unit}`;
+  }
+  const base=LEVELS[q.level].pts;let pts=0,lvlUp=false;
+  if(res.ok){
+    G.wrongRun=0;
+    if(G.mode==='solo'){
+      G.streak++;G.best=Math.max(G.best,G.streak);
+      const before=rankOf(G.score).r;
+      pts=Math.round(base*multiplier()*(G.streak>=5?2:G.streak>=3?1.5:1));G.score+=pts;
+      G.run++;if(G.climb&&G.run>=3&&G.level<4){G.level++;G.run=0;lvlUp=true;}
+      G.cnt[q.topic]=(G.cnt[q.topic]||0)+1;if(S.units==='on')G.unitsRight++;
+      checkBadges(q);
+      const after=rankOf(G.score).r;if(after!==before){toast(`Promoted to ${after[1].toLowerCase()}.`);sfx.up();}
+    }else{const t=G.teams[teamIdx];pts=Math.round(base*multiplier());t.score+=pts;t.right++;}
+    if(S.style!=='mc')$('#ansMark').innerHTML=TICK+`+${pts}`;
+    sfx.ok();if(q.golden||G.streak===3||G.streak===5||G.mode==='class')confetti(q.golden?160:90,q.golden);
+    pip(G.streak===3?'Three in a row!':G.streak===5?'Five in a row. Double points now.':P(PIP.ok));
+  }else{
+    sfx.bad();G.wrongRun++;
+    if(G.mode==='solo'){G.streak=0;G.run=0;if(!G.calm)G.lives--;}
+    if(G.wrongRun>=2&&G.mode==='solo') pip('Feeling stuck? A short breather really does help.','<br><button class="btn small" data-breath>Breathing exercise</button>');
+    else pip(P(PIP.bad));
+  }
+  $('#fb').className='fbx show '+(res.ok?'ok':'bad');
+  $('#fb').innerHTML=feedbackHTML(q,res,pts,raw,timeout);
+  if(lvlUp){sfx.up();toast(`Level up: now on ${LEVELS[G.level].label.toLowerCase()} questions.`);}
+  if(G.mode==='class'&&!res.ok&&G.teams.length>1) stealPanel(teamIdx,Math.round(base*multiplier()/2));
+  finishTurnUI();
+  renderTeams(res.ok?teamIdx:null);
+}
+function markMC(chosen){
+  const q=G.q;
+  $('#mcRow').querySelectorAll('.mcb').forEach(b=>{b.disabled=true;const o=q.opts[+b.dataset.i];
+    if(Math.abs(o.v-q.answer)<=q.tol&&o.u===q.unit)b.classList.add('right');else if(chosen!=null&&+b.dataset.i===chosen)b.classList.add('wrong');else b.classList.add('dim');});
+}
+function stepsHTML(q){return `<ol class="steps">${q.steps.map(s=>`<li>${s}</li>`).join('')}</ol>${q.note?`<p class="note">${q.note}</p>`:''}`;}
+function feedbackHTML(q,res,pts,raw,timeout){
+  if(res.ok){
+    const ex=[];if(q.golden)ex.push('golden question');if(isFinalPrev())ex.push('final round');if(G.double)ex.push('double points');if(G.tier&&!G.calm)ex.push('help used');
+    return `<p class="fbh">${P(GOOD)} +${pts} points</p>${ex.length?`<p class="fbsub">Includes: ${ex.join(', ')}.</p>`:''}<details><summary>See the working</summary>${stepsHTML(q)}</details>`;
+  }
+  const tips=[...new Set(res.kinds)].map(k=>ERR[k]?`<li><b>${ERR[k][0]}</b>${ERR[k][1]}</li>`:'').join('');
+  return `<p class="fbh">${timeout?'Time is up.':P(BADH)}</p>
+    <p class="fbans">Answer: ${fa(q,q.answer)} ${q.unit}</p>
+    ${raw?`<p class="fbsub">You wrote: ${esc(raw)}</p>`:''}
+    ${tips?`<ul class="coach">${tips}</ul>`:''}<h4>How to get there</h4>${stepsHTML(q)}`;
+}
+function isFinalPrev(){return G.mode==='class'&&(G.n-1)>=G.total-(G.all?1:G.teams.length);}
+function stealPanel(teamIdx,half){
+  const sb=$('#stealBox');
+  sb.innerHTML=`<b>Steal.</b> Did another team get it right, with the unit? Tap them to give <b>${half}</b> points.<div class="chips">${G.teams.map((t,i)=>i===teamIdx?'':`<button class="chip" data-i="${i}">${t.emo} ${esc(t.name)}</button>`).join('')}<button class="chip" data-i="-1">No one</button></div>`;
+  sb.classList.add('show');
+  sb.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i;
+    if(i>=0){G.teams[i].score+=half;toast(`${esc(G.teams[i].name)} stole ${half} points.`);sfx.ok();confetti(60);renderTeams(i);}
+    sb.querySelectorAll('button').forEach(x=>x.disabled=true);
+  });
+}
+function finishTurnUI(){
+  const last=(G.mode==='solo'&&!G.calm&&G.lives<=0)||G.n>=G.total;
+  $('#btnNext').textContent=last?'See the results':(G.mode==='class'&&!G.all?`Next: ${G.teams[G.n%G.teams.length].name}`:'Next question');
+  $('#btnNext').classList.add('show');
+  $('#pwRow').classList.remove('show');
+  hud();
+  setTimeout(()=>$('#btnNext').scrollIntoView({behavior:'smooth',block:'nearest'}),150);
+}
+function reveal(timeout){
+  if(!G||G.done)return;
+  G.done=true;clearInterval(turnInt);sfx.drum();
+  const q=G.q;
+  setTimeout(()=>{
+    if(S.style==='mc') markMC(null);
+    $('#fb').className='fbx show neutral';
+    $('#fb').innerHTML=`<p class="fbh">${timeout?'Time is up. Boards up.':'Boards up. The answer is:'}</p><p class="fbans">${fa(q,q.answer)} ${q.unit}</p>${S.units==='on'?'<p class="fbsub">Only count it if the unit is on the board too.</p>':''}<h4>How to get there</h4>${stepsHTML(q)}`;
+    const pts=Math.round(LEVELS[q.level].pts*multiplier());
+    const ab=$('#awardBox');
+    ab.innerHTML=`<b>Which teams got it right?</b> Tap each one, then give them ${pts} points each.<div class="chips" id="awardChips">${G.teams.map((t,i)=>`<button class="chip" data-i="${i}">${t.emo} ${esc(t.name)}</button>`).join('')}</div><p style="margin-top:12px"><button class="btn ok" id="btnAward">Give the points</button></p>`;
+    ab.classList.add('show');
+    ab.querySelectorAll('#awardChips .chip').forEach(b=>b.onclick=()=>{b.classList.toggle('sel');tone(600,.05,'triangle');});
+    $('#btnAward').onclick=()=>{
+      const sel=[...ab.querySelectorAll('#awardChips .chip.sel')].map(b=>+b.dataset.i);
+      sel.forEach(i=>{G.teams[i].score+=pts;G.teams[i].right++;});
+      G.hist.push({q,ok:sel.length/G.teams.length>=0.5,share:sel.length/G.teams.length,kinds:[],tier:G.tier,golden:q.golden});
+      G.n++;
+      ab.querySelectorAll('button').forEach(x=>x.disabled=true);
+      if(sel.length){sfx.ok();confetti(110,q.golden);toast(sel.length===G.teams.length?'Every team got it.':`${pts} points each to ${sel.map(i=>esc(G.teams[i].name)).join(', ')}.`);}
+      else toast('No points this time. Go through the working together.');
+      finishTurnUI();renderTeams();
+    };
+    $('#btnReveal').disabled=true;
+    $('#btnNext').classList.remove('show');
+  },650);
+}
+function skip(teacher){
+  if(!G||G.done)return;
+  if(G.mode==='sprint'){G.hist.push({q:G.q,raw:'',ok:false,kinds:['skipped'],tier:0,skipped:true});G.n++;next();return;}
+  G.done=true;clearInterval(turnInt);
+  G.hist.push({q:G.q,raw:'',ok:false,kinds:['skipped'],tier:G.tier,team:curTeamIdx(),skipped:true});G.n++;
+  if(G.mode==='solo'){G.streak=0;G.run=0;}
+  const q=G.q;$('#fb').className='fbx show neutral';
+  $('#fb').innerHTML=`<p class="fbh">Skipped${G.mode==='solo'&&!G.calm?'. No life lost.':'.'}</p><p class="fbans">Answer: ${fa(q,q.answer)} ${q.unit}</p><h4>How to get there</h4>${stepsHTML(q)}`;
+  $('#btnSubmit').disabled=true;$('#ans').disabled=true;$('#btnSkip').disabled=true;$('#btnReveal').disabled=true;
+  if(S.style==='mc') markMC(null);
+  finishTurnUI();
+}
+function startTurnTimer(sec){G.tEnd=Date.now()+sec*1000;G.tTotal=sec*1000;G.paused=false;$('#btnPause').textContent='Pause timer';G.lastS=sec;tickT();clearInterval(turnInt);turnInt=setInterval(tickT,100);}
+function tickT(){
+  if(G.paused)return;
+  const left=Math.max(0,G.tEnd-Date.now()),s=Math.ceil(left/1000);
+  $('#timerBar').style.width=(left/G.tTotal*100)+'%';$('#timerNum').textContent=s+' s';
+  $('#timerWrap').classList.toggle('low',s<=10);
+  if(s<=5&&s!==G.lastS){sfx.tick();G.lastS=s;}
+  if(left<=0){clearInterval(turnInt);if(G.all)reveal(true);else answer(null,'',true);}
+}
+function togglePause(){
+  if(!G||G.done||!S.timer)return;
+  if(!G.paused){G.paused=true;G.remain=G.tEnd-Date.now();$('#btnPause').textContent='Resume timer';}
+  else{G.paused=false;G.tEnd=Date.now()+G.remain;$('#btnPause').textContent='Pause timer';}
+}
+function checkBadges(q){
+  const got=store.get('dd_badges',[]);const add=k=>{if(!got.includes(k)){got.push(k);G.newBadges.push(k);toast(`New badge: ${BADGES[k][0]} ${BADGES[k][1]}`);sfx.up();}};
+  add('first');
+  if(G.streak>=5)add('streak5');if(G.streak>=10)add('streak10');
+  if((G.cnt[q.topic]||0)>=5)add(q.topic);
+  if(q.level===4)add('hard');if(q.golden)add('golden');if(G.unitsRight>=10)add('units');
+  store.set('dd_badges',got);
+}
+
+/* ================= end + coaching ================= */
+function topicBars(by,share){
+  return Object.entries(by).map(([k,v])=>`<div class="bar"><span><i class="sw" style="--c:${TOPICS[k].color}"></i>${TOPICS[k].label}</span>${gbar(v.r/v.n,TOPICS[k].color)}<b>${share?Math.round(v.r/v.n*100)+'%':`${v.r} of ${v.n}`}</b></div>`).join('');
+}
+function coachHTML(H){
+  const by={},kinds={};let hints=0;
+  H.forEach(h=>{const t=h.q.topic;by[t]=by[t]||{r:0,n:0};by[t].n++;if(h.ok)by[t].r++;(h.kinds||[]).forEach(k=>kinds[k]=(kinds[k]||0)+1);if(h.tier>0)hints++;});
+  const ents=Object.entries(by);
+  const strong=ents.filter(([k,v])=>v.r/v.n>=0.8);
+  const focus=ents.filter(([k,v])=>v.r/v.n<0.7).sort((a,b)=>a[1].r/a[1].n-b[1].r/b[1].n);
+  let h=`<div class="rsec"><h3>Topic by topic</h3>${topicBars(by)}</div>`;
+  h+=`<div class="rsec good"><h3>Going well</h3>${strong.length?strong.map(([k,v])=>`<div class="ritem"><b>${TOPICS[k].label}: ${v.r} of ${v.n}</b>Try the next level up when you feel ready.</div>`).join(''):'<div class="ritem">Every question you try builds the skill. The patterns below show exactly what to practise next.</div>'}</div>`;
+  if(focus.length) h+=`<div class="rsec focus"><h3>Work on next</h3>${focus.map(([k,v])=>`<div class="ritem"><b>${TOPICS[k].label}: ${v.r} of ${v.n}</b>${TADV[k]}</div>`).join('')}</div>`;
+  const ks=Object.entries(kinds).sort((a,b)=>b[1]-a[1]);
+  if(ks.length) h+=`<div class="rsec mist"><h3>Mistake patterns</h3><p class="rsub">Mistakes are information. These show exactly what to practise.</p>${ks.map(([k,n])=>ERR[k]?`<div class="ritem"><b>${ERR[k][0]} (${n} ${pl(n,'time')})</b>${ERR[k][1]}</div>`:'').join('')}</div>`;
+  if(G.mode!=='sprint') h+=`<div class="rsec calmr"><h3>Using help</h3><div class="ritem">You opened the help panel on ${hints} of ${H.length} questions. ${hints?'Checking a reference is what safe nurses do. Next time, try the formula first and see if you can finish without the walk-through.':'Good independence. The formula is there whenever you get stuck.'}</div></div>`;
+  return {html:h,focus:focus.map(([k])=>k)};
+}
+function progressHTML(acc){
+  const last=store.get('dd_sessions',[]).slice(-6);
+  if(last.length<2) return `<div class="rsec"><h3>Progress</h3><div class="ritem">This is your first saved session on this device. Play again to see how you improve.</div></div>`;
+  const diff=acc-last[last.length-2].acc;
+  return `<div class="rsec"><h3>Your last ${last.length} sessions</h3><div class="spark">${last.map(s=>`<div style="height:${Math.max(4,s.acc)}%"><span>${s.acc}%</span></div>`).join('')}</div>
+    <div class="ritem">${diff>0?`Up ${diff}% on last time. The practice is paying off.`:diff===0?'The same as last time. Steady practice builds confidence.':`Down ${-diff}% on last time. That is normal when you try new topics or levels.`}</div></div>`;
+}
+function finish(){
+  clearInterval(turnInt);clearInterval(sprintInt);
+  if(!G)return goHome();
+  document.body.classList.remove('proj');
+  const H=G.hist,right=H.filter(h=>h.ok).length,den=G.mode==='sprint'?10:H.length,pct=den?Math.round(right/den*100):0;
+  let body='';
+  if(G.mode!=='class'&&H.length){
+    const m=store.get('dd_mastery',{});H.forEach(h=>{const k=h.q.topic;m[k]=m[k]||{r:0,n:0};m[k].n++;if(h.ok)m[k].r++;});store.set('dd_mastery',m);
+    const ses=store.get('dd_sessions',[]);ses.push({t:Date.now(),mode:G.mode,acc:pct,n:den});store.set('dd_sessions',ses.slice(-30));
+  }
+  if(G.mode==='solo'){
+    const best=store.get('dd_best',0),nb=G.score>best;if(nb)store.set('dd_best',G.score);
+    const {r}=rankOf(G.score);
+    body=`<h2 class="sheet-title">${G.lives<=0&&!G.calm?'Out of lives, but well done for sticking with it.':'Session complete.'}</h2>
+      <p class="bignum">${G.score}</p><p class="endlede">points, reaching ${r[1].toLowerCase()}.${nb&&G.score>0?' That is a new personal best.':''}</p>
+      <div class="stats"><div class="stat"><b>${right} of ${H.length}</b><small>correct</small></div><div class="stat"><b>${pct}%</b><small>accuracy</small></div><div class="stat"><b>${G.best}</b><small>best streak</small></div><div class="stat"><b>${LEVELS[G.level].label}</b><small>level reached</small></div></div>`;
+  }else if(G.mode==='sprint'){
+    if(right===10){const got=store.get('dd_badges',[]);if(!got.includes('perfect')){got.push('perfect');store.set('dd_badges',got);G.newBadges.push('perfect');}}
+    const msg=right===10?'Full marks. You are ready for the real thing.':right>=8?'Very close. A little more practice on the areas below and you will have it.':right>=5?'A solid start. Your coaching report shows exactly what to work on.':'Everyone starts somewhere. Use the report below, then try calm practice on your focus topics.';
+    const unitSlips=H.filter(h=>(h.kinds||[]).some(k=>k.startsWith('unit')||k==='mcg'||k==='cc')).length;
+    body=`<h2 class="sheet-title">Exam sprint result</h2><p class="bignum">${right}/10</p><p class="endlede">${msg}</p>
+      <p class="sub" style="margin-top:8px;max-width:46em">Many nursing programmes set the pass mark for drug calculation assessments at 100%, so aim for 10 out of 10. You can practise as many times as you like.</p>
+      <div class="stats"><div class="stat"><b>${pct}%</b><small>score</small></div><div class="stat"><b>${10-H.length}</b><small>not reached</small></div><div class="stat"><b>${unitSlips}</b><small>unit slips</small></div></div>`;
+  }else{
+    const t=[...G.teams].sort((a,b)=>b.score-a.score),tie=t.length>1&&t[0].score===t[1].score;
+    const order=t.length>=3?[t[1],t[0],t[2]]:t,hts=[190,150,118],place=['1st','2nd','3rd'];
+    body=`<h2 class="sheet-title">${tie?'A tie at the top.':`${t[0].emo} ${esc(t[0].name)} win.`}</h2>
+      <div class="podium">${order.map(x=>{const rk=t.indexOf(x);return `<div class="pod" style="--c:${x.color};height:${hts[rk]||100}px"><span class="pp">${place[rk]||''}</span><span style="font-size:24px">${x.emo}</span>${esc(x.name)}<span class="ps">${x.score}</span></div>`;}).join('')}</div>
+      ${t.length>3?`<div class="stats">${t.slice(3).map((x,i)=>`<div class="stat"><b>${x.score}</b><small>${i+4}th, ${x.emo} ${esc(x.name)}</small></div>`).join('')}</div>`:''}`;
+    const by={};H.forEach(h=>{const k=h.q.topic;by[k]=by[k]||{r:0,n:0};by[k].n++;by[k].r+=G.all?(h.share||0):(h.ok?1:0);});
+    const weak=Object.entries(by).filter(([k,v])=>v.r/v.n<0.6);
+    const kinds={};H.forEach(h=>(h.kinds||[]).forEach(k=>kinds[k]=(kinds[k]||0)+1));
+    body+=`<div class="rsec"><h3>Class report</h3><p class="rsub">${G.all?'Share of teams correct on each topic.':'Correct first time, by topic.'}</p>${topicBars(by,true)}</div>`;
+    if(weak.length) body+=`<div class="rsec focus"><h3>Worth going over together</h3>${weak.map(([k])=>`<div class="ritem"><b>${TOPICS[k].label}</b>${TADV[k]}</div>`).join('')}</div>`;
+    const ks=Object.entries(kinds).filter(([k])=>k!=='skipped').sort((a,b)=>b[1]-a[1]);
+    if(ks.length) body+=`<div class="rsec mist"><h3>Common mistakes in this game</h3>${ks.map(([k,n])=>ERR[k]?`<div class="ritem"><b>${ERR[k][0]} (${n})</b>${ERR[k][1]}</div>`:'').join('')}</div>`;
+  }
+  let focus=[];
+  if(G.mode!=='class'&&H.length){const c=coachHTML(H);focus=c.focus;body+=`<h2 class="sheet-title" style="margin-top:40px;font-size:26px">Your coaching report</h2>`+c.html+progressHTML(pct);}
+  if(G.newBadges.length) body+=`<div class="rsec"><h3>New badges</h3><div class="stamps">${G.newBadges.map(k=>`<span class="stamp"><span>${BADGES[k][0]}</span>${BADGES[k][1]}</span>`).join('')}</div></div>`;
+  if(H.length) body+=`<div class="rsec review"><h3>Every question</h3>${H.map((h,i)=>{
+    const mk=h.ok?'<span class="mk-ok">✓</span>':(h.skipped?'<span class="mk-sk">Skipped</span>':G.all?`<span class="mk-sk">${Math.round((h.share||0)*100)}% of teams</span>`:'<span class="mk-no">✗</span>');
+    return `<details><summary>${mk} Question ${i+1}, ${TOPICS[h.q.topic].label}${G.teams&&h.team!=null?`, ${esc(G.teams[h.team].name)}`:''}. Answer ${fa(h.q,h.q.answer)} ${h.q.unit}${h.raw?`, you wrote ${esc(h.raw)}`:''}</summary><div class="qtext" style="font-size:17px;margin-top:8px">${h.q.text}</div><p class="ask" style="font-size:17px;margin-top:8px">${h.q.ask}</p>${stepsHTML(h.q)}</details>`;}).join('')}</div>`;
+  body+=`<div class="btns">${focus.length?`<button class="btn primary big" id="btnFocus">Practise my focus topics</button>`:''}<button class="btn ${focus.length?'':'primary'} big" id="btnAgain">Play again</button><button class="btn ghost big" id="btnHome">Change settings</button></div>`;
+  $('#endBody').innerHTML=body;
+  $('#btnAgain').onclick=start;$('#btnHome').onclick=goHome;
+  if(focus.length)$('#btnFocus').onclick=()=>{S.mode='solo';S.calm='calm';S.topics=new Set(focus);syncChips();refreshHome();start();toast('Calm practice on your focus topics.');};
+  show('end');
+  if(pct>=70||G.mode==='class'){sfx.win();confetti(180);}
+}
+function goHome(){clearInterval(turnInt);clearInterval(sprintInt);document.body.classList.remove('proj');refreshHome();show('home');}
+
+/* ================= worksheet ================= */
+function buildSheet(){
+  const n=S.sheetN,qs=[];
+  for(let i=0;i<n;i++){const L=S.level==='climb'?Math.min(4,1+Math.floor(4*i/n)):+S.level;qs.push(makeQ(L));}
+  const lv=S.level==='climb'?'Mixed levels, getting harder':`Level ${S.level}, ${LEVELS[+S.level].label.toLowerCase()}`;
+  $('#sheetBody').innerHTML=`<div class="page"><div class="sheethead"><h1>Dose Dash worksheet</h1><div>Name ____________________ &nbsp; Date ____________</div></div>
+    <p class="sub" style="margin-top:10px">${lv}. Show your working and write the unit with every answer.</p>
+    <ol class="wq">${qs.map(q=>`<li><div class="qhead">${tagsHTML(q)}</div><div class="qtext" style="font-size:17px">${q.text}</div><p class="ask">${q.ask}</p><div class="workbox"></div><div class="ansline">Answer, with unit: ______________________</div></li>`).join('')}</ol></div>
+    <div class="page key"><h2 class="sheet-title" style="font-size:24px">Answer key with working</h2><ol>${qs.map(q=>`<li><b>${fa(q,q.answer)} ${q.unit}</b><ul class="steps">${q.steps.map(s=>`<li>${s}</li>`).join('')}</ul></li>`).join('')}</ol></div>`;
+  show('sheet');
+}
+
+/* ================= calculator ================= */
+let calcExpr='';
+function buildCalc(){
+  const keys=['C','(',')','⌫','7','8','9','÷','4','5','6','×','1','2','3','-','0','.','=','+'];
+  $('#calcGrid').innerHTML=keys.map(k=>`<button class="${'÷×-+()'.includes(k)?'op':k==='='?'eq':''}" data-k="${k}" aria-label="${k==='⌫'?'Delete':k==='C'?'Clear':k}">${k}</button>`).join('');
+  $('#calcGrid').querySelectorAll('button').forEach(b=>b.onclick=()=>calcKey(b.dataset.k));
+}
+function calcKey(k){
+  if(k==='C'){calcExpr='';$('#calcPrev').textContent='';}
+  else if(k==='⌫')calcExpr=calcExpr.slice(0,-1);
+  else if(k==='='){
+    const e=calcExpr.replace(/×/g,'*').replace(/÷/g,'/');
+    if(!/^[0-9+\-*/().\s]+$/.test(e)){$('#calcOut').textContent='Error';return;}
+    try{const v=Function('"use strict";return ('+e+')')();if(!isFinite(v))throw 0;$('#calcPrev').textContent=calcExpr+' =';calcExpr=String(rd(v,6));}catch(err){$('#calcOut').textContent='Error';return;}
+  }else calcExpr+=k;
+  $('#calcOut').textContent=calcExpr||'0';
+}
+
+/* ================= breathing ================= */
+let breathT=[];
+function openBreath(){openModal('#mBreath');$('#bTxt').textContent='Ready?';$('#bCirc').style.transform='scale(.5)';$('#btnBreathGo').style.display='';$('#btnBreathGo').textContent='Start';}
+function stopBreath(){breathT.forEach(clearTimeout);breathT=[];}
+function runBreath(){
+  stopBreath();$('#btnBreathGo').style.display='none';
+  const ph=[['Breathe in',1],['Hold',1],['Breathe out',.5],['Hold',.5]];let t=0;
+  for(let r=0;r<3;r++)ph.forEach(([txt,sc])=>{breathT.push(setTimeout(()=>{$('#bTxt').textContent=txt;$('#bCirc').style.transform=`scale(${sc})`;},t));t+=4000;});
+  breathT.push(setTimeout(()=>{$('#bTxt').textContent='Well done';$('#bCirc').style.transform='scale(.7)';
+    const got=store.get('dd_badges',[]);if(!got.includes('zen')){got.push('zen');store.set('dd_badges',got);toast('New badge: 🧘 Calm and collected');}
+    $('#btnBreathGo').style.display='';$('#btnBreathGo').textContent='Go again';},t));
+}
+
+/* ================= wiring ================= */
+buildTopicChips();buildTeamInputs();bindGroups();buildCalc();syncChips();
+$('#btnStart').onclick=start;
+$('#btnQuick').onclick=()=>{S.mode='solo';S.calm='calm';syncChips();refreshHome();start();};
+$('#btnSubmit').onclick=submitTyped;
+$('#btnNext').onclick=next;
+$('#btnReveal').onclick=()=>reveal(false);
+$('#btnSkip').onclick=()=>skip(false);
+$('#btnTSkip').onclick=()=>{if(G&&G.all&&!G.done){G.done=true;clearInterval(turnInt);G.hist.push({q:G.q,ok:false,share:0,kinds:['skipped'],tier:0,skipped:true});G.n++;$('#fb').className='fbx show neutral';$('#fb').innerHTML=`<p class="fbh">Skipped.</p><p class="fbans">Answer: ${fa(G.q,G.q.answer)} ${G.q.unit}</p>${stepsHTML(G.q)}`;$('#btnReveal').disabled=true;finishTurnUI();}else skip(true);};
+$('#btnPause').onclick=togglePause;
+$('#btnEdit').onclick=()=>{$('#teamBar').classList.toggle('editing');$('#btnEdit').textContent=$('#teamBar').classList.contains('editing')?'Done adjusting':'Adjust scores';};
+$('#hbTiers').querySelectorAll('button').forEach(b=>b.onclick=()=>showHint(+b.dataset.t));
+$('#btnQuit').onclick=()=>{if(G&&G.hist.length===0){goHome();return;}finish();};
+$('#brand').onclick=e=>{e.preventDefault();goHome();};
+$('#btnPrint').onclick=()=>window.print();
+$('#btnNewSheet').onclick=buildSheet;
+$('#btnSheetBack').onclick=goHome;
+$('#btnFormula').onclick=()=>openModal('#mFormula');
+$('#btnCalc').onclick=()=>openModal('#mCalc');
+$('#btnBreath').onclick=openBreath;$('#btnBreathHome').onclick=openBreath;
+$('#btnBreathGo').onclick=runBreath;
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeModals);
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModals();}));
+$('#pipFace').onclick=()=>pip(P(TIPS));
+$('#btnSound').onclick=()=>{S.sound=!S.sound;$('#btnSound').classList.toggle('off',!S.sound);$('#btnSound').setAttribute('aria-pressed',S.sound);$('#sndTxt').textContent=S.sound?'Sound on':'Sound off';$('#sndWave').style.display=S.sound?'':'none';if(S.sound)tone(660,.1,'triangle');};
+$('#btnFull').onclick=()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){toast('Full screen is not available here.');}};
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeModals();return;}
+  if($('#mCalc').classList.contains('show')){const k=e.key==='*'?'×':e.key==='/'?'÷':e.key==='Enter'?'=':e.key==='Backspace'?'⌫':e.key;if('0123456789.+-()×÷=⌫'.includes(k)){e.preventDefault();calcKey(k);}return;}
+  if(!$('#scr-game').classList.contains('active')||!G)return;
+  if(e.key==='Enter'){
+    if(e.target&&e.target.tagName==='BUTTON'&&e.target.id!=='btnNext'&&e.target!==document.body&&G.done)return;
+    e.preventDefault();
+    if(!G.done){if(G.all)reveal(false);else if(S.style==='type')submitTyped();}
+    else if($('#btnNext').classList.contains('show'))next();
+  }else if(S.style==='mc'&&!G.done&&!G.all&&['1','2','3','4','a','b','c','d'].includes(e.key.toLowerCase())){
+    const idx='1234'.includes(e.key)?+e.key-1:'abcd'.indexOf(e.key.toLowerCase());const b=$('#mcRow').querySelectorAll('.mcb')[idx];if(b)b.click();
+  }
+});
+refreshHome();
+
+</script>
+</body>
+</html>

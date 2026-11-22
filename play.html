@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Join Dose Dash live</title>
+<link rel="stylesheet" href="/app.css">
+<link rel="stylesheet" href="/live.css">
+</head>
+<body>
+<div id="netbar" role="status"></div>
+<header class="top"><div class="topin">
+  <a class="brand" href="/" data-brand aria-label="Dose Dash home"></a>
+  <span class="sub" id="meName" style="font-weight:700"></span>
+</div></header>
+
+<main class="pwrap">
+<!-- join -->
+<section class="screen active" id="p-join">
+  <div class="sheet psheet">
+    <h1 class="sheet-title">Join a live game</h1>
+    <p class="sheet-sub">Enter the code on the main screen and the name your teacher will see.</p>
+    <label class="field"><span>Game code</span><input id="inCode" class="code" inputmode="numeric" pattern="[0-9]*" maxlength="7" autocomplete="off" placeholder="123 456"></label>
+    <label class="field"><span>Your name</span><input id="inName" maxlength="20" autocomplete="nickname" placeholder="First name and initial"></label>
+    <button class="btn primary big" id="btnJoin" style="margin-top:20px">Join the game</button>
+    <p class="msg" id="joinMsg" role="alert"></p>
+  </div>
+</section>
+
+<!-- lobby -->
+<section class="screen" id="p-wait">
+  <div class="sheet psheet">
+    <h1 class="sheet-title" id="waitTitle">You are in.</h1>
+    <p class="sheet-sub">Watch the main screen. The first question will appear here when your teacher starts the game.</p>
+    <p class="calmnote">Same four steps every time: read the question twice, write the formula, work one step at a time, then check it makes sense and add the unit.</p>
+  </div>
+</section>
+
+<!-- question -->
+<section class="screen" id="p-q">
+  <div class="pbar"><span id="qNum"></span><span id="qSecs"></span></div>
+  <div class="ptimer" id="ptimer"><i id="ptimerBar"></i></div>
+  <article class="sheet qcard pq" style="grid-template-columns:1fr">
+    <div class="qhead" id="qHead"></div>
+    <div class="qbody">
+      <div class="qtext" id="qText"></div>
+      <p class="ask" id="qAsk"></p>
+      <div id="typeArea">
+        <p class="unittip" id="unitTip">Write the number and the unit.</p>
+        <label class="ansl" for="ans">Your answer</label>
+        <div class="inputrow"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Number and unit" enterkeyhint="send"><button class="btn primary" id="btnSend">Send</button></div>
+        <div class="unitkeys" id="unitKeys"></div>
+      </div>
+      <div class="mc" id="mcArea"></div>
+      <div class="locked" id="lockedBox" style="display:none"><span>Answer locked in</span><b id="lockedTxt"></b><span class="sub">Waiting for everyone else.</span></div>
+      <p class="msg" id="qMsg" role="alert"></p>
+    </div>
+  </article>
+</section>
+
+<!-- result -->
+<section class="screen" id="p-r">
+  <div class="sheet psheet" id="resBody"></div>
+</section>
+
+<!-- leaderboard -->
+<section class="screen" id="p-board">
+  <div class="sheet psheet" id="boardBody"></div>
+</section>
+
+<!-- end -->
+<section class="screen" id="p-end">
+  <div class="sheet psheet" id="endBody"></div>
+</section>
+</main>
+
+<script src="/live.js"></script>
+<script>
+const UNITS=['tablets','mL','mg','g','micrograms','L','kg','mL/h','drops/min','kg/m²','hours','minutes','mL/kg/h'];
+const qp=new URLSearchParams(location.search);
+let code=(qp.get('code')||'').replace(/\D/g,'').slice(0,6),pid=null,live=null,V=null,lastQi=-2,sending=false;
+if(code)$('#inCode').value=fmtCode(code);
+const savedName=localStorage.getItem('dd_name');if(savedName)$('#inName').value=savedName;
+if(code&&!savedName)setTimeout(()=>$('#inName').focus(),100);
+
+const cd=Countdown((left,total)=>{
+  const s=Math.ceil(left/1000);
+  $('#qSecs').textContent=V&&V.phase==='question'?`${s} s left`:'';
+  $('#ptimerBar').style.width=(left/total*100)+'%';
+  $('#ptimer').classList.toggle('low',s<=10);
+});
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));window.scrollTo({top:0});}
+
+/* ---------- joining ---------- */
+$('#inCode').addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=d.length>3?d.slice(0,3)+' '+d.slice(3):d;});
+$('#btnJoin').onclick=join;
+$('#inName').addEventListener('keydown',e=>{if(e.key==='Enter')join();});
+async function join(){
+  const c=$('#inCode').value.replace(/\D/g,''),n=$('#inName').value.trim();
+  $('#joinMsg').textContent='';
+  if(c.length!==6){$('#joinMsg').textContent='The game code has 6 numbers.';return;}
+  if(!n){$('#joinMsg').textContent='Please type your name.';return;}
+  $('#btnJoin').disabled=true;
+  try{
+    const r=await fetch('/api/rooms/'+c);const j=await r.json();
+    if(!j.exists){$('#joinMsg').textContent='No game with that code. Check the main screen.';$('#btnJoin').disabled=false;return;}
+    if(j.phase==='ended'){$('#joinMsg').textContent='That game has already finished.';$('#btnJoin').disabled=false;return;}
+  }catch(e){$('#joinMsg').textContent='Could not reach the game. Check your internet connection.';$('#btnJoin').disabled=false;return;}
+  code=c;localStorage.setItem('dd_name',n);
+  history.replaceState(null,'','/play?code='+code);
+  pid=localStorage.getItem('dd_pid_'+code);
+  connect(n);
+}
+function connect(name){
+  live=Live(code,{onStatus:statusBar,onOpen:()=>live.send({t:'join',pid,name}),onMessage:m=>{
+    if(m.t==='joined'){pid=m.pid;localStorage.setItem('dd_pid_'+code,pid);$('#meName').textContent=m.name;}
+    else if(m.t==='state'){V=m;render();}
+    else if(m.t==='locked'){sending=false;showLocked(m.raw);}
+    else if(m.t==='invalid'){sending=false;$('#qMsg').textContent='Type a number and a unit, for example 7.5 mL.';$('#btnSend').disabled=false;}
+    else if(m.t==='error'){$('#joinMsg').textContent=m.msg;$('#btnJoin').disabled=false;show('p-join');live.stop();}
+    else if(m.t==='kicked'){live.stop();localStorage.removeItem('dd_pid_'+code);$('#joinMsg').textContent='Your teacher removed you from this game.';show('p-join');$('#btnJoin').disabled=false;}
+    else if(m.t==='gone'){live.stop();$('#joinMsg').textContent='This game has ended.';show('p-join');$('#btnJoin').disabled=false;}
+  }});
+}
+
+/* ---------- screens ---------- */
+function render(){
+  const v=V;
+  if(v.phase==='lobby'){$('#waitTitle').textContent=`You are in, ${v.name}.`;show('p-wait');return;}
+  if(v.phase==='question'){renderQ();return;}
+  cd.stop();
+  if(v.phase==='reveal'){renderResult();return;}
+  if(v.phase==='board'){renderBoard();return;}
+  if(v.phase==='ended'){renderEnd();return;}
+}
+function renderQ(){
+  const v=V,q=v.q;
+  show('p-q');
+  $('#qNum').innerHTML=`<b>Question ${q.qi+1}</b> of ${q.total}${q.double?', double points':''}`;
+  $('#qHead').innerHTML=qHeadHTML(q);
+  $('#qText').innerHTML=q.text;
+  $('#qAsk').textContent=q.ask;
+  cd.set(q.remainingMs,q.duration);
+  const fresh=q.qi!==lastQi;lastQi=q.qi;
+  $('#qMsg').textContent='';
+  if(v.locked){showLocked(v.locked);return;}
+  $('#lockedBox').style.display='none';
+  if(q.opts){
+    $('#typeArea').style.display='none';$('#mcArea').style.display='grid';
+    $('#mcArea').innerHTML=q.opts.map((o,i)=>`<button class="mcb" data-i="${i}"><span class="letter">${'ABCD'[i]}</span><span>${esc(o)}</span></button>`).join('');
+    $('#mcArea').querySelectorAll('.mcb').forEach(b=>b.onclick=()=>{if(sending)return;sending=true;live.send({t:'answer',opt:+b.dataset.i});$('#mcArea').querySelectorAll('.mcb').forEach(x=>{x.disabled=true;if(x!==b)x.classList.add('dim');});});
+  }else{
+    $('#mcArea').style.display='none';$('#typeArea').style.display='';
+    $('#unitTip').style.display=v.units?'':'none';
+    if(fresh){$('#ans').value='';$('#ans').disabled=false;$('#btnSend').disabled=false;}
+  }
+}
+function sendTyped(){
+  const raw=$('#ans').value.trim();if(!raw||sending)return;
+  if(!/\d/.test(raw)){$('#qMsg').textContent='Start with the number, then the unit.';return;}
+  sending=true;$('#btnSend').disabled=true;
+  if(!live.send({t:'answer',raw})){sending=false;$('#btnSend').disabled=false;$('#qMsg').textContent='Not connected. Try again in a moment.';}
+}
+$('#btnSend').onclick=sendTyped;
+$('#ans').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendTyped();}});
+$('#unitKeys').innerHTML=UNITS.map(u=>`<button type="button" data-u="${u}">${u}</button>`).join('');
+$('#unitKeys').querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=$('#ans');const num=(i.value.match(/^\s*[+-]?[\d.,\/½]+/)||[''])[0].trim();i.value=(num?num+' ':'')+b.dataset.u;i.focus();});
+function showLocked(raw){
+  $('#typeArea').style.display='none';$('#mcArea').style.display='none';
+  $('#lockedTxt').textContent=raw;$('#lockedBox').style.display='';$('#qMsg').textContent='';
+}
+function rankLine(v){
+  const moved=v.prevRank&&v.prevRank!==v.rank?(v.prevRank>v.rank?`, up ${v.prevRank-v.rank}`:`, down ${v.rank-v.prevRank}`):'';
+  return `<div class="rankline">You are <b>${ordinal(v.rank)}</b> of ${v.of}${moved}. Score <b>${v.score}</b>.</div>`;
+}
+function renderResult(){
+  const v=V,r=v.result,sol=v.sol;
+  let h='';
+  if(r.none) h=`<p class="bigres bad">No answer this time</p><p class="fbans">Answer: ${esc(sol.answer)}</p><p class="calmnote">That is fine. Read through how to get there, ready for the next one.</p>`;
+  else if(r.ok) h=`<p class="bigres">${TICK}Correct</p><p class="ptsline">+${r.pts} points${v.streak>1?`, streak of ${v.streak}`:''}</p><p class="fbsub" style="margin-top:6px">You wrote ${esc(r.raw)}.</p>`;
+  else h=`<p class="bigres bad">Not this time</p><p class="fbans">Answer: ${esc(sol.answer)}</p><p class="fbsub">You wrote ${esc(r.raw)}.</p>${tipsHTML(r.kinds)}`;
+  h+=`<details ${r.ok?'':'open'}><summary>How to get there</summary>${stepsHTML(sol)}</details>`+rankLine(v);
+  $('#resBody').innerHTML=h;show('p-r');
+}
+function renderBoard(){
+  const v=V;
+  const ahead=v.ahead?`<p class="fbsub" style="margin-top:8px">${v.ahead.gap} points behind ${esc(v.ahead.name)}.</p>`:v.rank===1?'<p class="fbsub" style="margin-top:8px">You are in the lead.</p>':'';
+  $('#boardBody').innerHTML=`<p class="sub">Your position</p><p class="bigrank">${ordinal(v.rank)}</p><p class="endlede">of ${v.of} players, with ${v.score} points.</p>${ahead}
+    <h3 style="margin-top:22px;font-size:19px">Top ${v.top.length}</h3><ol class="toplist">${v.top.map((p,i)=>`<li class="${p.name===v.name?'me':''}"><span>${i+1}. ${esc(p.name)}</span><span>${p.score}</span></li>`).join('')}</ol>`;
+  show('p-board');
+}
+function renderEnd(){
+  const v=V;
+  const ks=Object.entries(v.kinds||{}).filter(([k])=>ERR[k]).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  $('#endBody').innerHTML=`<p class="sub">Final position</p><p class="bigrank">${ordinal(v.rank)}</p><p class="endlede">of ${v.of} players, with ${v.score} points. You got ${v.correct} of ${v.total} right.</p>
+    <h3 style="margin-top:22px;font-size:19px">Podium</h3><ol class="toplist">${v.top.map((p,i)=>`<li class="${p.name===v.name?'me':''}"><span>${ordinal(i+1)} ${esc(p.name)}</span><span>${p.score}</span></li>`).join('')}</ol>
+    ${ks.length?`<h3 style="margin-top:22px;font-size:19px">What to practise next</h3><ul class="coach">${ks.map(([k,n])=>`<li><b>${ERR[k][0]} (${n})</b>${ERR[k][1]}</li>`).join('')}</ul>`:'<p class="calmnote">No mistake patterns to work on. Well done.</p>'}
+    <p style="margin-top:22px"><a class="btn primary big" href="/">Keep practising on your own</a></p>`;
+  show('p-end');
+}
+
+/* reconnect automatically after a refresh */
+if(code){const sp=localStorage.getItem('dd_pid_'+code);if(sp){pid=sp;connect(localStorage.getItem('dd_name')||'');}}
+</script>
+</body>
+</html>
