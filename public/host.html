@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dose Dash live: host screen</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/app.css">
 <link rel="stylesheet" href="/live.css">
 </head>
@@ -24,12 +25,12 @@
     <p class="sheet-sub">Students answer on their own phones and the leaderboard updates after every question. Up to 150 players.</p>
     <div class="frow"><div class="fl"><b>Field</b></div>
       <div class="chips" id="gField">
-        <button class="chip" data-v="mixed">Mixed</button><button class="chip" data-v="adult"><i class="sw" style="--c:#2F5DA8"></i>Adult</button><button class="chip" data-v="child"><i class="sw" style="--c:#B86E00"></i>Child</button><button class="chip" data-v="mh"><i class="sw" style="--c:#6B3FA0"></i>Mental health</button><button class="chip" data-v="ld"><i class="sw" style="--c:#1F7A5C"></i>Learning disability</button>
+        <button class="chip" data-v="mixed">Mixed</button><button class="chip" data-v="adult" style="--c:#2D5BE3"><i class="sw" style="--c:#2D5BE3"></i>Adult</button><button class="chip" data-v="child" style="--c:#E07A00"><i class="sw" style="--c:#E07A00"></i>Child</button><button class="chip" data-v="mh" style="--c:#7B4FE0"><i class="sw" style="--c:#7B4FE0"></i>Mental health</button><button class="chip" data-v="ld" style="--c:#13865B"><i class="sw" style="--c:#13865B"></i>Learning disability</button>
       </div></div>
     <div class="frow"><div class="fl"><b>Topics</b><small>At least one stays ticked.</small></div><div class="chips ticks" id="gTopics"></div></div>
     <div class="frow"><div class="fl"><b>Level</b><small>Climb gets harder as the game goes on.</small></div>
       <div class="chips" id="gLevel">
-        <button class="chip" data-v="1"><i class="lv" style="--c:#2E8B57"></i>Simple</button><button class="chip" data-v="2"><i class="lv" style="--c:#D4A017"></i>Moderate</button><button class="chip" data-v="3"><i class="lv" style="--c:#D9661F"></i>Difficult</button><button class="chip" data-v="4"><i class="lv" style="--c:#C21F32"></i>Hard</button><button class="chip" data-v="climb">Climb</button>
+        <button class="chip" data-v="1" style="--c:#22A06B"><i class="lv" style="--c:#22A06B"></i>Simple</button><button class="chip" data-v="2" style="--c:#D98E00"><i class="lv" style="--c:#F2A516"></i>Moderate</button><button class="chip" data-v="3" style="--c:#E8552A"><i class="lv" style="--c:#FF6B3D"></i>Difficult</button><button class="chip" data-v="4" style="--c:#E0294A"><i class="lv" style="--c:#E0294A"></i>Hard</button><button class="chip" data-v="climb" style="--c:#7B4FE0">Climb</button>
       </div></div>
     <div class="frow"><div class="fl"><b>Questions</b></div>
       <div class="chips" id="gCount"><button class="chip" data-v="5">5</button><button class="chip" data-v="10">10</button><button class="chip" data-v="15">15</button><button class="chip" data-v="20">20</button><button class="chip" data-v="25">25</button><button class="chip" data-v="30">30</button></div></div>
@@ -99,7 +100,7 @@
 <script src="/qrcode.js"></script>
 <script src="/live.js"></script>
 <script>
-const TOPIC_LIST=[['bmi','BMI','#7B61A8'],['conv','Conversions','#2B83A6'],['wig','WIG formula','#B5487E'],['flow','Flow rates','#3A62B5'],['bal','Fluid balance','#2E8B6E'],['miss','Missing value','#C98B00'],['bnf','BNF maximum doses','#157A4A']];
+const TOPIC_LIST=[['bmi','BMI','#7B5CF0'],['conv','Conversions','#12A3B8'],['wig','WIG formula','#F2547D'],['flow','Flow rates','#2D5BE3'],['bal','Fluid balance','#22A06B'],['miss','Missing value','#F2A516'],['bnf','BNF maximum doses','#0E8A55']];
 const qp=new URLSearchParams(location.search);
 const ST={field:qp.get('field')||'mixed',topics:new Set((qp.get('topics')||TOPIC_LIST.map(t=>t[0]).join(',')).split(',').filter(k=>TOPIC_LIST.some(t=>t[0]===k))),level:qp.get('level')||'climb',count:'10',timer:'60',style:qp.get('style')||'type',units:qp.get('units')==='off'?'0':'1',speed:'1',double:'1'};
 if(!ST.topics.size)TOPIC_LIST.forEach(t=>ST.topics.add(t[0]));
@@ -158,6 +159,7 @@ function render(){
   $('#gTitle').textContent=`Question ${v.qi+1} of ${v.total}`;
   $('#gSub').innerHTML=`<i class="lv" style="--c:${q.level.color}"></i>${esc(q.level.label)}${q.double?', double points':''}`;
   $('#qHead').innerHTML=qHeadHTML(q);
+  document.body.style.setProperty('--tc',q.topic.color);
   $('#qText').innerHTML=q.text;
   $('#qAsk').textContent=q.ask+(v.settings.units&&v.phase==='question'?' Answer with the unit.':'');
   $('#meters').style.display=v.phase==='question'?'':'none';
@@ -215,7 +217,7 @@ function renderLobby(){
   }
   const ps=V.players;
   $('#joinedCount').innerHTML=`${ps.length} ${ps.length===1?'player':'players'} joined<small>${V.online} connected now</small>`;
-  $('#names').innerHTML=ps.map(p=>`<button class="pname ${p.online?'':'off'}" data-pid="${p.pid}" title="Remove ${esc(p.name)}">${esc(p.name)}</button>`).join('');
+  $('#names').innerHTML=ps.map((p,i)=>`<button style="--c:${['#2D5BE3','#C2386E','#13865B','#B35F00','#7B4FE0','#0E7C8C','#D63C3C'][i%7]}" class="pname ${p.online?'':'off'}" data-pid="${p.pid}" title="Remove ${esc(p.name)}">${esc(p.name)}</button>`).join('');
   document.querySelectorAll('#names .pname').forEach(b=>b.onclick=()=>{if(confirm(`Remove ${b.textContent} from the game?`))send({t:'kick',pid:b.dataset.pid});});
   $('#btnStartGame').disabled=ps.length===0;
 }
@@ -262,8 +264,8 @@ function downloadCsv(){
 function confettiBurst(){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const cv=$('#confetti'),cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
-  const cols=['#1B2A72','#C21F32','#FFE45C','#157A4A','#9DB7E6'];
-  const ps=Array.from({length:180},()=>({x:innerWidth/2+(Math.random()-.5)*300,y:innerHeight/3,vx:(Math.random()-.5)*15,vy:-Math.random()*13-4,s:Math.random()*8+5,c:cols[Math.floor(Math.random()*5)],r:Math.random()*6,vr:(Math.random()-.5)*.3}));
+  const cols=['#2D5BE3','#F2547D','#FFC93C','#22A06B','#7B5CF0','#12A3B8','#FF6B3D'];
+  const ps=Array.from({length:180},()=>({x:innerWidth/2+(Math.random()-.5)*300,y:innerHeight/3,vx:(Math.random()-.5)*15,vy:-Math.random()*13-4,s:Math.random()*8+5,c:cols[Math.floor(Math.random()*cols.length)],r:Math.random()*6,vr:(Math.random()-.5)*.3}));
   let t=0;(function f(){cx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore();});if(++t<170)requestAnimationFrame(f);else cx.clearRect(0,0,cv.width,cv.height);})();
 }
 $('#btnFull').onclick=()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){}};

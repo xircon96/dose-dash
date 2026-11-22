@@ -5,7 +5,7 @@ const ROOM_TTL = 8 * 3600 * 1000;      // a game room lives for at most 8 hours
 const ENDED_TTL = 2 * 3600 * 1000;     // results stay available for 2 hours after the end
 const MAX_PLAYERS = 150;
 const ALL_FIELDS = ["adult", "child", "mh", "ld"];
-const CONFUSE = { tablets: ["mg", "mL"], mL: ["mg", "L"], "mL/h": ["mL/min", "drops/min"], "drops/min": ["mL/h", "drops/h"], "kg/m²": ["kg", "kg/m"], kg: ["g", "kg/m²"], g: ["mg", "kg"], mg: ["g", "micrograms"], micrograms: ["mg", "g"], L: ["mL", "kg"], hours: ["minutes"], minutes: ["hours", "seconds"], "mL/kg/h": ["mL/h", "mL/kg"] };
+const CONFUSE = { tablets: ["mg", "mL"], mL: ["mg", "L"], cm: ["mm", "m"], "mL/h": ["mL/min", "drops/min"], "drops/min": ["mL/h", "drops/h"], "kg/m²": ["kg", "kg/m"], kg: ["g", "kg/m²"], g: ["mg", "kg"], mg: ["g", "micrograms"], micrograms: ["mg", "g"], L: ["mL", "kg"], hours: ["minutes"], minutes: ["hours", "seconds"], "mL/kg/h": ["mL/h", "mL/kg"] };
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };

@@ -385,3 +385,95 @@ ol.wq>li{margin:18px 0;padding-bottom:14px;border-bottom:1px dashed var(--rule);
 }
 
 .modes .opt:last-child:nth-child(odd){grid-column:1/-1}
+
+/* ================= Colour layer ================= */
+:root{
+  --desk:#E6F0FB;--grid:#D0E0F3;--band:#EAF1FF;--ref:#F3F0FF;
+  --cobalt:#2D5BE3;--cobalt-d:#1E44B5;--coral:#FF6B3D;--sun:#FFC93C;--teal:#12A3B8;--violet:#7B5CF0;--leaf:#22A06B;--pink:#F2547D;--amber:#F2A516;
+  --t-mint:#E6F7EF;--t-rose:#FFEDF1;--t-butter:#FFF6D8;--t-lilac:#F2EEFF;--t-sky:#EAF2FF;--t-peach:#FFEEE6;
+}
+header.top{border-bottom:0}
+header.top::after{content:"";display:block;height:6px;background:linear-gradient(90deg,var(--pink) 0 14.3%,var(--amber) 0 28.6%,var(--leaf) 0 42.9%,var(--teal) 0 57.2%,var(--cobalt) 0 71.5%,var(--violet) 0 85.8%,var(--coral) 0)}
+.btn.primary{background:var(--cobalt);border-color:var(--cobalt)}
+.btn.primary:hover,.btn.primary:disabled:hover{background:var(--cobalt-d)}
+.btn:hover{background:var(--t-sky)}
+
+/* hero: a colour block with the medicines chart and its section tabs */
+.hero{background:var(--cobalt);color:#fff;border:1.5px solid var(--ink);border-radius:var(--r);padding:44px 44px 52px;margin-top:4px;box-shadow:var(--lift);
+  background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:28px 28px}
+.hero h1{color:#fff}
+.lede{color:#DCE6FF}
+.hero .btn{border-color:#fff;background:transparent;color:#fff}
+.hero .btn:hover{background:rgba(255,255,255,.14)}
+.hero .btn.primary{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.hero .btn.primary:hover{background:#FFD866}
+.hero .tip{color:#DCE6FF;border-left-color:var(--sun)}
+.hero .tip b{color:#fff}
+.ctabs{display:flex;gap:4px;padding:0 12px;margin-top:-31px;height:31px}
+.ctabs span{background:var(--c);color:#fff;font-size:13px;font-weight:700;padding:6px 10px 0;border-radius:6px 6px 0 0;border:1.5px solid var(--ink);border-bottom:0;white-space:nowrap}
+.ctabs span:first-child{color:#fff}
+.chart{margin-top:31px}
+.chart-head{background:var(--t-sky)}
+@media(max-width:860px){.hero{padding:28px 20px 34px}.ctabs span{font-size:12px;padding:6px 7px 0}}
+@media(max-width:420px){.ctabs span:nth-child(4){display:none}}
+
+/* set-up form: colour-coded rows, options and chips */
+.setup .frow:nth-of-type(7n+1){--rc:var(--pink)}.setup .frow:nth-of-type(7n+2){--rc:var(--amber)}.setup .frow:nth-of-type(7n+3){--rc:var(--leaf)}
+.setup .frow:nth-of-type(7n+4){--rc:var(--teal)}.setup .frow:nth-of-type(7n+5){--rc:var(--cobalt)}.setup .frow:nth-of-type(7n+6){--rc:var(--violet)}.setup .frow:nth-of-type(7n){--rc:var(--coral)}
+.fl b{display:flex;align-items:center;gap:10px}
+.fl b::before{content:"";width:8px;height:22px;border-radius:3px;background:var(--rc,var(--cobalt));flex:none}
+.startrow .fl b::before{display:none}
+.opt{--c:var(--cobalt);border-left:6px solid var(--c)}
+.opt .dot{border-color:var(--c)}
+.opt.sel{border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c);background:color-mix(in srgb,var(--c) 11%,#fff)}
+.opt.sel .dot::after{background:var(--c)}
+.chip.sel{background:var(--c,var(--cobalt));border-color:var(--c,var(--cobalt))}
+.ticks .chip.sel{background:color-mix(in srgb,var(--c,var(--cobalt)) 12%,#fff);border-color:var(--c,var(--cobalt));color:var(--ink)}
+.ticks .chip.sel::before{background-color:var(--c,var(--cobalt));border-color:var(--c,var(--cobalt))}
+.opts{background:var(--t-sky)}
+#soloOpts{background:var(--t-mint)}#classOpts{background:var(--t-peach)}#sheetOpts{background:var(--t-butter)}#liveOpts{background:var(--t-sky)}
+.helper .chip.sel{background:var(--leaf);border-color:var(--leaf)}
+.helper .chip[data-val="off"].sel{background:var(--ink2);border-color:var(--ink2)}
+
+/* progress, badges, calm card */
+.stamp:not(.off){border-style:solid}
+.stamp:not(.off):nth-child(6n+1){background:var(--t-rose);border-color:var(--pink)}.stamp:not(.off):nth-child(6n+2){background:var(--t-butter);border-color:var(--amber)}
+.stamp:not(.off):nth-child(6n+3){background:var(--t-mint);border-color:var(--leaf)}.stamp:not(.off):nth-child(6n+4){background:var(--t-sky);border-color:var(--cobalt)}
+.stamp:not(.off):nth-child(6n+5){background:var(--t-lilac);border-color:var(--violet)}.stamp:not(.off):nth-child(6n){background:var(--t-peach);border-color:var(--coral)}
+.calm{background:var(--t-mint);border-color:var(--leaf)}
+.calm .btn{border-color:var(--leaf);color:#0B5E3C}
+
+/* game: the topic colour tints the chart and the syringe liquid */
+.qcard{border-left:8px solid var(--tc,var(--cobalt))}
+.qhead{background:color-mix(in srgb,var(--tc,var(--cobalt)) 16%,#fff)}
+.syr-fill{background:color-mix(in srgb,var(--tc,var(--cobalt)) 45%,#fff)}
+.hl{background:#fff;border:1.5px solid var(--rule);border-radius:999px;padding:3px 12px 3px 10px}
+.help{background:var(--t-lilac)}
+.help h3{color:#4B2FB8}
+.fcard{border-color:var(--violet);border-left-width:6px}
+.hbtiers .btn.used{background:#E5DEFF}
+.fbx.ok{background:var(--t-mint);border-color:var(--leaf)}
+.fbx.bad{background:var(--t-rose);border-color:#E0294A}
+.fbx.neutral{background:var(--t-sky);border-color:var(--cobalt)}
+.mcb:nth-child(1) .letter{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+.mcb:nth-child(2) .letter{background:var(--pink);border-color:var(--pink);color:#fff}
+.mcb:nth-child(3) .letter{background:var(--sun);border-color:#D9A400;color:var(--ink)}
+.mcb:nth-child(4) .letter{background:var(--teal);border-color:var(--teal);color:#fff}
+.mcb.right .letter{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important}
+.team{background:var(--c);border-color:var(--c);color:#fff}
+.team.now{border-color:var(--ink);box-shadow:0 0 0 3px var(--sun),var(--lift)}
+.team .tmeta,.team.now .tmeta{color:#fff}
+.banner{background:var(--sun)}
+.pw{background:var(--t-butter)}
+.toast{background:var(--cobalt)}
+
+/* results */
+.rsec.good,.rsec.focus,.rsec.mist,.rsec.calmr{padding:16px 18px;border-radius:var(--r)}
+.rsec.good{background:var(--t-mint)}.rsec.focus{background:var(--t-butter)}.rsec.mist{background:var(--t-rose)}.rsec.calmr{background:var(--t-lilac);--c:var(--violet)}
+.ritem{background:#fff;padding:8px 12px 8px 14px;border-radius:0 var(--r) var(--r) 0}
+.spark div{background:var(--cobalt)}
+.spark div:last-child{background:var(--coral)}
+.pod{background:color-mix(in srgb,var(--c) 18%,#fff)}
+.bignum{color:var(--cobalt)}
+.hero .chart{color:var(--ink)}
+.hero .chart .write{color:var(--ink)}

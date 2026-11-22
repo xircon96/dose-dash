@@ -27,19 +27,19 @@ function Q(o){
 
 /* ================= fields ================= */
 const FIELDS={
-  adult:{label:'Adult',icon:'',color:'#2F5DA8',
+  adult:{label:'Adult',icon:'',color:'#2D5BE3',
     names:['Mr Okafor','Mrs Jones','Ms Kaur','Mr Davies','Mrs Chen','Mr Murphy','Ms Ahmed','Mrs Williams','Mr Nowak','Ms Evans'],
     places:['on a surgical ward','on the acute medical unit','on a respiratory ward','on an orthopaedic ward','on a care of older people ward','in a GP practice nurse clinic'],
     hosp:['on a surgical ward','on the acute medical unit','on a respiratory ward','on an orthopaedic ward','on a care of older people ward']},
-  child:{label:'Child',icon:'',color:'#B86E00',
+  child:{label:'Child',icon:'',color:'#E07A00',
     names:[['Ava',6],['Noah',4],['Ivy',8],['Theo',5],['Zara',7],['Oscar',3],['Maya',9],['Alfie',10],['Isla',2],['Leo',6]],
     places:["on the children's ward","in the paediatric assessment unit","on a children's surgical ward"],
     hosp:["on the children's ward","in the paediatric assessment unit","on a children's surgical ward"]},
-  mh:{label:'Mental health',icon:'',color:'#6B3FA0',
+  mh:{label:'Mental health',icon:'',color:'#7B4FE0',
     names:['Jordan','Sam','Priya','Daniel','Chloe','Marcus','Aisha','Tom','Kofi','Megan'],
     places:['on an acute mental health inpatient ward','at a community mental health team clinic','on a psychiatric intensive care unit','on an older adult mental health ward','at a crisis team home visit'],
     hosp:['on a general medical ward, supported by the mental health liaison team','on the acute medical unit after transfer from the mental health unit']},
-  ld:{label:'Learning disability',icon:'',color:'#1F7A5C',
+  ld:{label:'Learning disability',icon:'',color:'#13865B',
     names:['Ben','Grace','Ryan','Sophie','Liam','Hannah','Kieran','Ellie','Josh','Fatima'],
     places:['in a supported living service','at their annual health check','in a specialist learning disability assessment unit','at a respite service','at home with their support worker'],
     hosp:['on a medical ward, supported by the learning disability liaison nurse','in hospital, with their hospital passport in the notes']}
@@ -251,7 +251,8 @@ function genConv(L,f){
       traps:[[v/k,'wrongway']]});
   }
   if(L===3){
-    const t=R(0,2);
+    const t=R(0,3);
+    if(t===3) return imperialConv(c,f);
     if(t===0){
       const [drug,lab,mg,n,per]=P(DAILY[f]),tot=mg*n,g=tot/1000;
       return Q({fk:'conv',drug,text:`${c.who} is ${c.place} and takes <b>${lab}</b>.`,ask:`What is the total dose in grams ${per}?`,answer:g,unit:'g',
@@ -284,12 +285,50 @@ function genConv(L,f){
     hint:'1% means 1 g in 100 mL. Change that into mg per mL.',traps:[[ml,'missedstep'],[ml/100,'missedstep']],alts:[mg*10]});
 }
 
+
+/* ================= UK patient-reported measurements ================= */
+const IMP_NOTE='Use <b>1 stone = 14 lb</b>, <b>1 kg = 2.2 lb</b>, <b>1 foot = 12 inches</b> and <b>1 inch = 2.54 cm</b>.';
+function imperialConv(c,f){
+  if(f==='child'){
+    const lb=R(5,9),oz=R(0,15),totLb=lb+oz/16,kg=totLb/2.2;
+    const q=Q({fk:'imperial',text:`${c.who} is ${c.place}. Their parent says their birth weight was <b>${lb} lb ${oz} oz</b>. Use <b>1 lb = 16 oz</b> and <b>1 kg = 2.2 lb</b>.`,
+      ask:'What was the birth weight in kg? Round to 2 decimal places.',answer:kg,dp:2,unit:'kg',
+      steps:[`Ounces to pounds: ${oz} ÷ 16 = ${nf(oz/16)} lb`,`Total = ${lb} + ${nf(oz/16)} = ${nf(totLb)} lb`,`Pounds to kg: ${nf(totLb)} ÷ 2.2 = ${nf(kg)}, so <b>${nfd(kg,2)} kg</b>`],
+      hint:'Turn the ounces into pounds first (÷ 16), then divide the pounds by 2.2.',traps:[[(lb+oz/10)/2.2,'calc'],[totLb*2.2,'inverted']]});
+    q.tol=0.011;return q;
+  }
+  if(Math.random()<0.6){
+    const st=R(7,17),lb=R(0,13),totLb=st*14+lb,kg=totLb/2.2;
+    return Q({fk:'imperial',text:`${c.who} is ${c.place}. They tell you they weigh <b>${st} stone ${lb} lb</b>. Weights must be recorded in kg. Use <b>1 stone = 14 lb</b> and <b>1 kg = 2.2 lb</b>.`,
+      ask:'What is their weight in kg? Round to 1 decimal place.',answer:kg,dp:1,unit:'kg',
+      steps:[`Stones to pounds: ${st} × 14 = ${st*14} lb`,`Total = ${st*14} + ${lb} = ${totLb} lb`,`Pounds to kg: ${totLb} ÷ 2.2 = ${nf(kg)}, so <b>${nfd(kg,1)} kg</b>`],
+      hint:'Change everything into pounds first, then divide by 2.2.',traps:[[totLb*2.2,'inverted'],[(st*10+lb)/2.2,'calc'],[st*14/2.2,'missedstep']]});
+  }
+  const ft=P([4,5,5,5,6]),inch=ft===6?R(0,4):ft===4?R(8,11):R(0,11),totIn=ft*12+inch,cm=totIn*2.54;
+  return Q({fk:'imperial',text:`${c.who} is ${c.place}. They tell you they are <b>${ft} feet ${inch} inches</b> tall. Use <b>1 foot = 12 inches</b> and <b>1 inch = 2.54 cm</b>.`,
+    ask:'What is their height in cm? Round to 1 decimal place.',answer:cm,dp:1,unit:'cm',
+    steps:[`Feet to inches: ${ft} × 12 = ${ft*12} inches`,`Total = ${ft*12} + ${inch} = ${totIn} inches`,`Inches to cm: ${totIn} × 2.54 = ${nf(cm)}, so <b>${nfd(cm,1)} cm</b>`],
+    hint:'Change the feet into inches (× 12), add the inches, then × 2.54.',traps:[[totIn/2.54,'inverted'],[(ft*10+inch)*2.54,'calc'],[ft*12*2.54,'missedstep']]});
+}
+function bmiImperial(c,where){
+  let st,lb,ft,inch,totLb,kg,totIn,m,b;
+  do{st=R(8,16);lb=R(0,13);ft=P([5,5,5,6]);inch=ft===6?R(0,3):R(0,11);totLb=st*14+lb;kg=totLb/2.2;totIn=ft*12+inch;m=totIn*2.54/100;b=kg/(m*m);}while(b<17||b>40);
+  const kgR=rd(kg,2),mR=rd(m,4),m2=rd(mR*mR,4),bS=kgR/m2;
+  const note=`For adults, ${nfd(bS,1)} is in the standard <b>${bmiCat(rd(bS,1))}</b> range.`;
+  const q=Q({fk:'bmiImp',text:`${c.who} is having their BMI checked ${where}. They tell you they weigh <b>${st} stone ${lb} lb</b> and are <b>${ft} feet ${inch} inches</b> tall. ${IMP_NOTE}`,
+    ask:'What is their BMI? Round to 1 decimal place.',answer:bS,dp:1,unit:'kg/m²',note,
+    steps:[`Weight: ${st} × 14 + ${lb} = ${totLb} lb, then ${totLb} ÷ 2.2 = ${nf(kgR)} kg`,`Height: ${ft} × 12 + ${inch} = ${totIn} inches, then ${totIn} × 2.54 = ${nf(totIn*2.54)} cm = ${nf(mR)} m`,`Height² = ${nf(mR)} × ${nf(mR)} = ${nf(m2)}`,`BMI = ${nf(kgR)} ÷ ${nf(m2)} = ${nf(bS)}, so <b>${nfd(bS,1)} kg/m²</b>`],
+    hint:'Change the weight into kg and the height into metres first. Then BMI = weight ÷ height².',traps:[[totLb/(m*m),'noconv'],[kg/m,'nosquare']]});
+  q.tol=0.1+1e-9;return q;
+}
+
 /* ================= BMI ================= */
 const bmiCat=b=>b<18.5?'underweight':b<25?'healthy weight':b<30?'overweight':b<40?'obese':'severely obese';
 const BMI_WHY={adult:'at a pre-operative assessment clinic',mh:'as part of physical health monitoring for antipsychotic medication',ld:'at their annual health check'};
 function genBMI(L,f){
   const c=f==='child'?teen():ctx(f);
   const where=f==='child'?c.place:BMI_WHY[f];
+  if(f!=='child'&&(L===2||L===3)&&Math.random()<0.35) return bmiImperial(c,where);
   let w,hcm,h,text,ask='What is their BMI? Round to 1 decimal place.';const steps=[];
   if(L===4&&f!=='child'){
     hcm=R(155,185);h=hcm/100;const h2=rd(h*h,4),b0=R(27,34)+R(0,9)/10;
@@ -630,15 +669,15 @@ function genBNF(L,f){
 }
 
 const TOPICS={
-  bmi:{label:'BMI',icon:'',color:'#7B61A8',gen:genBMI},
-  conv:{label:'Conversions',icon:'',color:'#2B83A6',gen:genConv},
-  wig:{label:'WIG formula',icon:'',color:'#B5487E',gen:genWIG},
-  flow:{label:'Flow rates',icon:'',color:'#3A62B5',gen:genFlow},
-  bal:{label:'Fluid balance',icon:'',color:'#2E8B6E',gen:genBal},
-  miss:{label:'Missing value',icon:'',color:'#C98B00',gen:genMiss},
-  bnf:{label:'BNF maximum doses',icon:'',color:'#157A4A',gen:genBNF}
+  bmi:{label:'BMI',icon:'',color:'#7B5CF0',gen:genBMI},
+  conv:{label:'Conversions',icon:'',color:'#12A3B8',gen:genConv},
+  wig:{label:'WIG formula',icon:'',color:'#F2547D',gen:genWIG},
+  flow:{label:'Flow rates',icon:'',color:'#2D5BE3',gen:genFlow},
+  bal:{label:'Fluid balance',icon:'',color:'#22A06B',gen:genBal},
+  miss:{label:'Missing value',icon:'',color:'#F2A516',gen:genMiss},
+  bnf:{label:'BNF maximum doses',icon:'',color:'#0E8A55',gen:genBNF}
 };
-const LEVELS=[null,{label:'Simple',color:'#2E8B57',pts:10},{label:'Moderate',color:'#D4A017',pts:20},{label:'Difficult',color:'#D9661F',pts:30},{label:'Hard',color:'#C21F32',pts:50}];
+const LEVELS=[null,{label:'Simple',color:'#22A06B',pts:10},{label:'Moderate',color:'#F2A516',pts:20},{label:'Difficult',color:'#FF6B3D',pts:30},{label:'Hard',color:'#E0294A',pts:50}];
 function makeQFor(L,f,t){const q=TOPICS[t].gen(L,f);q.topic=t;q.field=f;q.level=L;if(f==='child'&&q.drug)q.child=true;return q;}
 
 /* ================= units ================= */
@@ -649,6 +688,7 @@ const UNIT_ALIASES={
   'drops/min':['drops/min','drops/mins','drops/minute','drops/minutes','drop/min','drop/minute','gtt/min','gtts/min','dpm'],
   'kg/m²':['kg/m2','kgm2','kg/m^2','kg/msq','kg/sqm'],
   'kg':['kg','kgs','kilogram','kilograms','kilo','kilos'],
+  'cm':['cm','cms','centimetre','centimetres','centimeter','centimeters'],
   'g':['g','gram','grams','gm','gms','gs'],
   'mg':['mg','mgs','milligram','milligrams'],
   'micrograms':['micrograms','microgram'],
@@ -679,7 +719,7 @@ function parseFull(raw){
   if(m[1]==='-')v=-v;
   return {v,unit:matchUnit(s.slice(m[0].length))};
 }
-const DIM={micrograms:['m',0.001],mg:['m',1],g:['m',1000],kg:['m',1e6],mL:['v',1],L:['v',1000],minutes:['t',1],hours:['t',60]};
+const DIM={micrograms:['m',0.001],mg:['m',1],g:['m',1000],kg:['m',1e6],mL:['v',1],L:['v',1000],minutes:['t',1],hours:['t',60],cm:['d',1]};
 function equiv(v,u,a,qu){const A=DIM[u],B=DIM[qu];if(!A||!B||A[0]!==B[0])return false;return Math.abs(v*A[1]-a*B[1])<=Math.abs(a*B[1])*0.005+1e-9;}
 function numKind(q,v){
   const a=q.answer,tl=Math.max(q.tol,q.dp!=null?0.5*Math.pow(10,-q.dp):0.001);

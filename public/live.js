@@ -40,7 +40,8 @@ const FORMULAS = {
   nappy: ["Weighing nappies", "Urine (mL) = wet weight minus dry weight"], balance: ["Fluid balance", "Balance = total in minus total out"], urine: ["Urine output", `mL/kg/h = ${fr("urine (mL)", "weight (kg) × hours")}`],
   volume: ["Volume given", "Volume = rate × time"], missingEntry: ["Missing entry", "Missing = total minus the entries you know"], intake: ["Fluid balance rearranged", "In = out + balance"],
   doseFromVol: ["Dose in a volume", `mg per mL = ${fr("strength", "volume")}<br>Dose = mL × mg per mL`], weightFromDose: ["Weight from a dose", `weight = ${fr("dose (mg)", "dose per kg")}`],
-  newrate: ["New rate", `Left = bag minus given<br>New rate = ${fr("volume left", "hours left")}`], maxdose: ["Maximum dose check", `Room left = maximum minus already given<br>If asked: ${fr("room left", "strength")} × In`],
+  newrate: ["New rate", `Left = bag minus given<br>New rate = ${fr("volume left", "hours left")}`], imperial: ["UK measurements to metric", "1 stone = 14 lb · 1 lb = 16 oz · kg = lb ÷ 2.2<br>inches = feet × 12 + inches · cm = inches × 2.54"], bmiImp: ["UK measurements, then BMI", `kg = (stone × 14 + lb) ÷ 2.2<br>m = (feet × 12 + inches) × 2.54 ÷ 100<br>BMI = ${fr("weight (kg)", "height (m)²")}`],
+  maxdose: ["Maximum dose check", `Room left = maximum minus already given<br>If asked: ${fr("room left", "strength")} × In`],
 };
 
 function qHeadHTML(q) {
