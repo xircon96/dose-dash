@@ -477,3 +477,36 @@ header.top::after{content:"";display:block;height:6px;background:linear-gradient
 .bignum{color:var(--cobalt)}
 .hero .chart{color:var(--ink)}
 .hero .chart .write{color:var(--ink)}
+
+/* ================= Phone and touch fixes ================= */
+button,a,input,label,.chip,.mcb,.opt{touch-action:manipulation;-webkit-tap-highlight-color:rgba(45,91,227,.18)}
+/* Pip and pop-up messages must never block taps on the page underneath */
+#pip{pointer-events:none;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.pipf{pointer-events:auto}
+.pipb .btn{pointer-events:auto}
+#toasts{pointer-events:none}
+.mcb{min-height:58px}
+@media(max-width:700px){
+  .topin{padding:6px 10px;gap:6px;flex-wrap:nowrap}
+  .brand{font-size:18px;gap:7px}
+  .brand svg{width:30px;height:30px}
+  .tools{flex-wrap:nowrap;gap:0}
+  .tool{padding:8px 7px}
+  .tool svg{width:21px;height:21px}
+  header.top::after{height:4px}
+  body.ingame header.top{position:static}
+  main{padding:16px 12px calc(110px + env(safe-area-inset-bottom,0px))}
+  .pipf{pointer-events:none;width:32px;height:32px}
+  .pipb{font-size:15px;max-width:230px;padding:8px 11px 9px}
+  #toasts{top:12px;bottom:auto;left:12px;right:12px;max-width:none;align-items:center}
+  .toast{font-size:15px;padding:8px 12px}
+  .mcb{font-size:19px;padding:12px 14px}
+  .hbtiers .btn{flex:1 1 auto}
+  .inputrow input{font-size:24px}
+  .inputrow .btn{flex:1 1 100%}
+  .hud{gap:10px}
+  .hud-r{width:100%;justify-content:space-between;gap:10px}
+  .hm{font-size:22px}
+  #syrWrap{margin-top:12px}
+}
+@media(max-width:380px){.tool[id="btnFull"]{display:none}}

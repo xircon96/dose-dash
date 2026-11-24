@@ -149,9 +149,10 @@ export class GameRoom extends DurableObject {
 
   async answer(pid, m, ws) {
     const s = this.s, p = s.players[pid];
-    if (!p || s.phase !== "question" || s.answers[pid]) return;
+    if (!p) return;
     const now = Date.now();
-    if (now > s.qEnd + 1500) return;
+    if (s.phase !== "question" || now > s.qEnd + 1500) { this.send(ws, { t: "late" }); return; }
+    if (s.answers[pid]) { this.send(ws, { t: "locked", raw: s.answers[pid].raw }); return; }
     let parsed, raw, opt = null;
     if (s.q.opts) {
       opt = Number.isInteger(m.opt) ? m.opt : -1;

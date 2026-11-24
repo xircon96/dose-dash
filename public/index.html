@@ -205,7 +205,7 @@
       <div id="typeRow">
         <label class="ansl" for="ans">Your answer</label>
         <div class="inputrow">
-          <input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Number and unit">
+          <input id="ans" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="Number and unit">
           <button class="btn primary" id="btnSubmit">Check answer</button>
         </div>
       </div>
@@ -1221,7 +1221,8 @@ function confetti(n=120,gold){
 function toast(html){const d=document.createElement('div');d.className='toast';d.innerHTML=html;$('#toasts').appendChild(d);setTimeout(()=>d.remove(),3500);}
 function pip(msg,extra){
   const b=$('#pipText');b.innerHTML=msg+(extra||'');b.classList.remove('hide');
-  clearTimeout(pipTimer);pipTimer=setTimeout(()=>b.classList.add('hide'),extra?12000:6000);
+  const phone=matchMedia('(max-width:700px)').matches;
+  clearTimeout(pipTimer);pipTimer=setTimeout(()=>b.classList.add('hide'),extra?(phone?8000:12000):(phone?3500:6000));
   const bb=b.querySelector('[data-breath]');if(bb)bb.onclick=()=>openBreath();
 }
 
@@ -1442,11 +1443,12 @@ function answer(p,raw,timeout,mcIdx){
   }else{
     sfx.bad();G.wrongRun++;
     if(G.mode==='solo'){G.streak=0;G.run=0;if(!G.calm)G.lives--;}
-    if(G.wrongRun>=2&&G.mode==='solo') pip('Feeling stuck? A short breather really does help.','<br><button class="btn small" data-breath>Breathing exercise</button>');
+    if(G.wrongRun>=2&&G.mode==='solo') pip('Feeling stuck? A short breather really does help.');
     else pip(P(PIP.bad));
   }
   $('#fb').className='fbx show '+(res.ok?'ok':'bad');
   $('#fb').innerHTML=feedbackHTML(q,res,pts,raw,timeout);
+  if(!res.ok&&G.wrongRun>=2&&G.mode==='solo'){$('#fb').insertAdjacentHTML('beforeend','<p style="margin-top:14px"><button class="btn small" id="fbBreath">Feeling stuck? Take a 1 minute breather</button></p>');$('#fbBreath').onclick=openBreath;}
   if(lvlUp){sfx.up();toast(`Level up: now on ${LEVELS[G.level].label.toLowerCase()} questions.`);}
   if(G.mode==='class'&&!res.ok&&G.teams.length>1) stealPanel(teamIdx,Math.round(base*multiplier()/2));
   finishTurnUI();

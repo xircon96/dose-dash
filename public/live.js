@@ -71,26 +71,48 @@ function Countdown(onTick) {
 
 /* WebSocket connection with automatic reconnection */
 function Live(code, { onOpen, onMessage, onStatus }) {
-  let ws, tries = 0, stopped = false, timer = 0;
+  let ws, tries = 0, stopped = false, timer = 0, gen = 0, lastMsg = Date.now();
   const url = (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws/" + code;
   function open() {
+    clearTimeout(timer);
+    const my = ++gen;
+    if (ws) { ws.onclose = ws.onmessage = ws.onopen = null; try { ws.close(); } catch {} }
     ws = new WebSocket(url);
-    ws.onopen = () => { tries = 0; onStatus && onStatus("online"); onOpen && onOpen(); };
-    ws.onmessage = (e) => { let m; try { m = JSON.parse(e.data); } catch { return; } if (m.t === "pong") return; onMessage(m); };
+    lastMsg = Date.now();
+    ws.onopen = () => { if (my !== gen) return; tries = 0; lastMsg = Date.now(); onStatus && onStatus("online"); onOpen && onOpen(); };
+    ws.onmessage = (e) => { if (my !== gen) return; lastMsg = Date.now(); let m; try { m = JSON.parse(e.data); } catch { return; } if (m.t === "pong") return; onMessage(m); };
     ws.onclose = (e) => {
+      if (my !== gen) return;
       if (stopped || e.code === 4000 || e.code === 4001) { onStatus && onStatus("closed", e.code); return; }
       onStatus && onStatus("reconnecting");
       clearTimeout(timer); timer = setTimeout(open, Math.min(8000, 500 * 2 ** tries++));
     };
   }
+  function ping() { if (ws && ws.readyState === 1) { try { ws.send('{"t":"ping"}'); } catch {} } }
+  // Reconnect at once if the connection is closed, or if it has gone silent (phones often keep dead connections open after sleeping).
+  function check(maxSilence) {
+    if (stopped) return;
+    if (!ws || ws.readyState > 1) { tries = 0; open(); return; }
+    if (ws.readyState === 1 && Date.now() - lastMsg > maxSilence) { onStatus && onStatus("reconnecting"); tries = 0; open(); }
+  }
   open();
-  setInterval(() => { if (ws && ws.readyState === 1) ws.send('{"t":"ping"}'); }, 25000);
-  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && ws && ws.readyState > 1 && !stopped) { clearTimeout(timer); tries = 0; open(); } });
+  setInterval(() => { ping(); check(40000); }, 15000);
+  const wake = () => { if (stopped) return; ping(); check(45000); setTimeout(() => check(6000), 5000); };
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") wake(); });
+  window.addEventListener("pageshow", wake);
+  window.addEventListener("online", () => { if (!stopped) { tries = 0; open(); } });
   return {
-    send(o) { if (ws && ws.readyState === 1) { ws.send(JSON.stringify(o)); return true; } return false; },
-    stop() { stopped = true; try { ws.close(); } catch {} },
+    send(o) { if (ws && ws.readyState === 1) { try { ws.send(JSON.stringify(o)); return true; } catch { return false; } } return false; },
+    stop() { stopped = true; gen++; try { ws.close(); } catch {} },
   };
 }
+
+/* Keep the phone screen on during a live game (where the browser supports it) */
+let wakeLock = null;
+async function keepAwake() {
+  try { if ("wakeLock" in navigator && document.visibilityState === "visible" && !wakeLock) { wakeLock = await navigator.wakeLock.request("screen"); wakeLock.addEventListener("release", () => (wakeLock = null)); } } catch {}
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && keepAwake.on) keepAwake(); });
 
 function statusBar(state) {
   const b = $("#netbar"); if (!b) return;

@@ -49,7 +49,7 @@
       <div id="typeArea">
         <p class="unittip" id="unitTip">Write the number and the unit.</p>
         <label class="ansl" for="ans">Your answer</label>
-        <div class="inputrow"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Number and unit" enterkeyhint="send"><button class="btn primary" id="btnSend">Send</button></div>
+        <div class="inputrow"><input id="ans" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Number and unit" enterkeyhint="send"><button class="btn primary" id="btnSend">Send</button></div>
         <div class="unitkeys" id="unitKeys"></div>
       </div>
       <div class="mc" id="mcArea"></div>
@@ -79,7 +79,7 @@
 <script>
 const UNITS=['tablets','mL','mg','g','micrograms','L','kg','cm','mL/h','drops/min','kg/m²','hours','minutes','mL/kg/h'];
 const qp=new URLSearchParams(location.search);
-let code=(qp.get('code')||'').replace(/\D/g,'').slice(0,6),pid=null,live=null,V=null,lastQi=-2,sending=false;
+let code=(qp.get('code')||'').replace(/\D/g,'').slice(0,6),pid=null,live=null,V=null,lastQi=-2,sending=false,sendTimer=0;
 if(code)$('#inCode').value=fmtCode(code);
 const savedName=localStorage.getItem('dd_name');if(savedName)$('#inName').value=savedName;
 if(code&&!savedName)setTimeout(()=>$('#inName').focus(),100);
@@ -113,11 +113,13 @@ async function join(){
   connect(n);
 }
 function connect(name){
+  keepAwake.on=true;keepAwake();
   live=Live(code,{onStatus:statusBar,onOpen:()=>live.send({t:'join',pid,name}),onMessage:m=>{
     if(m.t==='joined'){pid=m.pid;localStorage.setItem('dd_pid_'+code,pid);$('#meName').textContent=m.name;}
     else if(m.t==='state'){V=m;render();}
-    else if(m.t==='locked'){sending=false;showLocked(m.raw);}
-    else if(m.t==='invalid'){sending=false;$('#qMsg').textContent='Type a number and a unit, for example 7.5 mL.';$('#btnSend').disabled=false;}
+    else if(m.t==='locked'){sending=false;clearTimeout(sendTimer);showLocked(m.raw);}
+    else if(m.t==='late'){sending=false;clearTimeout(sendTimer);$('#qMsg').textContent='Time is up for this question.';}
+    else if(m.t==='invalid'){sending=false;clearTimeout(sendTimer);$('#qMsg').textContent='Type a number and a unit, for example 7.5 mL.';$('#btnSend').disabled=false;}
     else if(m.t==='error'){$('#joinMsg').textContent=m.msg;$('#btnJoin').disabled=false;show('p-join');live.stop();}
     else if(m.t==='kicked'){live.stop();localStorage.removeItem('dd_pid_'+code);$('#joinMsg').textContent='Your teacher removed you from this game.';show('p-join');$('#btnJoin').disabled=false;}
     else if(m.t==='gone'){live.stop();$('#joinMsg').textContent='This game has ended.';show('p-join');$('#btnJoin').disabled=false;}
@@ -144,13 +146,16 @@ function renderQ(){
   $('#qAsk').textContent=q.ask;
   cd.set(q.remainingMs,q.duration);
   const fresh=q.qi!==lastQi;lastQi=q.qi;
-  $('#qMsg').textContent='';
+  if(fresh||!v.locked){sending=false;clearTimeout(sendTimer);}
+  if(fresh)$('#qMsg').textContent='';
   if(v.locked){showLocked(v.locked);return;}
   $('#lockedBox').style.display='none';
   if(q.opts){
     $('#typeArea').style.display='none';$('#mcArea').style.display='grid';
     $('#mcArea').innerHTML=q.opts.map((o,i)=>`<button class="mcb" data-i="${i}"><span class="letter">${'ABCD'[i]}</span><span>${esc(o)}</span></button>`).join('');
-    $('#mcArea').querySelectorAll('.mcb').forEach(b=>b.onclick=()=>{if(sending)return;sending=true;live.send({t:'answer',opt:+b.dataset.i});$('#mcArea').querySelectorAll('.mcb').forEach(x=>{x.disabled=true;if(x!==b)x.classList.add('dim');});});
+    $('#mcArea').querySelectorAll('.mcb').forEach(b=>b.onclick=()=>{if(sending)return;
+      if(!live.send({t:'answer',opt:+b.dataset.i})){$('#qMsg').textContent='Not connected. Reconnecting, then tap your answer again.';return;}
+      sending=true;armSendTimer();$('#mcArea').querySelectorAll('.mcb').forEach(x=>{x.disabled=true;if(x!==b)x.classList.add('dim');});});
   }else{
     $('#mcArea').style.display='none';$('#typeArea').style.display='';
     $('#unitTip').style.display=v.units?'':'none';
@@ -160,13 +165,15 @@ function renderQ(){
 function sendTyped(){
   const raw=$('#ans').value.trim();if(!raw||sending)return;
   if(!/\d/.test(raw)){$('#qMsg').textContent='Start with the number, then the unit.';return;}
-  sending=true;$('#btnSend').disabled=true;
-  if(!live.send({t:'answer',raw})){sending=false;$('#btnSend').disabled=false;$('#qMsg').textContent='Not connected. Try again in a moment.';}
+  if(!live.send({t:'answer',raw})){$('#qMsg').textContent='Not connected. Reconnecting, then send again.';return;}
+  sending=true;$('#btnSend').disabled=true;armSendTimer();
 }
 $('#btnSend').onclick=sendTyped;
 $('#ans').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendTyped();}});
 $('#unitKeys').innerHTML=UNITS.map(u=>`<button type="button" data-u="${u}">${u}</button>`).join('');
 $('#unitKeys').querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=$('#ans');const num=(i.value.match(/^\s*[+-]?[\d.,\/½]+/)||[''])[0].trim();i.value=(num?num+' ':'')+b.dataset.u;i.focus();});
+/* If the game does not confirm an answer within 6 seconds, unlock the buttons so the student can send it again. */
+function armSendTimer(){clearTimeout(sendTimer);sendTimer=setTimeout(()=>{if(!sending)return;sending=false;$('#btnSend').disabled=false;$('#mcArea').querySelectorAll('.mcb').forEach(x=>{x.disabled=false;x.classList.remove('dim');});$('#qMsg').textContent='Your answer did not reach the game. Please send it again.';},6000);}
 function showLocked(raw){
   $('#typeArea').style.display='none';$('#mcArea').style.display='none';
   $('#lockedTxt').textContent=raw;$('#lockedBox').style.display='';$('#qMsg').textContent='';
